@@ -10,6 +10,7 @@ import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
 import "./App.css";
+import { HomeOutlined } from '@ant-design/icons';
 
 const AppLayout = () => {
   return (
@@ -27,9 +28,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <Home/>
-        ),
+        element: <Home/>,
       },
       {
         path: "/about",
@@ -42,3 +41,4 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
+

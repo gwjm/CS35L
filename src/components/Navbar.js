@@ -6,6 +6,11 @@ import {BiBookOpen} from 'react-icons/bi'
 import {FaBars, FaTimes} from "react-icons/fa"
 import {IconContext} from "react-icons/lib"
 
+// ant designs
+import { HomeOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+const { Search } = Input;
+
 function NavBar() {
   const [click , setClick] = useState(false);
 
@@ -27,27 +32,10 @@ function NavBar() {
           {click ? <FaTimes /> : <FaBars />}
         </div>
         <ul className={click ? "nav-menu active" : "nav-menu"}>
-          <li className="nav-item">
-            <NavLink 
-              to="/" 
-              className={({ isActive }) => 
-                "nav-links" + (isActive ? " activated" : "")
-                }
-              onClick={closeMobileMenu}
-              >
-                Home
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink 
-              to="/about" 
-              className={({ isActive }) => 
-                "nav-links" + (isActive ? " activated" : "")
-                }
-              onClick={closeMobileMenu}
-              >
-                About
-            </NavLink>
+          {createNavElement("/", (<HomeOutlined /> ), closeMobileMenu)}
+          {createNavElement("/about", "About", closeMobileMenu)}
+          <li className="search-bar">
+            <Search placeholder="input search text" onSearch={(value) => console.log(value)} style={{ width:300 }} enterButton />
           </li>
         </ul>
       </div>
@@ -56,5 +44,21 @@ function NavBar() {
     </>
   )
 }
+
+const createNavElement = (pathTo, label, clickAction) => {
+  return (<li className="nav-item">
+    <NavLink 
+      to={pathTo}
+      className={({ isActive }) => 
+        "nav-links" + (isActive ? " activated" : "")
+        }
+      onClick={clickAction}
+      >
+        {label}
+    </NavLink>
+  </li>
+  );
+}
+
 
 export default NavBar;
