@@ -15,11 +15,6 @@ import ErrorPage from "./routes/ErrorPage";
 // TODO: Replace with ant design
 import "./index.css";
 
-// ant design
-import { Button, ConfigProvider } from 'antd';
-
-
-
 const AppLayout = () => {
   return (
     <>
