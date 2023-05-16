@@ -6,10 +6,14 @@ import {
   Outlet,
 } from "react-router-dom";
 import Home from "./routes/Home";
+import Contact from "./routes/Contact";
+import Projects from "./routes/Projects";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
-import ToDo from "./routes/ToDo";
+import Todo from "./routes/Todo";
+
+// TODO: Replace with ant design
 import "./index.css";
 
 const AppLayout = () => {
@@ -28,9 +32,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <Home />
-        ),
+        element: <Home/>,
+      },
+      {
+        path: "/Contact",
+        element: <Contact/>,
+      },
+      {
+        path: "/Projects",
+        element: <Projects/>,
+      },
+      {
+        path: "/Todo",
+        element: <Todo/>,
       },
       {
         path: "/about",
@@ -47,3 +61,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
+
+// TODO: add all routes here using nodejs fs module
+// const addAllRoutes = () => {};
