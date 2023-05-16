@@ -14,10 +14,19 @@
   height: 90vh;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2rem;
   background-color: #000;
   color: #fff;
 }
+
+/* .ToDo {
+  align-items: center;
+  display: grid;
+} */
+/* .todo-wrapper {
+  display: flex;
+  align-items: center;
+} */
 
 .page-icon {
   margin-left: 1rem;

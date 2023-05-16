@@ -10,7 +10,7 @@ import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
 import ToDo from "./routes/ToDo";
-import "./App.css";
+import "./index.css";
 
 const AppLayout = () => {
   return (
