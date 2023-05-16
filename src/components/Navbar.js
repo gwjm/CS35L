@@ -40,16 +40,21 @@ function NavBar() {
 
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
-    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} style={{ display: 'flex' , justifyContent: 'space-between'}} onClick={onClick}>
+      <div>
       <Menu.Item key="logo" style={{ fontWeight: 'bold' }}>
       <Link to="/">{<PandaIcon
         style={{
           fontSize: '32px',
           verticalAlign: 'middle',
+          marginRight: '8px',
+          justifyContent: 'flex-start',
         }}
-      />} My Website</Link>
+      />} {} ProjectHub </Link>
       </Menu.Item>
+      </div>
 
+      <div style={{ justifyContent: 'flex-end' }}>
       <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
       </Menu.Item>
@@ -84,6 +89,7 @@ function NavBar() {
         unCheckedChildren="Light"
       />
       </Menu.Item>
+      </div>
     </Menu>
   );
 }
