@@ -9,31 +9,36 @@ import Home from "./routes/Home";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
+import ToDo from "./routes/ToDo";
 import "./App.css";
 
 const AppLayout = () => {
   return (
     <>
-    <NavBar />
-    <Outlet />
+      <NavBar />
+      <Outlet />
     </>
   )
 }
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout/>,
+    element: <AppLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
         element: (
-          <Home/>
+          <Home />
         ),
       },
       {
         path: "/about",
-        element: <About/>,
+        element: <About />,
+      },
+      {
+        path: "/to-do",
+        element: <ToDo />,
       },
     ]
   }
