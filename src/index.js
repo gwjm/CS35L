@@ -19,15 +19,15 @@ import "./index.css";
 const AppLayout = () => {
   return (
     <>
-    <NavBar />
-    <Outlet />
+      <NavBar />
+      <Outlet />
     </>
   )
 }
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout/>,
+    element: <AppLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -48,7 +48,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About/>,
+        element: <About />,
+      },
+      {
+        path: "/to-do",
+        element: <ToDo />,
       },
     ]
   }
