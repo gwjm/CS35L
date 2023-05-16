@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
 // ant designs
-import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined} from '@ant-design/icons';
+import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined, OrderedListOutlined } from '@ant-design/icons';
 import { Menu, Switch, Input } from 'antd';
 
 function NavBar() {
@@ -29,6 +29,8 @@ function NavBar() {
         return 'contact';
       case '/projects':
         return 'projects';
+      case '/todo':
+        return 'todo';
       default:
         return '';
     }
@@ -50,6 +52,9 @@ function NavBar() {
 
       <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
+      </Menu.Item>
+      <Menu.Item key="todo" icon={<OrderedListOutlined />}>
+        <Link to="/todo">Todo</Link>
       </Menu.Item>
       <Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
