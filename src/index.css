@@ -9,7 +9,6 @@
 
 .home,
 .about,
-.todo,
 .contact {
   display: flex;
   height: 90vh;
