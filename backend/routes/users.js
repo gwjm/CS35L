@@ -7,15 +7,30 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
-router.route('/add').post((req, res) => {
+router.route('/createUser').post((req, res) => {
   const username = req.body.username;
   const email = req.body.email;
-
-  const newUser = new User({username});
+  const password = req.body.password;
+  const newUser = new User({username, email, password});
 
   newUser.save()
     .then(() => res.json('User added!'))
     .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/loginUser').post((req, res) => {
+  const {username, password} = req.body;
+  if(!username || !password){
+    return res.status(422).json({error: "Please add username or password"});
+  }
+  const cur = await(User.findOne({username: username}));
+
+  if(!cur) return res.status(200).json({error: "Invalid username"});
+
+  let validpassword;
+  cur.password === password ? (validpassword = true) : (validpassword = false);
+
+  validpassword ? res.status(200).json({message: "Successfully signed in"}) : res.status(200).json({error: "Invalid password"});
 });
 
 module.exports = router;
