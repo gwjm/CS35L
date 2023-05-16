@@ -49,11 +49,7 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
-      },
-      {
-        path: "/to-do",
-        element: <ToDo />,
-      },
+      }
     ]
   }
 ]);
