@@ -19,6 +19,15 @@
   color: #fff;
 }
 
+/* .ToDo {
+  align-items: center;
+  display: grid;
+} */
+/* .todo-wrapper {
+  display: flex;
+  align-items: center;
+} */
+
 .page-icon {
   margin-left: 1rem;
   font-size: 100px;

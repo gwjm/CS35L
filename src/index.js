@@ -11,27 +11,23 @@ import Projects from "./routes/Projects";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
+import Todo from "./routes/Todo";
 
 // TODO: Replace with ant design
 import "./index.css";
 
-// ant design
-import { Button, ConfigProvider } from 'antd';
-
-
-
 const AppLayout = () => {
   return (
     <>
-    <NavBar />
-    <Outlet />
+      <NavBar />
+      <Outlet />
     </>
   )
 }
 
 const router = createBrowserRouter([
   {
-    element: <AppLayout/>,
+    element: <AppLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -47,9 +43,13 @@ const router = createBrowserRouter([
         element: <Projects/>,
       },
       {
-        path: "/about",
-        element: <About/>,
+        path: "/Todo",
+        element: <Todo/>,
       },
+      {
+        path: "/about",
+        element: <About />,
+      }
     ]
   }
 ]);

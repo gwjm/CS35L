@@ -9,7 +9,6 @@ const projectSchema = new Schema({
   date: {type: Date, required: true },
   members: { type: [mongoose.Schema.Type.objectId], required: true },
   //other possible attributes: deadline, permissions, members,
-
 }, {
   timestamps: true,
 });
