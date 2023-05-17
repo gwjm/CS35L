@@ -37,7 +37,7 @@ function Todo() {
         let h = now.getHours();
         let m = now.getMinutes();
         let s = now.getSeconds();
-        let completedOn = dd + '-' + mm + '-' + yyyy + ' at ' + h + ':' + m + ':' + s;
+        let completedOn = mm + '-' + dd + '-' + yyyy + ' at ' + h + ':' + m + ':' + s;
 
         let filteredItem = {
             ...allTodos[index],
@@ -71,24 +71,27 @@ function Todo() {
         }
 
     }, [])
+
     return (
         <div className="todo">
             <h1>My Todos</h1>
 
             <div className='todo-wrapper'>
-                <div className='todo-input'>
-                    <div className='todo-input-item'>
-                        <label>Title</label>
-                        <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What's the task title?" />
+                <form>
+                    <div className='todo-input'>
+                        <div className='todo-input-item'>
+                            <label>Title</label>
+                            <input type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What's the task title?" />
+                        </div>
+                        <div className='todo-input-item'>
+                            <label>Description</label>
+                            <input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="What's the task description?" />
+                        </div>
+                        <div className='todo-input-item'>
+                            <button type='button' onClick={handleAddTodo} className='primaryBtn'>Add</button>
+                        </div>
                     </div>
-                    <div className='todo-input-item'>
-                        <label>Description</label>
-                        <input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="What's the task description?" />
-                    </div>
-                    <div className='todo-input-item'>
-                        <button type='button' onClick={handleAddTodo} className='primaryBtn'>Add</button>
-                    </div>
-                </div>
+                </form>
 
                 <div className='btn-area'>
                     <button className={`secondaryBtn ${isCompleteScreen === false && 'active'}`} onClick={() => setIsCompleteScreen(false)}>Todo</button>
