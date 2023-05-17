@@ -16,6 +16,20 @@ const userSchema = new Schema({
     unique: true,
     trim: true
   },
+  password: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  ownedprojects: {
+    type: [mongoose.schema.Types.ObjectId],
+    ref: 'Project'
+  },
+  joinedprojects: {
+    type: [mongoose.schema.Types.ObjectId],
+    ref: 'Project'
+  }
 }, 
 //{
 //  timestamps: true,
