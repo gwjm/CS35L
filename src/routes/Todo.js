@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './Todo.css';
 import Icon, { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { Button, Form, Input } from 'antd';
 
 function Todo() {
     const [isCompleteScreen, setIsCompleteScreen] = useState(false);
@@ -8,6 +9,8 @@ function Todo() {
     const [newTitle, setNewTitle] = useState("");
     const [newDescription, setNewDescription] = useState("");
     const [completedTodos, setCompletedTodos] = useState([]);
+
+    const [form] = Form.useForm();
 
     const handleAddTodo = () => {
         let newTodoItem = {
@@ -59,6 +62,11 @@ function Todo() {
         setCompletedTodos(reducedTodo);
     }
 
+    const onFinish = () => {
+        handleAddTodo();
+        form.resetFields();
+    };
+
     useEffect(() => {
         let savedTodo = JSON.parse(localStorage.getItem('todolist'))
         let savedCompletedTodo = JSON.parse(localStorage.getItem('completedTodos'))
@@ -77,21 +85,41 @@ function Todo() {
             <h1>My Todos</h1>
 
             <div className='todo-wrapper'>
-                <form>
+                <Form
+                    form={form}
+                    layout="inline"
+                    onFinish={onFinish}
+                >
                     <div className='todo-input'>
                         <div className='todo-input-item'>
-                            <label>Title</label>
-                            <input type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What's the task title?" />
+                            <Form.Item
+                                label="Title"
+                                name="title"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input a title for your task!',
+                                    },
+                                ]}
+                            >
+                                <Input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What's the task title?" />
+                            </Form.Item>
                         </div>
                         <div className='todo-input-item'>
-                            <label>Description</label>
-                            <input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="What's the task description?" />
+                            <Form.Item
+                                label="Description"
+                                name="description"
+                            >
+                                <Input type="text" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="What's the task description?" />
+                            </Form.Item>
                         </div>
-                        <div className='todo-input-item'>
-                            <button type='button' onClick={handleAddTodo} className='primaryBtn'>Add</button>
-                        </div>
+                        <Form.Item>
+                            <div className='todo-input-item'>
+                                <Button type='primary' htmlType="submit" className='primaryBtn'>Add</Button>
+                            </div>
+                        </Form.Item>
                     </div>
-                </form>
+                </Form>
 
                 <div className='btn-area'>
                     <button className={`secondaryBtn ${isCompleteScreen === false && 'active'}`} onClick={() => setIsCompleteScreen(false)}>Todo</button>
@@ -128,7 +156,7 @@ function Todo() {
                         )
                     })}
                 </div>
-            </div>
+            </div >
         </div >
     )
 }
