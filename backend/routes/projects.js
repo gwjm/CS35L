@@ -9,15 +9,22 @@ router.route('/').get((req, res) => {
 
 router.route('/add').post((req, res) => {
   const title = req.body.title;
-  const owner = Number(req.body.owner);
+  const owner = req.body.owner;
   const description = req.body.description;
   const date = Date.parse(req.body.date);
+  const deadline = Date.parse(req.body.date);
+  //TODO
+  //const members
+  //const permissions
 
   const newProject = new Project({
     title,
     owner,
     description,
     date,
+    deadline,
+    members,
+    permissions,
   });
 
   newProject.save()
@@ -25,6 +32,12 @@ router.route('/add').post((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
+ router.route('/delete').delete((req, res) => {
+   if(!req.body.id){
+     return res.status(422).json({error: "Please add project id"});
+   }
+   Project.delete(req.body.id).then((data)=> res.status(200).json(data)).catch((error)=>res.status(422).json({error: `Error: ${error}`}));
+ });
 // router.route('/:id').get((req, res) => {
 //     Exercise.findById(req.params.id)
 //       .then(exercise => res.json(exercise))
