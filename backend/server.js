@@ -1,7 +1,7 @@
 //https://www.youtube.com/watch?v=7CqJlxBYj-M
 
 const express = require('express');
-// const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const projectsRouter = require('./routes/projects');
@@ -13,10 +13,10 @@ require('dotenv').config();
 //nakes app into express app, we can call functions on app
 const app = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 //middle ware
-// app.use(cors());
+app.use(cors());
 //allows for us to extract data from the request
 app.use(express.json());
 //this logs what the path and method was
