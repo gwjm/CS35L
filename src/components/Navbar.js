@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
 // ant designs
-import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input } from 'antd';
+import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined , UserOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input , Avatar , Space } from 'antd';
 
 function NavBar() {
   const [theme, setTheme] = useState('dark');
@@ -74,7 +74,7 @@ function NavBar() {
         <Link to="/login">Login</Link>
       </Menu.Item>
 
-      <Menu.Item key="5">
+      <Menu.Item key="searchBar">
         <Input.Search
         placeholder="input search text"
         allowClear

@@ -16,6 +16,7 @@ import Login from "./routes/Login";
 
 // TODO: Replace with ant design
 import "./index.css";
+import { Button, ConfigProvider, theme } from 'antd';
 
 const AppLayout = () => {
   return (
@@ -59,8 +60,17 @@ const router = createBrowserRouter([
   }
 ]);
 
+// TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  
+  <ConfigProvider
+    // theme={{
+    //   algorithm: theme.darkAlgorithm,
+    // }}
+  >
+    <RouterProvider router={router} />
+  </ConfigProvider>
+    
 );
 
 // TODO: add all routes here using nodejs fs module
