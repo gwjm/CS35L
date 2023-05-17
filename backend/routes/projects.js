@@ -12,12 +12,19 @@ router.route('/add').post((req, res) => {
   const owner = Number(req.body.owner);
   const description = req.body.description;
   const date = Date.parse(req.body.date);
+  const deadline = Date.parse(req.body.date);
+  //TODO
+  //const members
+  //const permissions
 
   const newProject = new Project({
     title,
     owner,
     description,
     date,
+    deadline,
+    members,
+    permissions,
   });
 
   newProject.save()
