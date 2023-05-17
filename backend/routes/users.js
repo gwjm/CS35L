@@ -1,5 +1,6 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
+const Project = require("../models/project.model");
 
 router.route('/').get((req, res) => {
   User.find()
@@ -33,6 +34,18 @@ router.route('/loginUser').post((req, res) => {
   validpassword ? res.status(200).json({message: "Successfully signed in"}) : res.status(200).json({error: "Invalid password"});
 });
 
-// TODO: Create route to delete a user from the database and delete any of their owned projects
+router.route('/deleteUser').delete((req, res) => {
+  if (!req.body.id) {
+    return res.status(422).json({error: "Please add user id"});
+  }
+  const user = User.findOne({_id: req.body.id});
+  if(!user) return res.status(422).json({error: "Invalid user id"});
+  const ownedprojects = user.ownedprojects;
+  // delete all owned projects
+  for(let i = 0; i < ownedprojects.length; i++){
+    Project.delete(ownedprojects[i]);
+  }
+  User.delete(req.body.id).then((data) => res.status(200).json(data)).catch((error) => res.status(422).json({error: "Invalid user id"}));
+});
 
 module.exports = router;
