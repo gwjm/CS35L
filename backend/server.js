@@ -1,7 +1,5 @@
 //https://www.youtube.com/watch?v=7CqJlxBYj-M
 
-import express from 'express';
-
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -9,7 +7,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 //const port = 3000;
 
 app.use(cors());

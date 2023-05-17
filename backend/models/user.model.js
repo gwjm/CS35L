@@ -23,11 +23,13 @@ const userSchema = new Schema({
     trim: true
   },
   ownedprojects: {
-    type: [mongoose.schema.Types.ObjectId],
+    //[mongoose.schema.Types.ObjectId]
+    type: String,
     ref: 'Project'
   },
   joinedprojects: {
-    type: [mongoose.schema.Types.ObjectId],
+    //[mongoose.schema.Types.ObjectId]
+    type: String,
     ref: 'Project'
   }
 }, 
