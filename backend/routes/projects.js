@@ -25,6 +25,8 @@ router.route('/add').post((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// router.route('/delete').post((req, res) => {
+  //TODO: Create route to delete a project from the database
 // router.route('/:id').get((req, res) => {
 //     Exercise.findById(req.params.id)
 //       .then(exercise => res.json(exercise))

@@ -33,4 +33,6 @@ router.route('/loginUser').post((req, res) => {
   validpassword ? res.status(200).json({message: "Successfully signed in"}) : res.status(200).json({error: "Invalid password"});
 });
 
+// TODO: Create route to delete a user from the database and delete any of their owned projects
+
 module.exports = router;
