@@ -20,11 +20,11 @@ const projectSchema = new Schema({
     type: Date, 
     required: true 
   },
-  members: { 
-    //[mongoose.schema.Types.ObjectId]
-  type: String, 
-  required: true 
-},
+  // members: { 
+  //   //[mongoose.schema.Types.ObjectId]
+  //   type: String, 
+  //   required: true 
+  // },
   //other possible attributes: deadline, permissions, members,
 }, {
   timestamps: true,

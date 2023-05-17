@@ -23,8 +23,8 @@ router.route('/add').post((req, res) => {
     description,
     date,
     deadline,
-    members,
-    permissions,
+    // members,
+    // permissions,
   });
 
   newProject.save()
