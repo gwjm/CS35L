@@ -137,7 +137,7 @@ onSubmit(e) {
       title: this.state.title,
   }
 
-  axios.post('http://localhost:5000/project/add', project).then(rest => console.log('Added Project'));
+  axios.post('http://localhost:3000/projects/add', project).then(rest => console.log('Added Project'));
 
   //change following line to section where project added to database
   console.log(project)
