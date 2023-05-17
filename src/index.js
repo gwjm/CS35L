@@ -16,12 +16,16 @@ import Login from "./routes/Login";
 
 // TODO: Replace with ant design
 import "./index.css";
-import { Button, ConfigProvider, theme } from 'antd';
+import useTheme from "./hooks/useTheme";
+const ThemeContext = React.createContext();
+
 
 const AppLayout = () => {
+  const [ theme, setTheme ] = useTheme();
+
   return (
     <>
-      <NavBar />
+      <NavBar theme={theme} toggleTheme={setTheme} />
       <Outlet />
     </>
   )
@@ -62,15 +66,11 @@ const router = createBrowserRouter([
 
 // TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
-  
-  <ConfigProvider
-    // theme={{
-    //   algorithm: theme.darkAlgorithm,
-    // }}
-  >
+
+  // <ThemeContext.Provider value={{ theme, setTheme }}>
     <RouterProvider router={router} />
-  </ConfigProvider>
-    
+  // </ThemeContext.Provider> // TODO: pass theme as context to all routes
+
 );
 
 // TODO: add all routes here using nodejs fs module

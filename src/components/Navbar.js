@@ -3,14 +3,15 @@ import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
 // ant designs
 import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined , UserOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input , Avatar , Space } from 'antd';
+import { Menu, Switch, Input , Avatar , Space } from 'antd'; // TODO: implement drop down avatar in navbar
 
-function NavBar() {
-  const [theme, setTheme] = useState('dark');
+function NavBar(props) {
+  const { theme, toggleTheme } = props;
   const [current, setCurrent] = useState('1');
-  const changeTheme = (value) => {
-    setTheme(value ? 'dark' : 'light');
-  };
+  // const changeTheme = (value) => { // TODO: implement dark mode hook, perserved for future multiple theme use
+  //   toggleTheme(value ? 'dark' : 'light');
+  // };
+
   const onClick = (e) => {
     console.log('click ', e);
     setCurrent(e.key);
@@ -87,9 +88,9 @@ function NavBar() {
       <Menu.Item key="6" style={{ float: 'right' }}>
       <Switch
         checked={theme === 'dark'}
-        onChange={changeTheme}
-        checkedChildren="Dark"
-        unCheckedChildren="Light"
+        onChange={toggleTheme}
+        // checkedChildren="Dark"
+        // unCheckedChildren="Light"
       />
       </Menu.Item>
       </div>
