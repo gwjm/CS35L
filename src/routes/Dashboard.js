@@ -9,6 +9,7 @@ function Dashboard() {
     return (
         <div>
             <h1>My Dashboard</h1>
+            {loading && <div>Loading...</div>}
             {error && <div>{error}</div>}
             <div
                 id="scrollableDiv"
