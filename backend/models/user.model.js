@@ -8,7 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
-    minlength: 3
+    //minlength: 3
   },
   email: {    
     type: String,
@@ -19,23 +19,23 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
     trim: true
   },
-  ownedprojects: {
-    //[mongoose.schema.Types.ObjectId]
-    type: String,
-    ref: 'Project'
-  },
-  joinedprojects: {
-    //[mongoose.schema.Types.ObjectId]
-    type: String,
-    ref: 'Project'
-  }
+  // ownedprojects: {
+  //   //[mongoose.schema.Types.ObjectId]
+  //   type: String,
+  //   ref: 'Project'
+  // },
+  // joinedprojects: {
+  //   //[mongoose.schema.Types.ObjectId]
+  //   type: String,
+  //   ref: 'Project'
+  // }
 }, 
-//{
-//  timestamps: true,
-//}
+{
+ timestamps: true,
+}
 );
 
 const User = mongoose.model('User', userSchema);
