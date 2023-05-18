@@ -1,12 +1,47 @@
 import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
-
+import axios from 'axios';
 
 const Login = () => {
+
+  // constructor(props) {
+  //   super(props);
+  
+  //   this.onChangeUsername = this.onChangeUsername.bind(this);
+  //   this.onChangePassword = this.onChangePassword.bind(this);
+  //   //this.onFinish = this.onFinish.bind(this)
+  
+  //   this.state = {
+  //     username: '',
+  //     password: ''
+  //   };
+  // };
+
+  // onChangeUsername(e) {
+  //   this.setState({ username: e.target.value});
+  // };
+
+  //   onChangePassword() {
+  //     this.setState({ password: e.target.value});
+  // };
+      
+
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
+
+    const user = {
+      username: values['username'],
+      email: values['username'],
+      password: values['password']
+    }
+
+    console.log(user)
+
+      axios.post('http://localhost:3001/api/users/createUser', user).then(rest => console.log('Added User'));
   };
+
+
   return (
     <Form
       name="normal_login"
