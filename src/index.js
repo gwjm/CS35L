@@ -14,6 +14,7 @@ import ErrorPage from "./routes/ErrorPage";
 import Todo from "./routes/Todo";
 import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
+import ProjectDetails from "./routes/ProjectDetails";
 
 // TODO: Replace with ant design
 import "./index.css";
@@ -64,7 +65,11 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />
-      }
+      },
+      {
+        path: "/Projects/:id",
+        element: <ProjectDetails />,
+      },
     ]
   }
 ]);
