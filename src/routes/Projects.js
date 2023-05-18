@@ -92,14 +92,11 @@ onSubmit(e) {
 
   //change following line to section where project added to database
   console.log(project)
-
 }
-
-
 
   render() {
     return (
-    <div>
+      <div>
       <h3>Create New Project</h3>
       <form onSubmit={this.onSubmit}>
         <div className="form-group"> 
@@ -175,8 +172,6 @@ onSubmit(e) {
           <input type="submit" value="Create User" className="btn btn-primary" />
         </div>
       </form>
-    </div>
-    
-    )
+    </div>);
   }
 }
