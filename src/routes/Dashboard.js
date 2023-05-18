@@ -1,11 +1,13 @@
 import { Avatar, Button, List, Skeleton, Divider } from 'antd';
-import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useFetch from '../hooks/useFetch';
+import { Link } from "react-router-dom"
 
 function Dashboard() {
     const { data, loading, error } = useFetch('http://localhost:8000/projects');
 
+    console.log(data);
+    console.log(data.id);
     return (
         <div>
             <h1>My Dashboard</h1>
@@ -32,8 +34,7 @@ function Dashboard() {
                         renderItem={(item) => (
                             <List.Item actions={[<a key="list-loadmore-edit">edit</a>]} key={item.body}>
                                 <List.Item.Meta
-
-                                    title={<a href="https://ant.design">{item.title}</a>}
+                                    title={<Link to={`/Projects/${item.id}`}>{item.title}</Link>}
                                     description={item.body}
                                 />
                             </List.Item>
