@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input , Card } from 'antd';
+import { Button, Checkbox, Form, Input , Card, Space } from 'antd';
 import axios from 'axios';
 
 const Login = () => {
@@ -52,7 +52,8 @@ const Login = () => {
   };
 
   return (
-    <Card title="User Management">
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Card title="User Management" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
         <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
           <Input />
@@ -61,10 +62,15 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">Login</Button>
+          <Space>
+            <Checkbox value={true}>Remember me</Checkbox>
+            <Button type="primary" htmlType="submit" onClick={onFinishLogin}>Login</Button>
+            <Button type="primary" htmlType="submit" onClick={onFinishCreate}>Register</Button>
+          </Space>
         </Form.Item>
       </Form>
     </Card>
+    </div>
   );
   // return (
   //   <Form
