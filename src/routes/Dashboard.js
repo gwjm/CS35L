@@ -35,7 +35,7 @@ function Dashboard() {
                             <List.Item actions={[<a key="list-loadmore-edit">edit</a>]} key={item.body}>
                                 <List.Item.Meta
                                     title={<Link to={`/Projects/${item.id}`}>{item.title}</Link>}
-                                    description={item.body}
+                                    description={<div>Author: {item.author}</div>}
                                 />
                             </List.Item>
                         )}
