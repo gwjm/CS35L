@@ -13,6 +13,7 @@ import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
 import Todo from "./routes/Todo";
 import Login from "./routes/Login";
+import Dashboard from "./routes/Dashboard"
 
 // TODO: Replace with ant design
 import "./index.css";
@@ -21,7 +22,7 @@ const ThemeContext = React.createContext();
 
 
 const AppLayout = () => {
-  const [ theme, setTheme ] = useTheme();
+  const [theme, setTheme] = useTheme();
 
   return (
     <>
@@ -38,19 +39,23 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "/Contact",
-        element: <Contact/>,
+        element: <Contact />,
       },
       {
         path: "/Projects",
-        element: <Projects/>,
+        element: <Projects />,
+      },
+      {
+        path: "/Dashboard",
+        element: <Dashboard />,
       },
       {
         path: "/Todo",
-        element: <Todo/>,
+        element: <Todo />,
       },
       {
         path: "/about",
@@ -68,7 +73,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
 
   // <ThemeContext.Provider value={{ theme, setTheme }}>
-    <RouterProvider router={router} />
+  <RouterProvider router={router} />
   // </ThemeContext.Provider> // TODO: pass theme as context to all routes
 
 );
