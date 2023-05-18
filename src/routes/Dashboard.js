@@ -1,13 +1,26 @@
 import { Avatar, Button, List, Skeleton, Divider } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useFetch from '../hooks/useFetch';
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import axios from 'axios';
 
 function Dashboard() {
     const { data, loading, error } = useFetch('http://localhost:8000/projects');
 
-    console.log(data);
-    console.log(data.id);
+    axios.get('http://localhost:3001/api/projects/')
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .finally(function () {
+
+        });
+
+
+    //console.log(data);
+    //console.log(data.id);
     return (
         <div>
             <h1>My Dashboard</h1>
