@@ -11,8 +11,9 @@ router.route('/add').post((req, res) => {
   const title = req.body.title;
   const owner = req.body.owner;
   const description = req.body.description;
-  const date = Date.parse(req.body.date);
-  const deadline = Date.parse(req.body.date);
+  const id = req.body.id;
+  // const date = Date.parse(req.body.date);
+  // const deadline = Date.parse(req.body.date);
   //TODO
   //const members
   //const permissions
@@ -21,8 +22,9 @@ router.route('/add').post((req, res) => {
     title,
     owner,
     description,
-    date,
-    deadline,
+    id
+    // date,
+    // deadline,
     // members,
     // permissions,
   });

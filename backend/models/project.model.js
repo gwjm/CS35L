@@ -16,10 +16,14 @@ const projectSchema = new Schema({
     type: String, 
     required: true 
   },
-  date: {
-    type: Date, 
-    required: true 
+  id: {
+    type: String,
+    // required: true
   },
+  // date: {
+  //   type: Date, 
+  //   required: true 
+  // },
   // members: { 
   //   //[mongoose.schema.Types.ObjectId]
   //   type: String, 
