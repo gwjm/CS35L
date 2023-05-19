@@ -38,7 +38,7 @@ const Login = () => {
 
     console.log(user)
 
-    axios.post('http://localhost:3001/api/users/createUser', user).then(rest => console.log('Added User'));
+    axios.post('http://localhost:3001/api/users/createUser', user).then(console.log('Added User'));
   };
 
   const onFinishCreate = (values) => {

@@ -31,27 +31,21 @@ export default class CreateProject extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-        users: ['test user'],
-        owner: 'test user'
-    })
-}
-
-// componentDidMount() {
-//   axios.get('http://localhost:5000/users/')
-//         .then(response => {
-//           if (response.data.length > 0) {
-//             this.setState({
-//               users: response.data.map(user => user.username),
-//               username: response.data[0].username
-//             })
-//           }
-//         })
-//         .catch((error) => {
-//           console.log(error);
-//         })
-//   }
+componentDidMount() {
+  axios.get('http://localhost:3001/api/users/')
+        .then(response => {
+          console.log(response.data)
+          if (response.data.length > 0) {
+            this.setState({
+              users: response.data.map(user => user.username),
+              username: response.data[0].username
+            })
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  }
 
 onChangeDate(date) {
   this.setState({ date: date});

@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 
 function Dashboard() {
-    const { data, loading, error } = useFetch('http://localhost:8000/projects');
+    const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
+
+
 
     axios.get('http://localhost:3001/api/projects/')
         .then(function (response) {
@@ -17,6 +19,7 @@ function Dashboard() {
         .finally(function () {
 
         });
+
 
 
     //console.log(data);
@@ -48,7 +51,7 @@ function Dashboard() {
                             <List.Item actions={[<a key="list-loadmore-edit">edit</a>]} key={item.body}>
                                 <List.Item.Meta
                                     title={<Link to={`/Projects/${item.id}`}>{item.title}</Link>}
-                                    description={<div>Author: {item.author}</div>}
+                                    description={<div>Owner:  {item.owner}</div>}
                                 />
                             </List.Item>
                         )}
