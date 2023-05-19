@@ -6,13 +6,13 @@ function ProjectDetails() {
     const { data: projects, error, loading } = useFetch('http://localhost:3001/api/projects');
     console.log(projects);
 
-    var project;
-    projects.some(function (el) {
-        if (el._id === id) {
+    var project = projects.find(function (el) {
+        return el._id === id;
+        /*if (el._id === id) {
             project = el;
             return true;
-        }
-    })
+        }*/
+    });
 
     console.log(project);
     return (
