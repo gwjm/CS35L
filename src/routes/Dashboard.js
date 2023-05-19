@@ -9,16 +9,16 @@ function Dashboard() {
 
 
 
-    axios.get('http://localhost:3001/api/projects/')
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .finally(function () {
-
-        });
+    /* axios.get('http://localhost:3001/api/projects/')
+         .then(function (response) {
+             console.log(response);
+         })
+         .catch(function (error) {
+             console.log(error);
+         })
+         .finally(function () {
+ 
+         });*/
 
 
 
@@ -50,7 +50,7 @@ function Dashboard() {
                         renderItem={(item) => (
                             <List.Item actions={[<a key="list-loadmore-edit">edit</a>]} key={item.body}>
                                 <List.Item.Meta
-                                    title={<Link to={`/Projects/${item.id}`}>{item.title}</Link>}
+                                    title={<Link to={`/Projects/${item._id}`}>{item.title}</Link>}
                                     description={<div>Owner:  {item.owner}</div>}
                                 />
                             </List.Item>
