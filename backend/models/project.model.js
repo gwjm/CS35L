@@ -3,12 +3,30 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const projectSchema = new Schema({
-  title: { type: String, required: true },
-  owner: { type: [mongoose.Schema.Type.objectId], required: true },
-  description: { type: String, required: true },
-  date: {type: Date, required: true },
-  members: { type: [mongoose.Schema.Type.objectId], required: true },
-  //other possible attributes: deadline, permissions, members,
+  title: { 
+    type: String, 
+    required: true 
+  },
+  owner: { 
+    type: mongoose.SchemaTypes.ObjectId, 
+    ref: "User",
+    required: false 
+  },
+  description: { 
+    type: String, 
+    required: false 
+  },
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now()
+  },
+  updatedAt: {
+    type: Date,
+    default: () => Date.now()
+  },
+  members: [mongoose.SchemaTypes.ObjectId]
+
 }, {
   timestamps: true,
 });

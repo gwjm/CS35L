@@ -1,16 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
 // ant designs
-import Icon, {ContactsOutlined, HomeOutlined , BranchesOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined , UserOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input , Avatar , Space } from 'antd'; // TODO: implement drop down avatar in navbar
+import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, UserOutlined, DashboardOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input, Button, Space , Divider } from 'antd'; // TODO: implement drop down avatar in navbar
 
 function NavBar(props) {
   const { theme, toggleTheme } = props;
   const [current, setCurrent] = useState('1');
-  // const changeTheme = (value) => { // TODO: implement dark mode hook, perserved for future multiple theme use
-  //   toggleTheme(value ? 'dark' : 'light');
-  // };
 
   const onClick = (e) => {
     console.log('click ', e);
@@ -30,6 +27,8 @@ function NavBar(props) {
         return 'contact';
       case '/projects':
         return 'projects';
+      case '/dashboard':
+        return 'dashboard';
       case '/todo':
         return 'todo';
       default:
@@ -41,21 +40,20 @@ function NavBar(props) {
 
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
-    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} style={{ display: 'flex' , justifyContent: 'space-between' , boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" }} onClick={onClick}>
-      <div>
+    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} 
+      style={{ display: 'flex' ,boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" , justifyContent: 'center'}} 
+      onClick={onClick} overflowedIndicator={<Button type="primary"><MenuOutlined /></Button>}>
       <Menu.Item key="logo" style={{ fontWeight: 'bold' }}>
-      <Link to="/">{<PandaIcon
-        style={{
-          fontSize: '32px',
-          verticalAlign: 'middle',
-          marginRight: '8px',
-          justifyContent: 'flex-start',
-        }}
-      />} {} ProjectHub </Link>
+        <Link to="/">{<PandaIcon
+          style={{
+            fontSize: '32px',
+            verticalAlign: 'middle',
+            marginRight: '8px',
+            justifyContent: 'flex-start',
+          }}
+        />} { } ProjectHub </Link>
       </Menu.Item>
-      </div>
-
-      <div style={{ justifyContent: 'flex-end' }}>
+    
       <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
       </Menu.Item>
@@ -64,6 +62,9 @@ function NavBar(props) {
       </Menu.Item>
       <Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
+      </Menu.Item>
+      <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+        <Link to="/dashboard">Dashboard</Link>
       </Menu.Item>
       <Menu.Item key="contact" icon={<ContactsOutlined />}>
         <Link to="/contact">Contact</Link>
@@ -77,23 +78,23 @@ function NavBar(props) {
 
       <Menu.Item key="searchBar">
         <Input.Search
-        placeholder="input search text"
-        allowClear
-        enterButton="Search"
-        onSearch={(value) => console.log(value)}
-        style={{ width: 300 , marginTop: 8}} // TODO: fix this, the search bar is not aligned horizontally with other navbar items
+          placeholder="input search text"
+          allowClear
+          enterButton="Search"
+          onSearch={(value) => console.log(value)}
+          style={{ width: 300, marginTop: 8 }} // TODO: fix this, the search bar is not aligned horizontally with other navbar items
         />
       </Menu.Item>
-      
+
       <Menu.Item key="6" style={{ float: 'right' }}>
-      <Switch
-        checked={theme === 'dark'}
-        onChange={toggleTheme}
-        // checkedChildren="Dark"
-        // unCheckedChildren="Light"
-      />
+        <Space>
+        <Switch
+          checked={theme === 'dark'}
+          onChange={toggleTheme}
+        />
+        <text> {theme === 'dark' ? 'Light' : 'Dark'} </text>
+        </Space>
       </Menu.Item>
-      </div>
     </Menu>
   );
 }

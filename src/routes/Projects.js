@@ -4,70 +4,6 @@ import { Timeline , ConfigProvider} from 'antd';
 import { DatePicker, Space , Layout} from 'antd';
 import axios from 'axios';
 
-
-// const { RangePicker } = DatePicker;
-
-// const onChange = (value, dateString) => {
-//   console.log('Selected Time: ', value);
-//   console.log('Formatted Selected Time: ', dateString);
-// };
-// const onOk = (value) => {
-//   console.log('onOk: ', value);
-// };
-
-// function Projects() {
-//     const output = (<Space direction="vertical" size={12}>
-//     <DatePicker showTime onChange={onChange} onOk={onOk} />
-//     <RangePicker
-//       showTime={{
-//         format: 'HH:mm',
-//       }}
-//       format="YYYY-MM-DD HH:mm"
-//       onChange={onChange}
-//       onOk={onOk}
-//     />
-//   </Space>);
-
-//     return (
-//         <ConfigProvider theme="dark">
-//             <div className="todo">
-//             <h1>Create Project</h1>
-
-//             <div className='todo-wrapper'>
-//                 <div className='todo-input'>
-//                     <div className='todo-input-item'>
-//                         <label>Title</label>
-//                         <input type="text" placeholder="What's the task title?" />
-//                     </div>
-//                     <div className='todo-input-item'>
-//                         <label>Description</label>
-//                         <input type="text" placeholder="What's the task description?" />
-//                     </div>
-//                     <div className='todo-input-item'>
-//                         <label>Members</label>
-//                         <input type="text" placeholder="List usernames (include your own)" />
-//                     </div>
-//                     <div className='todo-input-item'>
-//                         <label>Description</label>
-//                         <input type="text" placeholder="What's the task description?" />
-//                     </div>
-//                     <div>
-//                     {output}
-//                     </div>
-//                     <div className='todo-input-item'>
-//                         <button type='button' className='primaryBtn'>Add</button>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-
-//         </ConfigProvider>
-//     )
-// }
-
-// export default Projects;
-
-
 import React, { Component } from 'react';
 //import axios from 'axios';
 //import DatePicker from 'react-datepicker';
@@ -95,12 +31,21 @@ export default class CreateProject extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-        users: ['test user'],
-        owner: 'test user'
-    })
-}
+componentDidMount() {
+  axios.get('http://localhost:3001/api/users/')
+        .then(response => {
+          console.log(response.data)
+          if (response.data.length > 0) {
+            this.setState({
+              users: response.data.map(user => user.username),
+              username: response.data[0].username
+            })
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  }
 
 onChangeDate(date) {
   this.setState({ date: date});
@@ -137,16 +82,15 @@ onSubmit(e) {
       title: this.state.title,
   }
 
-  axios.post('http://localhost:5000/project/add', project).then(rest => console.log('Added Project'));
+  axios.post('http://localhost:3001/api/projects/add', project).then(rest => console.log('Added Project'));
 
   //change following line to section where project added to database
   console.log(project)
-
 }
 
   render() {
     return (
-    <div>
+      <div>
       <h3>Create New Project</h3>
       <form onSubmit={this.onSubmit}>
         <div className="form-group"> 
@@ -199,8 +143,29 @@ onSubmit(e) {
         </div>
       </form>
       <h3>Create New User</h3>
-    </div>
-    
-    )
+      <form onSubmit={this.onSubmit2}>
+      <div className="form-group"> 
+          <label>Title: </label>
+          <input  type="text" placeholder="What's the username?"
+              required
+              className="form-control"
+              value={this.state.title}
+              onChange={this.onChangeTitle}
+              />
+      </div>
+      <div className="form-group"> 
+          <label>Password: </label>
+          <input  type="text" placeholder="What's the password?"
+              required
+              className="form-control"
+              value={this.state.title}
+              onChange={this.onChangeTitle}
+              />
+      </div>
+      <div className="form-group">
+          <input type="submit" value="Create User" className="btn btn-primary" />
+        </div>
+      </form>
+    </div>);
   }
 }
