@@ -8,7 +8,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
-    minlength: 3
+    //minlength: 3
   },
   email: {    
     type: String,
@@ -16,10 +16,24 @@ const userSchema = new Schema({
     unique: true,
     trim: true
   },
+  password: {
+    type: String,
+    required: true,
+    unique: false,
+    trim: true
+  },
+  ownedprojects: {
+    type: [mongoose.SchemaType.ObjectId],
+    ref: 'Project'
+  },
+  joinedprojects: {
+    type: [mongoose.SchemaType.ObjectId],
+    ref: 'Project'
+  }
 }, 
-//{
-//  timestamps: true,
-//}
+{
+ timestamps: true,
+}
 );
 
 const User = mongoose.model('User', userSchema);
