@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import useFetch from '../hooks/useFetch';
+import { Todo } from './Todo.js';
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -16,16 +17,21 @@ function ProjectDetails() {
 
     console.log(project);
     return (
-        <div className="project-details">
-            {loading && <div>Loading...</div>}
-            {error && <div>{error}</div>}
-            {project && (
-                <article>
-                    <h2>{project.title}</h2>
-                    <p>Created by {project.owner}</p>
-                    <div>{project.description}</div>
-                </article>
-            )}
+        <div>
+            <div className="project-details">
+                {loading && <div>Loading...</div>}
+                {error && <div>{error}</div>}
+                {project && (
+                    <article>
+                        <h2>{project.title}</h2>
+                        <p>Created by {project.owner}</p>
+                        <div>{project.description}</div>
+                    </article>
+                )}
+            </div>
+            <div className="todo-list">
+                {Todo()}
+            </div>
         </div>
     );
 }

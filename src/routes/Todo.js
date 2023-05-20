@@ -3,7 +3,7 @@ import './Todo.css';
 import Icon, { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 
-function Todo() {
+export function Todo() {
     const [isCompleteScreen, setIsCompleteScreen] = useState(false);
     const [allTodos, setTodos] = useState([]);
     const [newTitle, setNewTitle] = useState("");

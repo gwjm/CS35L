@@ -29,6 +29,9 @@ function Dashboard() {
             <h1>My Dashboard</h1>
             {loading && <div>Loading...</div>}
             {error && <div>{error}</div>}
+            <Link to="/Projects">
+                <Button type="primary">Add Project</Button>
+            </Link>
             <div
                 id="scrollableDiv"
                 style={{
