@@ -22,16 +22,14 @@ const userSchema = new Schema({
     unique: false,
     trim: true
   },
-  // ownedprojects: {
-  //   //[mongoose.schema.Types.ObjectId]
-  //   type: String,
-  //   ref: 'Project'
-  // },
-  // joinedprojects: {
-  //   //[mongoose.schema.Types.ObjectId]
-  //   type: String,
-  //   ref: 'Project'
-  // }
+  ownedprojects: {
+    type: [mongoose.SchemaType.ObjectId],
+    ref: 'Project'
+  },
+  joinedprojects: {
+    type: [mongoose.SchemaType.ObjectId],
+    ref: 'Project'
+  }
 }, 
 {
  timestamps: true,

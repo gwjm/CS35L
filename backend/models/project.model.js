@@ -8,28 +8,25 @@ const projectSchema = new Schema({
     required: true 
   },
   owner: { 
-    //[mongoose.schema.Types.ObjectId]
-    type: String, 
-    required: true 
+    type: mongoose.SchemaTypes.ObjectId, 
+    ref: "User",
+    required: false 
   },
   description: { 
     type: String, 
-    required: true 
+    required: false 
   },
-  id: {
-    type: String,
-    // required: true
+  createdAt: {
+    type: Date,
+    immutable: true,
+    default: () => Date.now()
   },
-  // date: {
-  //   type: Date, 
-  //   required: true 
-  // },
-  // members: { 
-  //   //[mongoose.schema.Types.ObjectId]
-  //   type: String, 
-  //   required: true 
-  // },
-  //other possible attributes: deadline, permissions, members,
+  updatedAt: {
+    type: Date,
+    default: () => Date.now()
+  },
+  members: [mongoose.SchemaTypes.ObjectId]
+
 }, {
   timestamps: true,
 });
