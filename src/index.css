@@ -44,7 +44,7 @@
 .light-theme .home p {
   letter-spacing: 12px;
 }
-
+/* TODO: Use theme files for separate pages and add base css file */
 .light-theme .home div {
   background-image: url('./styles/Poro_Species_Collage.webp');
   height: 100vh;
