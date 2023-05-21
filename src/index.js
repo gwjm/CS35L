@@ -5,6 +5,8 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
+
+// All routes
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
 import Projects from "./routes/Projects";
@@ -17,21 +19,19 @@ import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
 
 // TODO: Replace with ant design
-import "./index.css";
-import useTheme from "./hooks/useTheme";
-const ThemeContext = React.createContext();
 
+// Contexts
+import { ThemeProvider } from "./contexts/ThemeContext";
+import "./index.css";
 
 const AppLayout = () => {
-  const [theme, setTheme] = useTheme();
-
   return (
-    <>
-      <NavBar theme={theme} toggleTheme={setTheme} />
+    <ThemeProvider>
+      <NavBar />
       <Outlet />
-    </>
-  )
-}
+    </ThemeProvider>
+  );
+};
 
 const router = createBrowserRouter([
   {
@@ -76,12 +76,5 @@ const router = createBrowserRouter([
 
 // TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
-
-  // <ThemeContext.Provider value={{ theme, setTheme }}>
   <RouterProvider router={router} />
-  // </ThemeContext.Provider> // TODO: pass theme as context to all routes
-
 );
-
-// TODO: add all routes here using nodejs fs module
-// const addAllRoutes = () => {};
