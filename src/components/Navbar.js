@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
+
 // ant designs
-import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, UserOutlined, DashboardOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input, Button, Space , Divider } from 'antd'; // TODO: implement drop down avatar in navbar
+import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input, Button, Space } from 'antd'; // TODO: implement drop down avatar in navbar
+
+// Contexts
+import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+
 
 function NavBar(props) {
-  const { theme, toggleTheme } = props;
+  const currentTheme = useTheme();
+  const toggleTheme = useThemeUpdate();
+
   const [current, setCurrent] = useState('1');
 
   const onClick = (e) => {
@@ -40,7 +47,7 @@ function NavBar(props) {
 
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
-    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} 
+    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={currentTheme} 
       style={{ display: 'flex' ,boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" , justifyContent: 'center'}} 
       onClick={onClick} overflowedIndicator={<Button type="primary"><MenuOutlined /></Button>}>
       <Menu.Item key="logo" style={{ fontWeight: 'bold' }}>
@@ -89,10 +96,10 @@ function NavBar(props) {
       <Menu.Item key="6" style={{ float: 'right' }}>
         <Space>
         <Switch
-          checked={theme === 'dark'}
+          checked={currentTheme === 'dark'}
           onChange={toggleTheme}
         />
-        <text> {theme === 'dark' ? 'Light' : 'Dark'} </text>
+        <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
         </Space>
       </Menu.Item>
     </Menu>
