@@ -22,9 +22,11 @@ export function ThemeProvider({ children }) {
     setTheme(theme === 'light' ? 'dark' : 'light');
 
     if (theme === 'light') {
+      document.title = 'Project Hub';
       faviconLink.href = './favicon.ico';
       rootElement.className = 'dark-theme';
     } else {
+      document.title = 'Poro Hub';
       faviconLink.href = './graceIcon.png';
       rootElement.className = 'light-theme';
     }
