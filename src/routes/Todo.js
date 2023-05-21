@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import './Todo.css';
 import Icon, { DeleteOutlined, CheckOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 

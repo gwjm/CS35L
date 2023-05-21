@@ -1,35 +1,102 @@
+@import url("./styles/Todo.css");
+
 /* Light theme */
-.light-theme {
-  background-color: #ffffff;
+.light-theme .home {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-.light-theme h1 {
-  font-size: 28px;
-  color: #000000;
+.light-theme .home h1,
+.light-theme .home p {
+  color: #ff9090;
+  font-size: 30px;
+  text-align: center;
 }
 
 .light-theme .button {
   background-color: #1890ff;
-  color: #ffffff;
-  border: none;
-  padding: 8px 16px;
-}
-
-/* Dark theme */
-.dark-theme {
-  background-color: #7a7a7a;
-}
-
-.dark-theme h1 {
-  font-size: 28px;
-  color: #ffffff;
-  background-color: #7e7e7e;
-}
-
-.dark-theme .button {
-  background-color: #fadb14;
-  color: #000000;
+  color: #fff;
   border: none;
   padding: 10px 20px;
 }
 
+.light-theme .home body {
+  background-color: #ff8888;
+  font-family: 'helvetica', sans-serif;
+  margin-top: 20%;
+}
+
+.light-theme .home h1 {
+  font-size: 60px;
+}
+
+.light-theme .home span {
+  background-color: #000000;
+  color: rgb(255, 110, 110);
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.light-theme .home p {
+  letter-spacing: 12px;
+}
+
+.light-theme .home div {
+  background-image: url('./styles/Poro_Species_Collage.webp');
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark theme */
+.dark-theme .home {
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.dark-theme .home h1, .dark-theme .home p {
+  color: #fff;
+  font-size: 30px;
+  text-align: center;
+}
+
+.dark-theme .button {
+  background-color: #fadb14;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+}
+
+.dark-theme .home body {
+  background-color: #000;
+  font-family: 'helvetica', sans-serif;
+  margin-top: 20%;
+}
+
+.dark-theme .home h1 {
+  font-size: 60px;
+}
+
+.dark-theme .home span {
+  background-color: orange;
+  color: #000;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.dark-theme .home p {
+  letter-spacing: 12px;
+}

@@ -18,8 +18,6 @@ import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
 
-// TODO: Replace with ant design
-
 // Contexts
 import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
@@ -74,7 +72,6 @@ const router = createBrowserRouter([
   }
 ]);
 
-// TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
