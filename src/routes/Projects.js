@@ -73,14 +73,29 @@ onSubmit(e) {
   e.preventDefault();
 
   const project = {
-      date: new Date(),
-      deadline: this.state.deadline,
-      description: this.state.description,
-      members: [this.state.owner],
-      owner: this.state.owner,
-      permissions: this.state.permissions,
-      title: this.state.title,
-  }
+    date: new Date(),
+    //deadline: this.state.deadline,
+    title: this.state.title,
+    description: this.state.description,
+    members: [this.state.owner],
+    owner: owner_id, //CHANGE THIS LINE
+    //permissions: this.state.permissions,
+}
+
+  var owner_id = 'XXX';
+  axios.get('http://localhost:3001/api/users/')
+        .then(response => {
+          if (response.data.length > 0) { 
+          let users = response.data.map(user => user.username)
+          let ids = response.data.map(user => user._id)
+
+          for (var i = 0; i < users.length; i++) {
+            if (project.owner == users[i]) {
+              console.log("HEREEEEEEEEEEEEEEE")
+              project.owner = ids[i];
+          }}}})
+
+  
 
   axios.post('http://localhost:3001/api/projects/add', project).then(rest => console.log('Added Project'));
 
