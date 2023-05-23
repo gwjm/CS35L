@@ -5,7 +5,8 @@ const mongoose = require('mongoose')
 //retrieve all workouts
 router.get('/', async (req, res) => {
   const projects = await Project.find({}).sort({createdAt: -1})
-
+    .populate('owner')
+    .exec()
   res.status(200).json(projects)
 });
 

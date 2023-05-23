@@ -51,13 +51,16 @@ function Dashboard() {
                         dataSource={data}
 
                         renderItem={(item) => (
-                            <List.Item actions={[<a key="list-loadmore-edit">edit</a>]} key={item.body}>
-                                <List.Item.Meta
-                                    title={<Link to={`/Projects/${item._id}`}>{item.title}</Link>}
-                                    description={<div>Owner:  {item.owner}</div>}
-                                />
+                            <List.Item
+                              actions={[<a key="list-loadmore-edit">edit</a>]}
+                              key={item.body}
+                            >
+                              <List.Item.Meta
+                                title={<Link to={`/Projects/${item._id}`}>{item.title}</Link>}
+                                description={<div>Owner: {item.owner.username}</div>}
+                              />
                             </List.Item>
-                        )}
+                          )}                          
                     />
                 </InfiniteScroll>
             </div>
