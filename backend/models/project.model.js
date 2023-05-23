@@ -21,7 +21,7 @@ const projectSchema = new Schema({
     immutable: true,
     default: () => Date.now()
   },
-  updatedAt: {
+  deadline: {
     type: Date,
     default: () => Date.now()
   },
