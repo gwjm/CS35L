@@ -46,9 +46,28 @@ const Login = () => {
     // Logic for user creation
   };
 
+  //Logic for user login
   const onFinishLogin = (values) => {
     console.log('Login:', values);
-    // Logic for user login
+    axios.get('http://localhost:3001/api/users/')
+        .then(response => {
+          if (response.data.length > 0) {
+          let users = response.data.map(user => user.username)
+          let passes = response.data.map(user => user.password)
+
+          for (var i = 0; i < users.length; i++) {
+            if (values.username == users[i]) {
+              if (values.password == passes[i]) {
+                //LOGIN SUCCESSFUL LOGIC HERE
+                console.log('Login Successful')
+                break;
+              }
+              else { console.log('Incorrect Password'); break;}
+            }
+            else if (i == users.length - 1) {
+              console.log('User not found');}
+          }
+        }})
   };
 
   return (
