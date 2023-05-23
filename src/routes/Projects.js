@@ -13,7 +13,7 @@ export default class CreateProject extends Component {
   constructor(props) {
     super(props);
 
-    this.onChangeDate = this.onChangeDate.bind(this);
+    // this.onChangeDate = this.onChangeDate.bind(this);
     this.onChangeDeadline = this.onChangeDeadline.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeOwner = this.onChangeOwner.bind(this);
@@ -23,10 +23,11 @@ export default class CreateProject extends Component {
     this.onSubmit = this.onSubmit.bind(this)
 
     this.state = {
+      title: '',
       owner: '',
       description: '',
       duration: 0,
-      date: new Date(),
+      deadline: new Date(),
       users: []
     }
   }
@@ -73,14 +74,14 @@ onSubmit(e) {
   e.preventDefault();
 
   const project = {
-    date: new Date(),
-    //deadline: this.state.deadline,
+    // date: new Date(),
+    deadline: new Date(),
     title: this.state.title,
     description: this.state.description,
     members: [this.state.owner],
     owner: owner_id, //CHANGE THIS LINE
     //permissions: this.state.permissions,
-}
+  }
 
   var owner_id = 'XXX';
   axios.get('http://localhost:3001/api/users/')
@@ -155,30 +156,6 @@ onSubmit(e) {
 
         <div className="form-group">
           <input type="submit" value="Create Project" className="btn btn-primary" />
-        </div>
-      </form>
-      <h3>Create New User</h3>
-      <form onSubmit={this.onSubmit2}>
-      <div className="form-group"> 
-          <label>Title: </label>
-          <input  type="text" placeholder="What's the username?"
-              required
-              className="form-control"
-              value={this.state.title}
-              onChange={this.onChangeTitle}
-              />
-      </div>
-      <div className="form-group"> 
-          <label>Password: </label>
-          <input  type="text" placeholder="What's the password?"
-              required
-              className="form-control"
-              value={this.state.title}
-              onChange={this.onChangeTitle}
-              />
-      </div>
-      <div className="form-group">
-          <input type="submit" value="Create User" className="btn btn-primary" />
         </div>
       </form>
     </div>);
