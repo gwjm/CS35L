@@ -22,7 +22,7 @@ app.use(express.json());
 //this logs what the path and method was
 //e.g. "/projects/add GET"
 app.use((req, res, next) => {
-  console.log(req.path, req.method)
+  console.log(req.path, req.method, req.body)
   next()
 })
 
