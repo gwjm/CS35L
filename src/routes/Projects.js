@@ -28,7 +28,8 @@ export default class CreateProject extends Component {
       description: '',
       duration: 0,
       deadline: new Date(),
-      users: []
+      users: [],
+      usersIDs: [],
     }
   }
 
@@ -39,7 +40,8 @@ componentDidMount() {
           if (response.data.length > 0) {
             this.setState({
               users: response.data.map(user => user.username),
-              username: response.data[0].username
+              usersIDs: response.data.map(user => user._id),
+              // username: response.data[0].username
             })
           }
         })
@@ -79,24 +81,15 @@ onSubmit(e) {
     title: this.state.title,
     description: this.state.description,
     members: [this.state.owner],
-    owner: owner_id, //CHANGE THIS LINE
-    //permissions: this.state.permissions,
+    owner: this.state.owner,
   }
 
-  var owner_id = 'XXX';
-  axios.get('http://localhost:3001/api/users/')
-        .then(response => {
-          if (response.data.length > 0) { 
-          let users = response.data.map(user => user.username)
-          let ids = response.data.map(user => user._id)
-
-          for (var i = 0; i < users.length; i++) {
-            if (project.owner == users[i]) {
-              console.log("HEREEEEEEEEEEEEEEE")
-              project.owner = ids[i];
-          }}}})
-
-  
+  for (var i = 0; i < this.state.users.length; i++) {
+    if (project.owner == this.state.users[i]) {
+      console.log("HEREEEEEEEEEEEEEEE")
+      project.owner = this.state.usersIDs[i];
+      project.members = this.state.usersIDs[i];
+  }}
 
   axios.post('http://localhost:3001/api/projects/add', project).then(rest => console.log('Added Project'));
 
