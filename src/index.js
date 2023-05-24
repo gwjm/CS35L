@@ -18,16 +18,21 @@ import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
 
-// Contexts
+//Contexts
 import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
 
+//For Login
+import { AuthProvider } from './contexts/AuthProvider';
+
 const AppLayout = () => {
   return (
-    <ThemeProvider>
-      <NavBar />
-      <Outlet />
-    </ThemeProvider>
+    <AuthProvider> 
+     <ThemeProvider>
+       <NavBar />
+       <Outlet />
+     </ThemeProvider>
+    </AuthProvider>
   );
 };
 

@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import { useRef, useState, useEffect, useContext } from 'react';
+
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input , Card } from 'antd';
 import axios from 'axios';
 
+import AuthContext from "../contexts/AuthProvider.js";
+//const LOGIN_URL = '/auth'
+
 const Login = () => {
+
+  const {setAuth} = useContext(AuthContext);
+  // const userRef = useRef();
+  // const errRef = useRef();
+
+  // const [user, setUser] = useState('');
+  // const [pwd, setPwd] = useState('');
 
   // constructor(props) {
   //   super(props);
@@ -24,8 +35,7 @@ const Login = () => {
 
   //   onChangePassword() {
   //     this.setState({ password: e.target.value});
-  // };
-      
+  // };      
 
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
@@ -60,6 +70,11 @@ const Login = () => {
               if (values.password == passes[i]) {
                 //LOGIN SUCCESSFUL LOGIC HERE
                 console.log('Login Successful')
+                const user1 = values.username;
+                const password1 = values.password;
+                setAuth({user1, password1});
+                //setUser('');
+                //setPwd('');
                 break;
               }
               else { console.log('Incorrect Password'); break;}
