@@ -41,7 +41,6 @@ componentDidMount() {
             this.setState({
               users: response.data.map(user => user.username),
               usersIDs: response.data.map(user => user._id),
-              // username: response.data[0].username
             })
           }
         })
@@ -109,6 +108,7 @@ onSubmit(e) {
               className="form-control"
               value={this.state.owner}
               onChange={this.onChangeOwner}>
+              <option value="">Select User</option>
               {
                 this.state.users.map(function(user) {
                   return <option 
