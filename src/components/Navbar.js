@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
+import AuthContext from "../contexts/AuthProvider.js";
 
 // ant designs
 import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
@@ -13,6 +14,8 @@ import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 function NavBar(props) {
   const currentTheme = useTheme();
   const toggleTheme = useThemeUpdate();
+
+  const { auth } = useContext(AuthContext);
 
   const [current, setCurrent] = useState('1');
 
@@ -45,10 +48,12 @@ function NavBar(props) {
   const selectedKey = getCurrentPageKey();
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
+  const loggedIn = (Object.keys(auth).length !== 0);
+
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
-    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={currentTheme} 
-      style={{ display: 'flex' ,boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" , justifyContent: 'center'}} 
+    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={currentTheme}
+      style={{ display: 'flex', boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)", justifyContent: 'center' }}
       onClick={onClick} overflowedIndicator={<Button type="primary"><MenuOutlined /></Button>}>
       <Menu.Item key="logo" style={{ fontWeight: 'bold' }}>
         <Link to="/">{<PandaIcon
@@ -60,28 +65,39 @@ function NavBar(props) {
           }}
         />} { } ProjectHub </Link>
       </Menu.Item>
-    
+
       <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
       </Menu.Item>
-      <Menu.Item key="todo" icon={<OrderedListOutlined />}>
-        <Link to="/todo">Todo</Link>
-      </Menu.Item>
+      {loggedIn &&
+        <Menu.Item key="todo" icon={<OrderedListOutlined />}>
+          <Link to="/todo">Todo</Link>
+        </Menu.Item>}
       <Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
       </Menu.Item>
-      <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-        <Link to="/dashboard">Dashboard</Link>
-      </Menu.Item>
+      {loggedIn &&
+        <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+          <Link to="/dashboard">Dashboard</Link>
+        </Menu.Item>}
       <Menu.Item key="contact" icon={<ContactsOutlined />}>
         <Link to="/contact">Contact</Link>
       </Menu.Item>
       <Menu.Item key="about" icon={<CoffeeOutlined />}>
         <Link to="/about">About</Link>
       </Menu.Item>
-      <Menu.Item key="login" icon={<KeyOutlined />}>
-        <Link to="/login">Login</Link>
-      </Menu.Item>
+      {!loggedIn &&
+        <Menu.Item key="login" icon={<KeyOutlined />}>
+          <Link to="/login">Login</Link>
+        </Menu.Item>}
+      {loggedIn &&
+        <Menu.Item key="profile" icon={<KeyOutlined />}>
+          <Link to="/login">Profile</Link>
+        </Menu.Item>}
+      {loggedIn &&
+        <Menu.Item key="logout" icon={<KeyOutlined />}>
+          <Link to="/login">Logout</Link>
+        </Menu.Item>}
 
       <Menu.Item key="searchBar">
         <Input.Search
@@ -95,11 +111,11 @@ function NavBar(props) {
 
       <Menu.Item key="6" style={{ float: 'right' }}>
         <Space>
-        <Switch
-          checked={currentTheme === 'dark'}
-          onChange={toggleTheme}
-        />
-        <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
+          <Switch
+            checked={currentTheme === 'dark'}
+            onChange={toggleTheme}
+          />
+          <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
         </Space>
       </Menu.Item>
     </Menu>

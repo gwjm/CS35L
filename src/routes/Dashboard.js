@@ -8,16 +8,17 @@ import AuthContext from "../contexts/AuthProvider.js";
 
 function Dashboard() {
     const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
-    console.log(data);
+    //console.log(data);
 
     let data2 = []
 
 
     const { auth } = useContext(AuthContext);
 
+    console.log(Object.keys(auth).length === 0);
     let j = 0;
     for (var i = 0; i < data.length; i++) {
-        if (data[i].owner.username == auth.user1) {
+        if (data[i].owner.username === auth.user1) {
             data2[j] = data[i];
             j++;
         }
@@ -37,7 +38,7 @@ function Dashboard() {
 
     //console.log(data);
     //console.log(data.id);
-    
+
     return (
         <div>
             <h1>My Dashboard</h1>
@@ -63,18 +64,18 @@ function Dashboard() {
                 >
                     <List
                         dataSource={data2}
-                        
+
                         renderItem={(item) => (
                             <List.Item
-                              actions={[<a key="list-loadmore-edit">edit</a>]}
-                              key={item.body}
+                                actions={[<a key="list-loadmore-edit">edit</a>]}
+                                key={item.body}
                             >
-                              <List.Item.Meta
-                                title={<Link to={`/Projects/${item._id}`}>{item.title} </Link>}
-                                description={<div>Owner: {item.owner.username}</div>} 
-                              />
+                                <List.Item.Meta
+                                    title={<Link to={`/Projects/${item._id}`}>{item.title} </Link>}
+                                    description={<div>Owner: {item.owner.username}</div>}
+                                />
                             </List.Item>
-                          )}
+                        )}
                     />
                 </InfiniteScroll>
             </div>
