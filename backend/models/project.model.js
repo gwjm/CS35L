@@ -10,7 +10,7 @@ const projectSchema = new Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false
+    required: true
   },
   description: {
     type: String,
@@ -22,14 +22,16 @@ const projectSchema = new Schema({
     default: () => Date.now()
   },
   deadline: {
-    type: Date,
-    default: () => Date.now()
+    type: Date
   },
   tasklist: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Task'
   },
-  members: [mongoose.Schema.Types.ObjectId]
+  members: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'User'
+  }, 
 
 }, {
   timestamps: true,
@@ -55,27 +57,21 @@ projectSchema.virtual('memberList', {
 // Add a virtual property to get the array of tasks
 projectSchema.virtual('taskList', {
   ref: 'Task',
-  localField: '_id',
+  localField: 'tasklist',
   foreignField: 'projectId',
   justOne: false
 });
 
 // Apply population to the owner field when querying
-projectSchema.pre('findOne', populateOwner);
-projectSchema.pre('find', populateOwner);
-projectSchema.pre('findOneAndUpdate', populateOwner);
-projectSchema.pre('update', populateOwner);
-
 projectSchema.pre('findOne', populateVirtuals);
 projectSchema.pre('find', populateVirtuals);
+projectSchema.pre('findOneAndUpdate', populateVirtuals);
+projectSchema.pre('update', populateVirtuals);
 
 function populateVirtuals(next) {
-  this.populate('memberList').populate('taskList');
-  next();
-}
-
-function populateOwner(next) {
-  this.populate('ownerUsername');
+  this.populate('memberList')
+  .populate({path: 'members', model: 'User'})
+  .populate({path: 'tasklist', model: 'Task'})
   next();
 }
 
