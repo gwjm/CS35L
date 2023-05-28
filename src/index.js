@@ -9,7 +9,7 @@ import {
 // All routes
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
-import Projects from "./routes/Projects";
+import Projects from "./routes/CreateProject";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
