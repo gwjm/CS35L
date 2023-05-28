@@ -1,6 +1,7 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 const Project = require("../models/project.model");
+const mongoose = require('mongoose')
 
 router.route('/').get((req, res) => {
   User.find()
@@ -11,17 +12,17 @@ router.route('/').get((req, res) => {
 router.get('/find/:id', async (req, res) => {
   const {id} = req.params
   if( !mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'Project not found'})
+    return res.status(404).json({error: 'User not found'})
   }
 
-  const project = await Project.findById(id)
+  const user = await User.findById(id)
 
   //dont execute rest of code if not found
-  if (!project) {
-    return res.status(404).json({error: 'Project not found'})
+  if (!user) {
+    return res.status(404).json({error: 'User not found'})
   }
 
-  res.status(200).json(project)
+  res.status(200).json(user)
 })
 
 router.route('/createUser').post((req, res) => {

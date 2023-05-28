@@ -24,7 +24,7 @@ function ProjectDetails() {
                 {project && (
                     <article>
                         <h2>{project.title}</h2>
-                        <p>Created by {project.owner}</p>
+                        <p>Created by {project.owner.username}</p>
                         <div>{project.description}</div>
                     </article>
                 )}
