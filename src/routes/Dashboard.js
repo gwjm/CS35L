@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import useFetch from '../hooks/useFetch';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
 
 function Dashboard() {
@@ -12,8 +12,14 @@ function Dashboard() {
 
     let data2 = []
 
-
     const { auth } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (auth) {
+            console.log(auth);
+            localStorage.setItem("token", JSON.stringify(auth));
+        }
+    }, [auth]);
 
     console.log(Object.keys(auth).length === 0);
     let j = 0;
