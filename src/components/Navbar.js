@@ -80,10 +80,10 @@ function NavBar(props) {
       {!loggedIn && <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
       </Menu.Item>}
-      {loggedIn &&
+      {/*loggedIn &&
         <Menu.Item key="todo" icon={<OrderedListOutlined />}>
           <Link to="/todo">Todo</Link>
-        </Menu.Item>}
+        </Menu.Item>*/}
       {/*<Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
       </Menu.Item> */}
