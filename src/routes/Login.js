@@ -82,6 +82,7 @@ const Login = () => {
                 const password1 = values.password;
                 setAuth({ user1, password1 });
                 //set logged in state so navbar shows correct things
+                //localStorage.setItem("token", JSON.stringify(auth));
                 window.localStorage.setItem("isLoggedIn", true);
                 //successful login redirect to dashboard
                 navigate("/dashboard");
