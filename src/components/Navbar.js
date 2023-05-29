@@ -77,26 +77,26 @@ function NavBar(props) {
         />} { } ProjectHub </Link>
       </Menu.Item>
 
-      <Menu.Item key="home" icon={<HomeOutlined />}>
+      {!loggedIn && <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
-      </Menu.Item>
+      </Menu.Item>}
       {loggedIn &&
         <Menu.Item key="todo" icon={<OrderedListOutlined />}>
           <Link to="/todo">Todo</Link>
         </Menu.Item>}
-      <Menu.Item key="projects" icon={<BranchesOutlined />}>
+      {/*<Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
-      </Menu.Item>
+      </Menu.Item> */}
       {loggedIn &&
         <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
           <Link to="/dashboard">Dashboard</Link>
         </Menu.Item>}
-      <Menu.Item key="contact" icon={<ContactsOutlined />}>
+      {!loggedIn && <Menu.Item key="contact" icon={<ContactsOutlined />}>
         <Link to="/contact">Contact</Link>
-      </Menu.Item>
-      <Menu.Item key="about" icon={<CoffeeOutlined />}>
+      </Menu.Item>}
+      {!loggedIn && <Menu.Item key="about" icon={<CoffeeOutlined />}>
         <Link to="/about">About</Link>
-      </Menu.Item>
+      </Menu.Item>}
       {!loggedIn &&
         <Menu.Item key="login" icon={<KeyOutlined />}>
           <Link to="/login">Login</Link>
