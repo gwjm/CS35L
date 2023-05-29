@@ -17,6 +17,7 @@ import Todo from "./routes/Todo";
 import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
+import Profile from "./routes/Profile";
 
 //Contexts
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -27,11 +28,11 @@ import { AuthProvider } from './contexts/AuthProvider';
 
 const AppLayout = () => {
   return (
-    <AuthProvider> 
-     <ThemeProvider>
-       <NavBar />
-       <Outlet />
-     </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <NavBar />
+        <Outlet />
+      </ThemeProvider>
     </AuthProvider>
   );
 };
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "/Projects/:id",
         element: <ProjectDetails />,
+      },
+      {
+        path: "/Profile",
+        element: <Profile />,
       },
     ]
   }

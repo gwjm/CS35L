@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
 import AuthContext from "../contexts/AuthProvider.js";
@@ -48,7 +48,18 @@ function NavBar(props) {
   const selectedKey = getCurrentPageKey();
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
-  const loggedIn = (Object.keys(auth).length !== 0);
+  const { setAuth } = useContext(AuthContext);
+  /*(() => {
+    if (Object.keys(window.localStorage.getItem("loggedInUser")).length !== 0)
+      
+  });*/
+
+  const logout = () => {
+    console.log("logout func called")
+    setAuth({});
+    window.localStorage.setItem("isLoggedIn", false);
+  };
+  const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
 
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
@@ -92,11 +103,11 @@ function NavBar(props) {
         </Menu.Item>}
       {loggedIn &&
         <Menu.Item key="profile" icon={<KeyOutlined />}>
-          <Link to="/login">Profile</Link>
+          <Link to="/profile">Profile</Link>
         </Menu.Item>}
       {loggedIn &&
         <Menu.Item key="logout" icon={<KeyOutlined />}>
-          <Link to="/login">Logout</Link>
+          <Link onClick={logout}>Logout</Link>
         </Menu.Item>}
 
       <Menu.Item key="searchBar">

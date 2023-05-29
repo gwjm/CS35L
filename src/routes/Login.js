@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-
+import { useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input , Card } from 'antd';
+import { Button, Checkbox, Form, Input, Card } from 'antd';
 import axios from 'axios';
 
 import AuthContext from "../contexts/AuthProvider.js";
@@ -9,7 +9,8 @@ import AuthContext from "../contexts/AuthProvider.js";
 
 const Login = () => {
 
-  const {setAuth} = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
   // const userRef = useRef();
   // const errRef = useRef();
 
@@ -18,11 +19,11 @@ const Login = () => {
 
   // constructor(props) {
   //   super(props);
-  
+
   //   this.onChangeUsername = this.onChangeUsername.bind(this);
   //   this.onChangePassword = this.onChangePassword.bind(this);
   //   //this.onFinish = this.onFinish.bind(this)
-  
+
   //   this.state = {
   //     username: '',
   //     password: ''
@@ -36,6 +37,13 @@ const Login = () => {
   //   onChangePassword() {
   //     this.setState({ password: e.target.value});
   // };      
+
+  useEffect(() => {
+    if (auth) {
+      console.log(auth);
+      localStorage.setItem("token", JSON.stringify(auth));
+    }
+  }, [auth]);
 
   const onFinish = (values) => {
     console.log('Received values of form: ', values);
@@ -60,8 +68,8 @@ const Login = () => {
   const onFinishLogin = (values) => {
     console.log('Login:', values);
     axios.get('http://localhost:3001/api/users/')
-        .then(response => {
-          if (response.data.length > 0) {
+      .then(response => {
+        if (response.data.length > 0) {
           let users = response.data.map(user => user.username)
           let passes = response.data.map(user => user.password)
 
@@ -72,17 +80,24 @@ const Login = () => {
                 console.log('Login Successful')
                 const user1 = values.username;
                 const password1 = values.password;
-                setAuth({user1, password1});
+                setAuth({ user1, password1 });
+                //set logged in state so navbar shows correct things
+                window.localStorage.setItem("isLoggedIn", true);
+                //successful login redirect to dashboard
+                navigate("/dashboard");
+
                 //setUser('');
                 //setPwd('');
                 break;
               }
-              else { console.log('Incorrect Password'); break;}
+              else { console.log('Incorrect Password'); break; }
             }
             else if (i == users.length - 1) {
-              console.log('User not found');}
+              console.log('User not found');
+            }
           }
-        }})
+        }
+      })
   };
 
   return (
