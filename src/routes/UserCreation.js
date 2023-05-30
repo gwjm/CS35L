@@ -4,6 +4,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Card } from 'antd';
 import axios from 'axios';
 import useFetch from '../hooks/useFetch';
+import { Link } from "react-router-dom";
 
 import AuthContext from "../contexts/AuthProvider.js";
 //const LOGIN_URL = '/auth'
@@ -137,6 +138,10 @@ const UserCreation = () => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">Create Account</Button>
+          &ensp;Or&nbsp;
+          <Link to="/login">
+            Login
+          </Link>
         </Form.Item>
       </Form>
     </Card >
