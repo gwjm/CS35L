@@ -26,9 +26,8 @@ router.get('/find/:id', async (req, res) => {
 })
 
 router.get('/findusername/:username', async (req, res) => {
-  const {id} = req.params
 
-  const user = await User.findOne(id)
+  const user = await User.findOne({username: req.params.username})
 
   //dont execute rest of code if not found
   if (!user) {
