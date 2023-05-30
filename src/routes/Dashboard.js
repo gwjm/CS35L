@@ -17,7 +17,7 @@ function Dashboard() {
     //set token to newly logged in user
     useEffect(() => {
         if (auth) {
-            console.log(auth);
+            //console.log(auth);
             localStorage.setItem("token", JSON.stringify(auth));
         }
     }, [auth]);

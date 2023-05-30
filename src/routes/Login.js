@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Card } from 'antd';
+import { Button, Checkbox, Form, Input, Card, Alert } from 'antd';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ import AuthContext from "../contexts/AuthProvider.js";
 const Login = () => {
 
   const { auth, setAuth } = useContext(AuthContext);
+  const [error, setError] = useState();
   const navigate = useNavigate();
   // const userRef = useRef();
   // const errRef = useRef();
@@ -92,18 +93,31 @@ const Login = () => {
                 //setPwd('');
                 break;
               }
-              else { console.log('Incorrect Password'); break; }
+              else { console.log('Incorrect Password'); setError('Incorrect password'); break; }
             }
             else if (i == users.length - 1) {
               console.log('User not found');
+              setError('User not found');
             }
           }
         }
       })
   };
 
+  const onClose = () => {
+    setError(null);
+  }
+
   return (
     <Card title="Login">
+      {console.log(error)}
+      {error ? <Alert
+        //message="Error Text"
+        description={error}
+        type="error"
+        closable
+        onClose={onClose}
+      /> : null}
       <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
         <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
           <Input />
