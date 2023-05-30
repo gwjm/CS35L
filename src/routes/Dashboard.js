@@ -22,7 +22,7 @@ function Dashboard() {
         }
     }, [auth]);
 
-    console.log(Object.keys(auth).length === 0);
+    //console.log(Object.keys(auth).length === 0);
     let j = 0;
     for (var i = 0; i < data.length; i++) {
         if (data[i].owner.username === auth.user1) {

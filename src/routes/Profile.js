@@ -8,6 +8,13 @@ function Profile() {
     const { auth } = useContext(AuthContext);
     const { data, loading, error } = useFetch('http://localhost:3001/api/users/');
 
+    var user;
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].username === auth.user1) {
+            user = data[i];
+        }
+    }
+
     //TODO: filter out already friends
     const filteredData = ({}
 

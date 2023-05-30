@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Card } from 'antd';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
 import AuthContext from "../contexts/AuthProvider.js";
@@ -102,7 +103,7 @@ const Login = () => {
   };
 
   return (
-    <Card title="User Management">
+    <Card title="Login">
       <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
         <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
           <Input />
@@ -112,6 +113,11 @@ const Login = () => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">Login</Button>
+          &ensp;Or&nbsp;
+          <Link to="/UserCreation">
+            Register Now!
+          </Link>
+
         </Form.Item>
       </Form>
     </Card>
