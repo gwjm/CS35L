@@ -54,7 +54,7 @@ function Profile() {
                 <p>Email: {user ? user.email : ""}</p>
             </div>
             <div className="search">
-                <p>Find Friends (because you don't have any in real life :D)</p>
+                <p>Add Friends (because you don't have any in real life :D)</p>
                 <div>
                     <Form
                         name="basic"

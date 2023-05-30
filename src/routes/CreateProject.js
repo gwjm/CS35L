@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Form, Input, Button, DatePicker, Select } from 'antd';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { AlignCenterOutlined } from '@ant-design/icons';
 import AuthContext from "../contexts/AuthProvider.js";
 
 const { Option } = Select;
 
-const TaskForm = ({tasks, addTask}) => {
+const TaskForm = ({ tasks, addTask }) => {
   const { auth } = useContext(AuthContext);
   const [members, setMembers] = useState([]);
 
@@ -14,7 +15,7 @@ const TaskForm = ({tasks, addTask}) => {
     console.log('Success:', values);
     try {
       const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
-      const data = { ...values}; // Add the owner field with the logged-in user's _id
+      const data = { ...values }; // Add the owner field with the logged-in user's _id
       console.log(data)
       const response = await axios.post('http://localhost:3001/api/tasks', data);
       console.log('Task created successfully');
@@ -28,14 +29,14 @@ const TaskForm = ({tasks, addTask}) => {
     console.log('Failed:', errorInfo);
   }
 
-  return ( 
-      <Form
-        name="basic"
-        labelCol={AlignCenterOutlined}
-        wrapperCol={{ span: 16 }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
+  return (
+    <Form
+      name="basic"
+      labelCol={AlignCenterOutlined}
+      wrapperCol={{ span: 16 }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
       <Form.Item
         label="Task Title"
         name="title"
@@ -81,7 +82,7 @@ const TaskForm = ({tasks, addTask}) => {
           Submit
         </Button>
       </Form.Item>
-      </Form>
+    </Form>
   );
 }
 
@@ -92,7 +93,8 @@ const ProjectForm = () => {
   const { auth } = useContext(AuthContext);
   const [members, setMembers] = useState([]);
   const [tasks, addTask] = useState([]);
-  
+  const navigate = useNavigate();
+
 
   const onFinish = async values => {
     console.log('Success:', values);
@@ -102,6 +104,7 @@ const ProjectForm = () => {
       console.log(data)
       await axios.post('http://localhost:3001/api/projects/add', data);
       console.log('Project created successfully');
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
     }
@@ -174,7 +177,7 @@ const ProjectForm = () => {
         <DatePicker />
       </Form.Item>
       <Form.Item
-      name={['task']}
+        name={['task']}
       >
         <TaskForm tasks={tasks} addTask={addTask} />
       </Form.Item>
