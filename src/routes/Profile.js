@@ -9,18 +9,22 @@ function Profile() {
     const { data, loading, error } = useFetch('http://localhost:3001/api/users/');
 
     var user;
+    var j = 0;
+    let filteredData = []
+
+    //get current user and filter out already friends and yourself
+    //TODO: filter out already friends
     for (var i = 0; i < data.length; i++) {
         if (data[i].username === auth.user1) {
             user = data[i];
         }
+        else {
+            filteredData[j] = data[i];
+            j++;
+        }
     }
 
-    //TODO: filter out already friends
-    const filteredData = ({}
-
-    );
-    //TODO: change the data below to filteredData
-    const labeledData = data.map(obj => {
+    const labeledData = filteredData.map(obj => {
         return { value: obj.username, label: obj.username }
     });
 
@@ -43,7 +47,8 @@ function Profile() {
         <div>
             <h1>My Profile</h1>
             <div>
-                <p>Username: {auth.user1}</p>
+                <p>Username: {user.username}</p>
+                <p>Email: {user.email}</p>
             </div>
             <div className="search">
                 <p>Find Friends (because you don't have any in real life :D)</p>
@@ -79,32 +84,7 @@ function Profile() {
                             </Button>
                         </Form.Item>
                     </Form>
-                    {/*members.slice(0, 10).map(member => (
-                            <Option key={member._id} value={member._id}>
-                                {member.username}
-                            </Option>
-                        ))*/}
                 </div>
-                {/*<div className="searchInputs">
-                    <Search
-                        placeholder="input search text"
-                        value={input}
-                        onChange={(e) => handleFilter(e)}
-                        enterButton
-                    />
-                </div>
-                {filteredData.length !== 0 && (
-                    <div className="dataResult">
-                        {filteredData.slice(0, 10).map((value, index) => {
-                            return (
-                                <div className="dataItem" key={value.username}>
-                                    <p>{value.username}</p>
-
-                                </div>
-                            );
-                        })}
-                    </div>
-                    )}*/}
             </div>
         </div >
     );
