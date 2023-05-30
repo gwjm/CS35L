@@ -14,6 +14,7 @@ function Dashboard() {
 
     const { auth } = useContext(AuthContext);
 
+    //set token to newly logged in user
     useEffect(() => {
         if (auth) {
             console.log(auth);
