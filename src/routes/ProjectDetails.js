@@ -1,38 +1,42 @@
 import { useParams } from "react-router-dom";
-import useFetch from '../hooks/useFetch';
-import { Todo } from './Todo.js';
+import { Card, Descriptions } from 'antd';
+import axios from "axios";
+import React, { useState, useEffect } from "react";    
 
 function ProjectDetails() {
     const { id } = useParams();
-    const { data: projects, error, loading } = useFetch('http://localhost:3001/api/projects');
-    console.log(projects);
+    const [project, setProject] = useState();
 
-    var project = projects.find(function (el) {
-        return el._id === id;
-        /*if (el._id === id) {
-            project = el;
-            return true;
-        }*/
-    });
+    useEffect(() => {
+        const fetchProject = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
+                setProject(response.data);
+            } catch (error) {
+                console.log('Error fetching project:', error);
+            }
+        };
 
-    console.log(project);
+        console.log("Fetching project...");
+        fetchProject();
+    }, [id]);
+    
+    console.log("Project:", project);
+
+    if (!project) {
+        return <div>Loading...</div>; // or display an appropriate loading state
+    }
+
     return (
-        <div>
-            <div className="project-details">
-                {loading && <div>Loading...</div>}
-                {error && <div>{error}</div>}
-                {project && (
-                    <article>
-                        <h2>{project.title}</h2>
-                        <p>Created by {project.owner.username}</p>
-                        <div>{project.description}</div>
-                    </article>
-                )}
-            </div>
-            <div className="todo-list">
-                {Todo()}
-            </div>
-        </div>
+        <Card>
+            <Descriptions title="Project Details" layout="vertical">
+                <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
+                <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
+                <Descriptions.Item label="Description">{project.description}</Descriptions.Item>
+                <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
+                <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
+            </Descriptions>
+        </Card>
     );
 }
 

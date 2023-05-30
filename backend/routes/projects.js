@@ -20,7 +20,10 @@ router.get('/find/:id', async (req, res) => {
   }
 
   const project = await Project.findById(id)
-
+    .populate('owner')
+    .populate({path: 'members', model: 'User'})
+    .populate({path: 'tasklist', model: 'Task'})
+    .exec()
   //dont execute rest of code if not found
   if (!project) {
     return res.status(404).json({error: 'Project not found'})
