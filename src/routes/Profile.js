@@ -7,8 +7,9 @@ import { AlignCenterOutlined } from '@ant-design/icons';
 function Profile() {
     const { auth } = useContext(AuthContext);
     const { data, loading, error } = useFetch('http://localhost:3001/api/users/');
-
-    var user;
+    //const { user, setUser } = useState();
+    console.log("hello")
+    let user;
     var j = 0;
     let filteredData = []
 
@@ -23,6 +24,7 @@ function Profile() {
             j++;
         }
     }
+    console.log(user)
 
     const labeledData = filteredData.map(obj => {
         return { value: obj.username, label: obj.username }
@@ -47,8 +49,9 @@ function Profile() {
         <div>
             <h1>My Profile</h1>
             <div>
-                <p>Username: {user.username}</p>
-                <p>Email: {user.email}</p>
+                {console.log(user)}
+                <p>Username: {user ? user.username : ""}</p>
+                <p>Email: {user ? user.email : ""}</p>
             </div>
             <div className="search">
                 <p>Find Friends (because you don't have any in real life :D)</p>
