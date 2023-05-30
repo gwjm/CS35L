@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
+import AuthContext from "../contexts/AuthProvider.js";
+
 // ant designs
-import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, UserOutlined, DashboardOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input, Button, Space , Divider } from 'antd'; // TODO: implement drop down avatar in navbar
+import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input, Button, Space } from 'antd'; // TODO: implement drop down avatar in navbar
+
+// Contexts
+import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+
 
 function NavBar(props) {
-  const { theme, toggleTheme } = props;
+  const currentTheme = useTheme();
+  const toggleTheme = useThemeUpdate();
+
+  const { auth } = useContext(AuthContext);
+
   const [current, setCurrent] = useState('1');
 
   const onClick = (e) => {
@@ -38,10 +48,23 @@ function NavBar(props) {
   const selectedKey = getCurrentPageKey();
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
+  const { setAuth } = useContext(AuthContext);
+  /*(() => {
+    if (Object.keys(window.localStorage.getItem("loggedInUser")).length !== 0)
+      
+  });*/
+
+  const logout = () => {
+    console.log("logout func called")
+    setAuth({});
+    window.localStorage.setItem("isLoggedIn", false);
+  };
+  const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
+
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
-    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={theme} 
-      style={{ display: 'flex' ,boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)" , justifyContent: 'center'}} 
+    <Menu mode="horizontal" selectedKeys={[selectedKey]} theme={currentTheme}
+      style={{ display: 'flex', boxShadow: "5px 8px 24px 5px rgba(208, 216, 243, 0.6)", justifyContent: 'center' }}
       onClick={onClick} overflowedIndicator={<Button type="primary"><MenuOutlined /></Button>}>
       <Menu.Item key="logo" style={{ fontWeight: 'bold' }}>
         <Link to="/">{<PandaIcon
@@ -53,28 +76,39 @@ function NavBar(props) {
           }}
         />} { } ProjectHub </Link>
       </Menu.Item>
-    
-      <Menu.Item key="home" icon={<HomeOutlined />}>
+
+      {!loggedIn && <Menu.Item key="home" icon={<HomeOutlined />}>
         <Link to="/">Home</Link>
-      </Menu.Item>
-      <Menu.Item key="todo" icon={<OrderedListOutlined />}>
-        <Link to="/todo">Todo</Link>
-      </Menu.Item>
-      <Menu.Item key="projects" icon={<BranchesOutlined />}>
+      </Menu.Item>}
+      {/*loggedIn &&
+        <Menu.Item key="todo" icon={<OrderedListOutlined />}>
+          <Link to="/todo">Todo</Link>
+        </Menu.Item>*/}
+      {/*<Menu.Item key="projects" icon={<BranchesOutlined />}>
         <Link to="/projects">Projects</Link>
-      </Menu.Item>
-      <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
-        <Link to="/dashboard">Dashboard</Link>
-      </Menu.Item>
-      <Menu.Item key="contact" icon={<ContactsOutlined />}>
+      </Menu.Item> */}
+      {loggedIn &&
+        <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
+          <Link to="/dashboard">Dashboard</Link>
+        </Menu.Item>}
+      {!loggedIn && <Menu.Item key="contact" icon={<ContactsOutlined />}>
         <Link to="/contact">Contact</Link>
-      </Menu.Item>
-      <Menu.Item key="about" icon={<CoffeeOutlined />}>
+      </Menu.Item>}
+      {!loggedIn && <Menu.Item key="about" icon={<CoffeeOutlined />}>
         <Link to="/about">About</Link>
-      </Menu.Item>
-      <Menu.Item key="login" icon={<KeyOutlined />}>
-        <Link to="/login">Login</Link>
-      </Menu.Item>
+      </Menu.Item>}
+      {!loggedIn &&
+        <Menu.Item key="login" icon={<KeyOutlined />}>
+          <Link to="/login">Login</Link>
+        </Menu.Item>}
+      {loggedIn &&
+        <Menu.Item key="profile" icon={<KeyOutlined />}>
+          <Link to="/profile">Profile</Link>
+        </Menu.Item>}
+      {loggedIn &&
+        <Menu.Item key="logout" icon={<KeyOutlined />}>
+          <Link onClick={logout}>Logout</Link>
+        </Menu.Item>}
 
       <Menu.Item key="searchBar">
         <Input.Search
@@ -88,11 +122,11 @@ function NavBar(props) {
 
       <Menu.Item key="6" style={{ float: 'right' }}>
         <Space>
-        <Switch
-          checked={theme === 'dark'}
-          onChange={toggleTheme}
-        />
-        <text> {theme === 'dark' ? 'Light' : 'Dark'} </text>
+          <Switch
+            checked={currentTheme === 'dark'}
+            onChange={toggleTheme}
+          />
+          <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
         </Space>
       </Menu.Item>
     </Menu>

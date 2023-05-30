@@ -1,12 +1,42 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
 const Project = require("../models/project.model");
+const mongoose = require('mongoose')
 
 router.route('/').get((req, res) => {
   User.find()
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.get('/find/:id', async (req, res) => {
+  const {id} = req.params
+  if( !mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'User not found'})
+  }
+
+  const user = await User.findById(id)
+
+  //dont execute rest of code if not found
+  if (!user) {
+    return res.status(404).json({error: 'User not found'})
+  }
+
+  res.status(200).json(user)
+})
+
+router.get('/findusername/:username', async (req, res) => {
+  const {id} = req.params
+
+  const user = await User.findOne(id)
+
+  //dont execute rest of code if not found
+  if (!user) {
+    return res.status(404).json({error: 'User not found'})
+  }
+
+  res.status(200).json(user)
+})
 
 router.route('/createUser').post((req, res) => {
   const username = req.body.username;

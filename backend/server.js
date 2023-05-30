@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const projectsRouter = require('./routes/projects');
 const usersRouter = require('./routes/users');
+const tasksRouter = require('./routes/tasks');
 
 //allows us to pull variables defined in .env
 require('dotenv').config();
@@ -22,13 +23,14 @@ app.use(express.json());
 //this logs what the path and method was
 //e.g. "/projects/add GET"
 app.use((req, res, next) => {
-  console.log(req.path, req.method)
+  console.log(req.path, req.method, req.body)
   next()
 })
 
 
 app.use('/api/projects', projectsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/tasks', tasksRouter);
 
 
 //connnects to mongod DB

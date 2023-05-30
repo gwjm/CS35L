@@ -1,55 +1,102 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("./styles/Todo.css");
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Open Sans", sans-serif;
-}
-
-.home,
-.about,
-.contact {
-  display: flex;
-  height: 90vh;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  background-color: #000;
-  color: #fff;
-}
-
-/* .ToDo {
-  align-items: center;
-  display: grid;
-} */
-/* .todo-wrapper {
-  display: flex;
-  align-items: center;
-} */
-
-.page-icon {
-  margin-left: 1rem;
-  font-size: 100px;
-}
-
-#error-page {
+/* Light theme */
+.light-theme .home {
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  min-height: 100vh;
 }
 
-@media screen and (max-width: 960px) {
-  .home,
-  .about,
-  .contact {
-    font-size: 2.5rem;
-  }
+.light-theme .home h1,
+.light-theme .home p {
+  color: #ff9090;
+  font-size: 30px;
+  text-align: center;
+}
 
-  .page-icon {
-    margin-left: 1rem;
-    font-size: 80px;
-  }
+.light-theme .button {
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+}
+
+.light-theme .home body {
+  background-color: #ff8888;
+  font-family: 'helvetica', sans-serif;
+  margin-top: 20%;
+}
+
+.light-theme .home h1 {
+  font-size: 60px;
+}
+
+.light-theme .home span {
+  background-color: #000000;
+  color: rgb(255, 110, 110);
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.light-theme .home p {
+  letter-spacing: 12px;
+}
+/* TODO: Use theme files for separate pages and add base css file */
+.light-theme .home div {
+  background-image: url('./styles/Poro_Species_Collage.webp');
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark theme */
+.dark-theme .home {
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.dark-theme .home h1, .dark-theme .home p {
+  color: #fff;
+  font-size: 30px;
+  text-align: center;
+}
+
+.dark-theme .button {
+  background-color: #fadb14;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+}
+
+.dark-theme .home body {
+  background-color: #000;
+  font-family: 'helvetica', sans-serif;
+  margin-top: 20%;
+}
+
+.dark-theme .home h1 {
+  font-size: 60px;
+}
+
+.dark-theme .home span {
+  background-color: orange;
+  color: #000;
+  padding: 6px;
+  border-radius: 5px;
+}
+
+.dark-theme .home p {
+  letter-spacing: 12px;
 }

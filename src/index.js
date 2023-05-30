@@ -5,9 +5,11 @@ import {
   RouterProvider,
   Outlet,
 } from "react-router-dom";
+
+// All routes
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
-import Projects from "./routes/Projects";
+import Projects from "./routes/CreateProject";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
@@ -15,23 +17,25 @@ import Todo from "./routes/Todo";
 import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
+import Profile from "./routes/Profile";
 
-// TODO: Replace with ant design
+//Contexts
+import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
-import useTheme from "./hooks/useTheme";
-const ThemeContext = React.createContext();
 
+//For Login
+import { AuthProvider } from './contexts/AuthProvider';
 
 const AppLayout = () => {
-  const [theme, setTheme] = useTheme();
-
   return (
-    <>
-      <NavBar theme={theme} toggleTheme={setTheme} />
-      <Outlet />
-    </>
-  )
-}
+    <AuthProvider>
+      <ThemeProvider>
+        <NavBar />
+        <Outlet />
+      </ThemeProvider>
+    </AuthProvider>
+  );
+};
 
 const router = createBrowserRouter([
   {
@@ -70,18 +74,14 @@ const router = createBrowserRouter([
         path: "/Projects/:id",
         element: <ProjectDetails />,
       },
+      {
+        path: "/Profile",
+        element: <Profile />,
+      },
     ]
   }
 ]);
 
-// TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
-
-  // <ThemeContext.Provider value={{ theme, setTheme }}>
   <RouterProvider router={router} />
-  // </ThemeContext.Provider> // TODO: pass theme as context to all routes
-
 );
-
-// TODO: add all routes here using nodejs fs module
-// const addAllRoutes = () => {};
