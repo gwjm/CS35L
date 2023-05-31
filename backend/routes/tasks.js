@@ -13,7 +13,12 @@ router.get('/tasks', async (req, res) => {
 });
 
 // Create a new task
-router.post('/tasks', async (req, res) => {
+router.post('/tasks/:id', async (req, res) => {
+  const project = await Project.findById(req.params.id)
+  if (!project) {
+    return res.status(404).json({ message: 'Project not found' });
+  }
+
   const task = new Task({
     title: req.body.title,
     description: req.body.description,
@@ -23,6 +28,8 @@ router.post('/tasks', async (req, res) => {
 
   try {
     const newTask = await task.save();
+    project.tasklist.push(newTask._id)
+    await project.save()
     res.status(201).json(newTask);
   } catch (error) {
     res.status(400).json({ message: error.message });
