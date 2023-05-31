@@ -74,7 +74,7 @@ function Dashboard() {
 
                         renderItem={(item) => (
                             <List.Item
-                                actions={[<a key="list-loadmore-edit">edit</a>, <Link to={`/Projects/${item._id}/TaskCreation`}><a key="list-loadmore-more">Add Task</a></Link>]}
+                                actions={[<a key="list-loadmore-edit">edit</a>, <Link to={`/TaskCreation/${item._id}`}><a key="list-loadmore-more">Add Task</a></Link>]}
                                 key={item.body}
                             >
                                 <List.Item.Meta
