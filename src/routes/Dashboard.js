@@ -17,12 +17,12 @@ function Dashboard() {
     //set token to newly logged in user
     useEffect(() => {
         if (auth) {
-            console.log(auth);
+            //console.log(auth);
             localStorage.setItem("token", JSON.stringify(auth));
         }
     }, [auth]);
 
-    console.log(Object.keys(auth).length === 0);
+    //console.log(Object.keys(auth).length === 0);
     let j = 0;
     for (var i = 0; i < data.length; i++) {
         if (data[i].owner.username === auth.user1) {
@@ -74,7 +74,7 @@ function Dashboard() {
 
                         renderItem={(item) => (
                             <List.Item
-                                actions={[<a key="list-loadmore-edit">edit</a>]}
+                                actions={[<a key="list-loadmore-edit">edit</a>, <Link to={`/TaskCreation/${item._id}`}><a key="list-loadmore-more">Add Task</a></Link>]}
                                 key={item.body}
                             >
                                 <List.Item.Meta

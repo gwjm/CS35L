@@ -1,98 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Form, Input, Button, DatePicker, Select } from 'antd';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { AlignCenterOutlined } from '@ant-design/icons';
 import AuthContext from "../contexts/AuthProvider.js";
 
 const { Option } = Select;
-
-const TaskForm = ({tasks, addTask}) => {
-  const { auth } = useContext(AuthContext);
-  const [members, setMembers] = useState([]);
-
-  const onFinish = async values => {
-    console.log('Success:', values);
-    try {
-      const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
-      const data = { ...values}; // Add the owner field with the logged-in user's _id
-      console.log(data)
-      const response = await axios.post('http://localhost:3001/api/tasks', data);
-      console.log('Task created successfully');
-      addTask([...tasks, response.data._id]);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const onFinishFailed = errorInfo => {
-    console.log('Failed:', errorInfo);
-  }
-
-  return ( 
-      <Form
-        name="basic"
-        labelCol={AlignCenterOutlined}
-        wrapperCol={{ span: 16 }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-      <Form.Item
-        label="Task Title"
-        name="title"
-        rules={[{ required: false, message: 'Please input your task title!' }]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Task Description"
-        name="description"
-        rules={[{ required: false, message: 'Please input your task description!' }]}
-      >
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item
-        label="Due Date"
-        name="dueDate"
-        rules={[{ required: false, message: 'Please input your task due date!' }]}
-      >
-        <DatePicker />
-      </Form.Item>
-      <Form.Item
-        label="Assigned User(s)"
-        name="assignedUsers"
-        rules={[{ required: false, message: 'Please input your task assigned user(s)!' }]}
-      >
-        <Select
-          mode="multiple"
-          showSearch
-          // onSearch={fetchMembers}
-          filterOption={false}
-          placeholder="Select members"
-        >
-          {members.map(member => (
-            <Option key={member._id} value={member._id}>
-              {member.username}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-      </Form>
-  );
-}
-
-
 
 
 const ProjectForm = () => {
   const { auth } = useContext(AuthContext);
   const [members, setMembers] = useState([]);
   const [tasks, addTask] = useState([]);
-  
+  const navigate = useNavigate();
+
 
   const onFinish = async values => {
     console.log('Success:', values);
@@ -102,6 +23,7 @@ const ProjectForm = () => {
       console.log(data)
       await axios.post('http://localhost:3001/api/projects/add', data);
       console.log('Project created successfully');
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
     }
@@ -174,9 +96,9 @@ const ProjectForm = () => {
         <DatePicker />
       </Form.Item>
       <Form.Item
-      name={['task']}
+        name={['task']}
       >
-        <TaskForm tasks={tasks} addTask={addTask} />
+        {/* <TaskForm tasks={tasks} addTask={addTask} /> */}
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">

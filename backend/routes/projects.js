@@ -20,6 +20,10 @@ router.get('/find/:id', async (req, res) => {
   }
 
   const project = await Project.findById(id)
+    .populate('owner')
+    .populate({path: 'members', model: 'User'})
+    .populate({path: 'tasklist', model: 'Task'})
+    .exec()
 
   //dont execute rest of code if not found
   if (!project) {
@@ -31,10 +35,10 @@ router.get('/find/:id', async (req, res) => {
 
 //add a project
 router.post('/add', async (req, res) => {
-  const {title, owner, description} = req.body
+  const {title, owner, description, deadline, tasklist, members} = req.body
 
   try {
-    const newProject = await Project.create({ title, owner, description });
+    const newProject = await Project.create({ title, owner, description, deadline, tasklist, members });
     res.status(200).json(newProject)
   } catch (error) {
     res.status(400).json({error: error.message})
@@ -47,6 +51,10 @@ router.delete('/delete/:id', async (req, res) => {
   const {id} = req.params
   if( !mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'Project not found'})
+  }
+  const todolist = await Project.findById(id).select('tasklist')
+  for (let i = 0; i < todolist.length; i++) {
+    await Task.findByIdAndDelete(todolist[i])
   }
   
   const project = await Project.findOneAndDelete({_id: id})

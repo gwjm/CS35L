@@ -1,7 +1,7 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext , useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input , Card, Space , ConfigProvider , theme } from 'antd';
+import { Button, Form, Input , Card , ConfigProvider , theme , Alert} from 'antd';
+import { Link } from "react-router-dom";
 import axios from 'axios';
 
 import AuthContext from "../contexts/AuthProvider.js";
@@ -14,6 +14,7 @@ const Login = () => {
   const currentTheme = useTheme();
   const toggleTheme = useThemeUpdate();
   const { auth, setAuth } = useContext(AuthContext);
+  const [error, setError] = useState();
   const navigate = useNavigate();
   // const userRef = useRef();
   // const errRef = useRef();
@@ -95,15 +96,20 @@ const Login = () => {
                 //setPwd('');
                 break;
               }
-              else { console.log('Incorrect Password'); break; }
+              else { console.log('Incorrect Password'); setError('Incorrect password'); break; }
             }
             else if (i === users.length - 1) {
               console.log('User not found');
+              setError('User not found');
             }
           }
         }
       })
   };
+
+  const onClose = () => {
+    setError(null);
+  }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -111,7 +117,15 @@ const Login = () => {
       theme={{
        algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm,
       }}>
-      <Card title={<><UserOutlined /> User Management</>} style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+    <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}> 
+      {console.log(error)}
+      {error ? <Alert
+        //message="Error Text"
+        description={error}
+        type="error"
+        closable
+        onClose={onClose}
+      /> : null}
       <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
         <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
           <Input />
@@ -120,11 +134,12 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <Space>
-            <Checkbox value={true}>Remember me</Checkbox>
-            <Button type="primary" htmlType="submit" onClick={onFinishLogin}>Login</Button>
-            <Button type="primary" htmlType="submit" onClick={onFinishCreate}>Register</Button>
-          </Space>
+          <Button type="primary" htmlType="submit">Login</Button>
+          &ensp;Or&nbsp;
+          <Link to="/UserCreation">
+            Register Now!
+          </Link>
+
         </Form.Item>
       </Form>
     </Card>
