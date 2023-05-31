@@ -29,6 +29,10 @@ const userSchema = new Schema({
   joinedprojects: {
     type: [mongoose.SchemaType.ObjectId],
     ref: 'Project'
+  },
+  friends: {
+    type: [mongoose.SchemaType.ObjectID],
+    ref: 'User'
   }
 }, 
 {
