@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions } from 'antd';
+import { Card, Descriptions, List } from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";    
 
@@ -20,6 +20,7 @@ function ProjectDetails() {
         console.log("Fetching project...");
         fetchProject();
     }, [id]);
+
     
     console.log("Project:", project);
 
@@ -27,7 +28,11 @@ function ProjectDetails() {
         return <div>Loading...</div>; // or display an appropriate loading state
     }
 
+    const projectMembers = project.members;
+    const tasklist = project.tasklist;
+
     return (
+        <div>
         <Card>
             <Descriptions title="Project Details" layout="vertical">
                 <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
@@ -37,6 +42,21 @@ function ProjectDetails() {
                 <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
             </Descriptions>
         </Card>
+
+        <List
+            header={<header> <h3>Members</h3></header>}
+            dataSource={projectMembers}
+
+            renderItem={(item) => <List.Item>{item.username}</List.Item>}
+        />
+
+        <List
+            header={<header> <h3>Task List</h3></header>}
+            dataSource={tasklist}
+
+            renderItem={(item) => <List.Item>{item.title}</List.Item>}
+        />
+        </div>
     );
 }
 
