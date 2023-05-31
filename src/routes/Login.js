@@ -1,15 +1,18 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useEffect, useContext , useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Card, Alert } from 'antd';
+import { Button, Form, Input , Card , ConfigProvider , theme , Alert} from 'antd';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
 import AuthContext from "../contexts/AuthProvider.js";
+import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+const { defaultAlgorithm, darkAlgorithm } = theme;
+
 //const LOGIN_URL = '/auth'
 
 const Login = () => {
-
+  const currentTheme = useTheme();
+  const toggleTheme = useThemeUpdate();
   const { auth, setAuth } = useContext(AuthContext);
   const [error, setError] = useState();
   const navigate = useNavigate();
@@ -76,8 +79,8 @@ const Login = () => {
           let passes = response.data.map(user => user.password)
 
           for (var i = 0; i < users.length; i++) {
-            if (values.username == users[i]) {
-              if (values.password == passes[i]) {
+            if (values.username === users[i]) {
+              if (values.password === passes[i]) {
                 //LOGIN SUCCESSFUL LOGIC HERE
                 console.log('Login Successful')
                 const user1 = values.username;
@@ -95,7 +98,7 @@ const Login = () => {
               }
               else { console.log('Incorrect Password'); setError('Incorrect password'); break; }
             }
-            else if (i == users.length - 1) {
+            else if (i === users.length - 1) {
               console.log('User not found');
               setError('User not found');
             }
@@ -109,7 +112,12 @@ const Login = () => {
   }
 
   return (
-    <Card title="Login">
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <ConfigProvider
+      theme={{
+       algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm,
+      }}>
+    <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}> 
       {console.log(error)}
       {error ? <Alert
         //message="Error Text"
@@ -135,60 +143,9 @@ const Login = () => {
         </Form.Item>
       </Form>
     </Card>
+    </ConfigProvider>
+    </div>
   );
-  // return (
-  //   <Form
-  //     name="normal_login"
-  //     className="login-form"
-  //     initialValues={{
-  //       remember: true,
-  //     }}
-  //     onFinish={onFinish}
-  //   >
-  //     <Form.Item
-  //       name="username"
-  //       rules={[
-  //         {
-  //           required: true,
-  //           message: 'Please input your Username!',
-  //         },
-  //       ]}
-  //     >
-  //       <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-  //     </Form.Item>
-  //     <Form.Item
-  //       name="password"
-  //       rules={[
-  //         {
-  //           required: true,
-  //           message: 'Please input your Password!',
-  //         },
-  //       ]}
-  //     >
-  //       <Input
-  //         prefix={<LockOutlined className="site-form-item-icon" />}
-  //         type="password"
-  //         placeholder="Password"
-  //       />
-  //     </Form.Item>
-  //     <Form.Item>
-  //       <Form.Item name="remember" valuePropName="checked" noStyle>
-  //         <Checkbox>Remember me</Checkbox>
-  //       </Form.Item>
-
-  //       <a className="login-form-forgot" href="">
-  //         Forgot password
-  //       </a>
-  //     </Form.Item>
-
-  //     <Form.Item>
-  //       <Button type="primary" htmlType="submit" className="login-form-button">
-  //         Log in
-  //       </Button>
-  //       Or <a href="">register now!</a>
-  //     </Form.Item>
-  //   </Form>
-  // );
 };
 
 export default Login;

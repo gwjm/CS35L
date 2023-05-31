@@ -33,10 +33,12 @@ export function ThemeProvider({ children }) {
   }
 
   return (
-    <ThemeContext.Provider value={ theme }>
-        <ThemeUpdateContext.Provider value={toggleTheme}>
-            {children}
-        </ThemeUpdateContext.Provider>
-    </ThemeContext.Provider>
+    <ConfigProvider theme={{algorithm: theme === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm}}>
+      <ThemeContext.Provider value={ theme }>
+          <ThemeUpdateContext.Provider value={toggleTheme}>
+              {children}
+          </ThemeUpdateContext.Provider>
+      </ThemeContext.Provider>
+    </ConfigProvider>
   )
 }
