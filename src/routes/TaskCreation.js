@@ -17,12 +17,13 @@ const TaskForm = () => {
       try {
         // const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
         const data = { ...values }; 
-
+        data.push(projectid);
         console.log(data)
         const response = await axios.post(`http://localhost:3001/api/tasks/${projectid}`, data);
         console.log('Task created successfully');
         // addTask([...tasks, response.data._id]);
       } catch (error) {
+        console.log("Failed to create task")
         console.error(error);
       }
     }
