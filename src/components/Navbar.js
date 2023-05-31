@@ -4,11 +4,13 @@ import "./Navbar.css"
 import AuthContext from "../contexts/AuthProvider.js";
 
 // ant designs
-import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input, Button, Space } from 'antd'; // TODO: implement drop down avatar in navbar
+import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, UserOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input, Button, Space , Avatar , Dropdown } from 'antd'; // TODO: implement drop down avatar in navbar
+import { useNavigate } from "react-router-dom";
 
 // Contexts
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+
 
 
 function NavBar(props) {
@@ -18,6 +20,58 @@ function NavBar(props) {
   const { auth } = useContext(AuthContext);
 
   const [current, setCurrent] = useState('1');
+
+  const navigate = useNavigate();
+  const items = [
+    {
+      key: '1',
+      type: 'group',
+      label: 'Settings',
+      children: [
+        {
+          key: '1-1',
+          label: 'Login/Register',
+          onClick: () => navigate('/login'),
+        },
+        {
+          key: '1-2',
+          disabled: true,
+          label: 'Logout',
+          onClick: () => navigate('/logout'),
+        },
+      ],
+    },
+    {
+      key: '2',
+      label: 'Preference',
+      children: [
+        {
+          key: '2-1',
+          label: 'Settings',
+        },
+        {
+          key: '2-2',
+          label: 'History ',
+        },
+      ],
+    },
+    {
+      key: '3',
+      label: 'Pls Login',
+      disabled: true,
+      children: [
+        {
+          key: '3-1',
+          label: '5d menu item',
+        },
+        {
+          key: '3-2',
+          label: '6th menu item',
+        },
+      ],
+    },
+  ];
+
 
   const onClick = (e) => {
     console.log('click ', e);
@@ -128,6 +182,17 @@ function NavBar(props) {
           />
           <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
         </Space>
+      </Menu.Item>
+
+      <Menu.Item>
+        <Dropdown menu={{ items }}>
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+            <Avatar size={{ xs: 24, sm: 32, md: 40}} icon={<UserOutlined />}/>
+            User
+            </Space>
+          </a>
+        </Dropdown>
       </Menu.Item>
     </Menu>
   );
