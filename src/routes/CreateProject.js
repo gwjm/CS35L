@@ -179,7 +179,7 @@ const ProjectForm = () => {
       <Form.Item
         name={['task']}
       >
-        <TaskForm tasks={tasks} addTask={addTask} />
+        {/* <TaskForm tasks={tasks} addTask={addTask} /> */}
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">

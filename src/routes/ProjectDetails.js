@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, List } from 'antd';
+import { Card, Descriptions, List, Button, Modal } from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";    
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -21,6 +22,26 @@ function ProjectDetails() {
         fetchProject();
     }, [id]);
 
+    const handleDelete = async () => {
+        setDeleteModalVisible(true);
+    }
+
+    const confirmDelete = async (id) => {
+        // Logic to delete the project with the given id
+        setDeleteModalVisible(false);
+        try {
+            await axios.delete(`http://localhost:3001/api/projects/delete/${project._id}`);
+            setProject(null);
+            window.location.href = '/dashboard';
+        } catch (error) {
+            console.log('Error deleting project:', error);
+        }
+        setDeleteModalVisible(false);
+      };
+    
+    const cancelDelete = () => {
+        setDeleteModalVisible(false);
+        };
     
     console.log("Project:", project);
 
@@ -56,6 +77,27 @@ function ProjectDetails() {
 
             renderItem={(item) => <List.Item>{item.title}</List.Item>}
         />
+
+
+        <div style={{ display: 'flex', justifyContent: 'center' }}> 
+        <Button 
+            danger type="text"
+            onClick={() => handleDelete()}
+        >
+            Delete
+        </Button>
+            <Modal
+            open={deleteModalVisible}
+            title="Confirm Delete"
+            okText="Delete"
+            cancelText="Cancel"
+            onOk={confirmDelete}
+            onCancel={cancelDelete}
+        >
+            Are you sure you want to delete the project?
+        </Modal>
+        </div>
+
         </div>
     );
 }
