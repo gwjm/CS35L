@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 let Task = require('../models/task.model');
+let Project = require('../models/project.model');
 
 // Get all tasks
-router.get('/tasks', async (req, res) => {
+router.get('/getall', async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -12,8 +13,17 @@ router.get('/tasks', async (req, res) => {
   }
 });
 
+router.get('/get/:id', async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Create a new task
-router.post('/tasks/:id', async (req, res) => {
+router.post('/add/:id', async (req, res) => {
   const project = await Project.findById(req.params.id)
   if (!project) {
     return res.status(404).json({ message: 'Project not found' });
@@ -32,12 +42,12 @@ router.post('/tasks/:id', async (req, res) => {
     await project.save()
     res.status(201).json(newTask);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: "failed in task creation" });
   }
 });
 
 // Update a task
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('update/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -57,7 +67,7 @@ router.patch('/tasks/:id', async (req, res) => {
 });
 
 // Delete a task
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('delete/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {

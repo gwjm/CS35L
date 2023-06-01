@@ -10,20 +10,23 @@ const { Option } = Select;
 const TaskForm = () => {
     const { auth } = useContext(AuthContext);
     const [members, setMembers] = useState([]);
-    const {projectid} = useParams();
+    const { id } = useParams();
+    console.log(id);
   
     const onFinish = async values => {
       console.log('Success:', values);
       try {
         // const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
-        const data = { ...values }; 
-        data.push(projectid);
+        console.log("Data Submission");
+        const data = {...values}; 
         console.log(data)
-        const response = await axios.post(`http://localhost:3001/api/tasks/${projectid}`, data);
+        const response = await axios.post(`http://localhost:3001/api/tasks/add/${id}`, data);
         console.log('Task created successfully');
+
         // addTask([...tasks, response.data._id]);
       } catch (error) {
         console.log("Failed to create task")
+        console.log(error)
         console.error(error);
       }
     }
@@ -39,6 +42,7 @@ const TaskForm = () => {
         wrapperCol={{ span: 16 }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        projectid={id}
       >
         <Form.Item
           label="Task Title"
@@ -62,6 +66,28 @@ const TaskForm = () => {
           <DatePicker />
         </Form.Item>
         <Form.Item
+          label="Task Status"
+          name="status"
+          rules={[{ required: true, message: 'Please input your task status!' }]}
+        >
+
+          <Select
+            showSearch
+            placeholder="Select a status"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onChange={(value) => {
+              Form.setFieldsValue({ status: value === "Completed" });
+              }}
+            >
+              <Option value={false}>Not Started</Option>
+              <Option value={true}>Completed</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
           label="Assigned User(s)"
           name="assignedUsers"
           rules={[{ required: false, message: 'Please input your task assigned user(s)!' }]}
@@ -81,7 +107,7 @@ const TaskForm = () => {
           </Select>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" Link to={`/Dashboard`}>
             Submit
           </Button>
         </Form.Item>

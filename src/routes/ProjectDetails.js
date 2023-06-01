@@ -7,7 +7,7 @@ function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
+    console.log(id);
     useEffect(() => {
         const fetchProject = async () => {
             try {
