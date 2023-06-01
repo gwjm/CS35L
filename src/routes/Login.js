@@ -116,24 +116,22 @@ const Login = () => {
   const onClose = () => {
     setError(null);
   }
-
+  
   return (
     <ConfigProvider
-      theme={{
-        algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm,
-      }}>
+      theme={{ algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm }}>
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' , background: currentTheme === 'dark' ? '#808080' : "#292929" }}>
 
-          <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+          <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}>
             {error && showErrorDialog(error)}
 
-            <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
+            <Form name="loginForm" onFinish={onFinishLogin} layout="vertical" style={{background: ''}}>
               <Form.Item label="Username" name="username" rules={[{ required: true, message: `Eease enter your username` }]}>
-                <Input placeholder="default size" prefix={<UserOutlined />} />
+                <Input placeholder="Username" prefix={<UserOutlined style={{color: "black"}}/>} style={{ background: '#fff'}}/>
               </Form.Item>
               <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
-                <Input.Password placeholder="default size" prefix={<KeyOutlined />} />
+                <Input.Password placeholder="Password" prefix={<KeyOutlined style={{color: "black"}}/>} style={{background: '#fff'}}/>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">Login</Button>
