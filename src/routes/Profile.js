@@ -1,13 +1,18 @@
-import React, { useContext } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
+import { showErrorDialog } from '../components/ErrorDialog';
 import useFetch from '../hooks/useFetch';
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+
+// Libraries
 import axios from 'axios';
+import React, { useContext } from "react";
 
 // AntD
 import { Typography, Form, Select, Button, Card, theme , ConfigProvider } from 'antd';
 const { Title, Text } = Typography;
 const { Option } = Select;
+
+
 
 function Profile() {
     const currentTheme = useTheme();
@@ -105,7 +110,7 @@ function Profile() {
     }
 
     const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
+        showErrorDialog('Failed to add friend');
     }
 
     /*const clearSearch = () => {

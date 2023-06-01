@@ -1,6 +1,7 @@
 import useFetch from '../hooks/useFetch';
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
+import { showErrorDialog } from '../components/ErrorDialog';
 
 // AntD
 import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme } from 'antd';
@@ -147,7 +148,7 @@ function Dashboard() {
         <div>
             <h1>My Dashboard</h1>
             {loading && <div>Loading...</div>}
-            {error && <div>{error}</div>}
+            {error && showErrorDialog(error)}
             <Link to="/Projects">
                 <Button type="primary">Add Project</Button>
             </Link>
@@ -205,5 +206,7 @@ function Dashboard() {
         </ConfigProvider>
     );
 };
+
+
 
 export default Dashboard;

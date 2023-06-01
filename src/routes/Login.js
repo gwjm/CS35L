@@ -1,9 +1,10 @@
-import { useEffect, useContext , useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input , Card , ConfigProvider , theme , Alert} from 'antd';
+import { Button, Form, Input, Card, ConfigProvider, theme, Alert } from 'antd';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { UserOutlined , KeyOutlined } from '@ant-design/icons';
+import { UserOutlined, KeyOutlined } from '@ant-design/icons';
+import { showErrorDialog } from '../components/ErrorDialog';
 
 import AuthContext from "../contexts/AuthProvider.js";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
@@ -106,6 +107,10 @@ const Login = () => {
           }
         }
       })
+      .catch((error) => {
+        showErrorDialog("Connection to server failed");
+      }
+      );
   };
 
   const onClose = () => {
@@ -113,40 +118,36 @@ const Login = () => {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <ConfigProvider
+    <ConfigProvider
       theme={{
-       algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm,
+        algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm,
       }}>
-    <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}> 
-      {console.log(error)}
-      {error ? <Alert
-        //message="Error Text"
-        description={error}
-        type="error"
-        closable
-        onClose={onClose}
-      /> : null}
+      <Card>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
 
-      <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
-        <Form.Item label="Username" name="username" rules={[{ required: true, message: `Eease enter your username`}]}>
-          <Input placeholder="default size" prefix={<UserOutlined />} />
-        </Form.Item>
-        <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
-          <Input.Password placeholder="default size" prefix={<KeyOutlined />}/>  
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">Login</Button>
-          &ensp;Or&nbsp;
-          <Link to="/UserCreation">
-            Register Now!
-          </Link>
+          <Card title="Login" style={{ width: 400, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+            {error && showErrorDialog(error)}
 
-        </Form.Item>
-      </Form>
-    </Card>
+            <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
+              <Form.Item label="Username" name="username" rules={[{ required: true, message: `Eease enter your username` }]}>
+                <Input placeholder="default size" prefix={<UserOutlined />} />
+              </Form.Item>
+              <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
+                <Input.Password placeholder="default size" prefix={<KeyOutlined />} />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">Login</Button>
+                &ensp;Or&nbsp;
+                <Link to="/UserCreation">
+                  Register Now!
+                </Link>
+
+              </Form.Item>
+            </Form>
+          </Card>
+        </div>
+      </Card>
     </ConfigProvider>
-    </div>
   );
 };
 

@@ -46,7 +46,6 @@
 }
 /* TODO: Use theme files for separate pages and add base css file */
 .light-theme .home div {
-  background-image: url('./styles/Poro_Species_Collage.webp');
   height: 100vh;
   display: flex;
   align-items: center;
@@ -57,6 +56,11 @@
   background-color: rgba(255, 255, 255, 0.8);
 }
 
+.light-theme .card {
+  background-color: #fff;
+}
+
+
 /* Dark theme */
 .dark-theme .home {
   background-color: #000;
@@ -65,6 +69,10 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+}
+
+.dark-theme .card {
+  background-color: #5a5a5a;
 }
 
 .dark-theme .home h1, .dark-theme .home p {
