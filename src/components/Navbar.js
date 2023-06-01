@@ -156,7 +156,7 @@ function NavBar(props) {
           allowClear
           enterButton="Search"
           onSearch={(value) => console.log(value)}
-          style={{ width: 300, marginTop: 8 }} // TODO: fix this, the search bar is not aligned horizontally with other navbar items
+          style={{ width: 300, marginTop: 8 }}
         />
       </Menu.Item>
 

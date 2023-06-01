@@ -3,12 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
 
 // AntD
-import { Table, Button, Skeleton, Divider, Menu, Dropdown, Modal, Form, Input } from 'antd';
+import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme } from 'antd';
 import { Link } from 'react-router-dom';
-import TaskCreation from './TaskCreation';
-
+import TaskCreation from './TaskCreation'; // TODO: add task creation floating
+import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
 function Dashboard() {
+    const { defaultAlgorithm, darkAlgorithm } = theme;
+    const currentTheme = useTheme();
+
     const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
     let data2 = []
 
@@ -137,6 +140,10 @@ function Dashboard() {
 
     // Return --------------------------------------------------
     return (
+    <ConfigProvider
+        theme={{
+         algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
+        }}>
         <div>
             <h1>My Dashboard</h1>
             {loading && <div>Loading...</div>}
@@ -195,6 +202,7 @@ function Dashboard() {
                 </Form>
             </Modal>
         </div>
+        </ConfigProvider>
     );
 };
 
