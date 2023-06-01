@@ -36,13 +36,13 @@ router.get('/findusername/:username', async (req, res) => {
 
   res.status(200).json(user)
 })
-
   //I DONT KNOW HOW TO MAKE IT WORK. SEE 1:44 AT https://www.youtube.com/watch?v=7CqJlxBYj
   //AND THE UPDATE FUNCTION IN https://github.com/beaucarnes/mern-exercise-tracker-mongodb/blob/master/backend/routes/exercises.js
   //POSSIBLE SOLUTION IS USING built in User.findByIdAndUpdate instead of User.findById, BUT I COULDNT FIGURE THAT OUT EITHER
-router.route('/addFriend/:id').post((req, res, new_friend) => {
-  console.log(req.params.id);
-  User.findById(req.params.id)
+router.route('/addFriend/:id').post((req, res) => {
+  console.log(req)
+  //FOR SOME REASON VALUES ARE SET TO NULL???? ALSO THE CONSOLE LOG ABOVE THIS LINE NEVER GOES THRU???
+  User.findByIdAndUpdate(req.params.id)
     .then( user => {
       user.username = req.body.username;
       user.email = req.body.email;
@@ -54,7 +54,7 @@ router.route('/addFriend/:id').post((req, res, new_friend) => {
       user.joinedprojects = req.body.joinedprojects;
       user.friends = req.body.friends;
 
-      user.friends.push(new_friend)
+      //user.friends.push(new_friend)
 
       console.log(user)
 

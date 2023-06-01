@@ -38,9 +38,8 @@ function Profile() {
         return { value: obj.username, label: obj.username }
     });
 
+
     const onFinish = async values => {
-
-
         console.log(auth.user1)
         let login_id = 'Unknown';
 
@@ -58,9 +57,31 @@ function Profile() {
                             login_id = ids[i];
                             let new_friend = values.users;
                             console.log('Works to here');
+
+                            axios.get('http://localhost:3001/api/users/find/' + login_id).then(response => { 
+                                let response2 = response.data;
+                                const updateu = {
+                                    username: response2.username,
+                                    email: response2.email,
+                                    password: response2.password,
+                                    ownedprojects: response2.ownedprojects,
+                                    joinedprojects: response2.joinedprojects,
+                                    friends: response2.friends,
+                                    ownedprojects: response2.ownedprojects,
+                                    joinedprojects: response2.joinedprojects,
+                                    friends: response2.friends,
+                                }
+                                //updateu.friends.append(new_friend);
+                                console.log(updateu, 'update')
+
+                                
+                                axios.post('http://localhost:3001/api/users/addFriend/' + login_id, updateu /*, new_friend*/).then(
+                                    res=> console.log(res.data)
+                                );
+                             })
                             //I DONT KNOW HOW TO MAKE IT WORK. SEE 1:44 AT https://www.youtube.com/watch?v=7CqJlxBYj-M and 
                             //THE UPDATE FUNCTION IN https://github.com/beaucarnes/mern-exercise-tracker-mongodb/blob/master/backend/routes/exercises.js
-                            axios.post('http://localhost:3001/api/users/addFriend/' + login_id, login_id, new_friend);
+                            //axios.post('http://localhost:3001/api/users/addFriend/' + login_id, login_id, new_friend);
                         }
                     }
 
