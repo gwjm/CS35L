@@ -37,6 +37,34 @@ router.get('/findusername/:username', async (req, res) => {
   res.status(200).json(user)
 })
 
+  //I DONT KNOW HOW TO MAKE IT WORK. SEE 1:44 AT https://www.youtube.com/watch?v=7CqJlxBYj
+  //AND THE UPDATE FUNCTION IN https://github.com/beaucarnes/mern-exercise-tracker-mongodb/blob/master/backend/routes/exercises.js
+  //POSSIBLE SOLUTION IS USING built in User.findByIdAndUpdate instead of User.findById, BUT I COULDNT FIGURE THAT OUT EITHER
+router.route('/addFriend/:id').post((req, res, new_friend) => {
+  console.log(req.params.id);
+  User.findById(req.params.id)
+    .then( user => {
+      user.username = req.body.username;
+      user.email = req.body.email;
+      user.password = req.body.password;
+      user.ownedprojects = req.body.ownedprojects;
+      user.joinedprojects = req.body.joinedprojects;
+      user.friends = req.body.friends;
+      user.ownedprojects = req.body.ownedprojects;
+      user.joinedprojects = req.body.joinedprojects;
+      user.friends = req.body.friends;
+
+      user.friends.push(new_friend)
+
+      console.log(user)
+
+      user.save()
+        .then(() => res.json('Friend added!'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/createUser').post((req, res) => {
   const username = req.body.username;
   const email = req.body.email;

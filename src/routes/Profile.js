@@ -3,6 +3,7 @@ import AuthContext from "../contexts/AuthProvider.js";
 import { Input, Space, Button, Form, Select } from "antd";
 import useFetch from '../hooks/useFetch';
 import { AlignCenterOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 function Profile() {
     const { auth } = useContext(AuthContext);
@@ -31,6 +32,44 @@ function Profile() {
     });
 
     const onFinish = async values => {
+   
+
+        console.log(auth.user1)
+        let login_id = 'Unknown';
+
+        axios.get('http://localhost:3001/api/users/')
+        .then(response => {
+        if (response.data.length > 0) {
+            //array of usernames
+          let users = response.data.map(user => user.username)
+          //array of user IDs
+          let ids = response.data.map(user => user._id)
+            
+          //find the user id of the currently logged in user, then post an update to that user's friend list
+          for (var i = 0; i < users.length; i++) {
+            if (users[i] == auth.user1) {
+                login_id = ids[i];
+                let new_friend = values.users;
+                console.log('Works to here');
+                //I DONT KNOW HOW TO MAKE IT WORK. SEE 1:44 AT https://www.youtube.com/watch?v=7CqJlxBYj-M and 
+                //THE UPDATE FUNCTION IN https://github.com/beaucarnes/mern-exercise-tracker-mongodb/blob/master/backend/routes/exercises.js
+                axios.post('http://localhost:3001/api/users/addFriend/'+login_id, login_id, new_friend);
+            }
+            }
+
+         // let aser = User.findById(login_id)
+                // user = {
+                //         username: aser.username,
+                //         email: aser.email,
+                //         password: aser.password,
+                //         ownedprojects: aser.ownedprojects,
+                //         joinedprojects: aser.joinedprojects,
+                //         friends: aser.friends,
+                        
+                // }
+                // user.friends.append(new_friend)
+
+    }});
         console.log('Success:', values);
         //TODO: add value to friends list here
 
