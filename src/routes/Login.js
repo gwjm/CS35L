@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form, Input , Card , ConfigProvider , theme , Alert} from 'antd';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { UserOutlined , KeyOutlined } from '@ant-design/icons';
 
 import AuthContext from "../contexts/AuthProvider.js";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
@@ -126,12 +127,13 @@ const Login = () => {
         closable
         onClose={onClose}
       /> : null}
+
       <Form name="loginForm" onFinish={onFinishLogin} layout="vertical">
-        <Form.Item label="Username" name="username" rules={[{ required: true, message: 'Please enter your username' }]}>
-          <Input />
+        <Form.Item label="Username" name="username" rules={[{ required: true, message: `Eease enter your username`}]}>
+          <Input placeholder="default size" prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item label="Password" name="password" rules={[{ required: true, message: 'Please enter your password' }]}>
-          <Input.Password />
+          <Input.Password placeholder="default size" prefix={<KeyOutlined />}/>  
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">Login</Button>

@@ -16,34 +16,23 @@ import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 function NavBar(props) {
   const currentTheme = useTheme();
   const toggleTheme = useThemeUpdate();
-
-  const { auth } = useContext(AuthContext);
-
   const [current, setCurrent] = useState('1');
 
+  const { auth } = useContext(AuthContext);
+  const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
+  const logout = () => {
+    console.log("logout func called")
+    setAuth({});
+    window.localStorage.setItem("isLoggedIn", false);
+  };
+
+  // Avatar menu items
   const navigate = useNavigate();
   const items = [
     {
-      key: '1',
-      type: 'group',
-      label: 'Settings',
-      children: [
-        {
-          key: '1-1',
-          label: 'Login/Register',
-          onClick: () => navigate('/login'),
-        },
-        {
-          key: '1-2',
-          disabled: true,
-          label: 'Logout',
-          onClick: () => navigate('/logout'),
-        },
-      ],
-    },
-    {
       key: '2',
       label: 'Preference',
+      disabled: !loggedIn,
       children: [
         {
           key: '2-1',
@@ -56,17 +45,20 @@ function NavBar(props) {
       ],
     },
     {
-      key: '3',
-      label: 'Pls Login',
-      disabled: true,
+      key: '1',
+      type: 'group',
+      label: 'Settings',
       children: [
         {
-          key: '3-1',
-          label: '5d menu item',
+          key: 'profileItem',
+          label: !loggedIn ? 'Login/Register' : "Profile",
+          onClick: () => !loggedIn ? navigate('/login') : navigate('/profile'),
         },
         {
-          key: '3-2',
-          label: '6th menu item',
+          key: '1-2',
+          disabled: !loggedIn,
+          label: 'Logout',
+          onClick: () => {logout(); navigate('/');},
         },
       ],
     },
@@ -99,6 +91,7 @@ function NavBar(props) {
         return '';
     }
   };
+
   const selectedKey = getCurrentPageKey();
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
@@ -107,13 +100,6 @@ function NavBar(props) {
     if (Object.keys(window.localStorage.getItem("loggedInUser")).length !== 0)
       
   });*/
-
-  const logout = () => {
-    console.log("logout func called")
-    setAuth({});
-    window.localStorage.setItem("isLoggedIn", false);
-  };
-  const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
 
   // TODO: Pass the theme state to routes and change the theme of the page, remove the old index.css file
   return (
