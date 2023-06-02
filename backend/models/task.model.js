@@ -15,9 +15,9 @@ const taskSchema = new Schema({
         type: Date,
         required: false
     },
-    completed: {
-        type: Boolean,
-        default: false,
+    status: {
+        type: Number, 
+        default: 0,
         required: true
     },
     // assignedUsers: {
