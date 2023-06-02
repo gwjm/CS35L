@@ -1,3 +1,13 @@
+1. Verify node is installed with `node -v`
+
+2. Run `npm install`
+
+3. Do `cd backend` to enter backend folder. Then, run `npm install express cors mongoose dotenv`
+
+4. Run `npm install nodemon -g`
+
+5. To start the app, run `nodemon start` while in the backend folder, and `npm start` while in the top level of the repo (parent directory of the backend folder)
+
 **Start frontend**
 
 `npm install` to load all the modules
