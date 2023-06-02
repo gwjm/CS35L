@@ -33,7 +33,8 @@ router.post('/add/:id', async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
-    dueDate: req.body.dueDate
+    dueDate: req.body.dueDate,
+    assignedUsers: req.body.assignedUsers
   });
 
   try {

@@ -20,9 +20,13 @@ const taskSchema = new Schema({
         default: false,
         required: true
     },
+    // assignedUsers: {
+    //     type: [mongoose.Schema.Types.ObjectId],
+    //     ref: 'User'
+    // },
+    //TODO: Need to change this to work with object IDs later
     assignedUsers: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User'
+        type: []
     },
 })
 
