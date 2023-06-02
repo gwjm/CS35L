@@ -1,3 +1,5 @@
+**After Cloning Repo**
+
 1. Verify node is installed with `node -v`
 
 2. Run `npm install`
