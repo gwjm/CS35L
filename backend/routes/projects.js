@@ -2,7 +2,7 @@ const router = require('express').Router();
 let Project = require('../models/project.model');
 const mongoose = require('mongoose')
 
-//retrieve all workouts
+//retrieve all projects
 router.get('/', async (req, res) => {
   const projects = await Project.find({}).sort({createdAt: -1})
 
@@ -28,10 +28,10 @@ router.get('/find/:id', async (req, res) => {
 
 //add a workout
 router.post('/add', async (req, res) => {
-  const {title, owner, description} = req.body
+  const {title, owner, description, startDate, deadline, tasklist, members} = req.body
 
   try {
-    const newProject = await Project.create({ title, owner, description });
+    const newProject = await Project.create({ title, owner, description, startDate, deadline, tasklist, members });
     res.status(200).json(newProject)
   } catch (error) {
     res.status(400).json({error: error.message})
@@ -39,7 +39,7 @@ router.post('/add', async (req, res) => {
 
 });
 
-//delete a workout 
+//delete a project 
 router.delete('/delete/:id', async (req, res) => {
   const {id} = req.params
   if( !mongoose.Types.ObjectId.isValid(id)) {

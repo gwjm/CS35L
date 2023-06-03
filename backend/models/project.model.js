@@ -21,8 +21,14 @@ const projectSchema = new Schema({
     immutable: true,
     default: () => Date.now()
   },
-  updatedAt: {
+  startDate: {
     type: Date,
+    required: true,
+    default: () => Date.now()
+  },
+  deadline: {
+    type: Date,
+    required: true,
     default: () => Date.now()
   },
   members: [mongoose.SchemaTypes.ObjectId]
