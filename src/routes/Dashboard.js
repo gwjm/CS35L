@@ -51,14 +51,10 @@ function Dashboard() {
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
 
     const handleEdit = (record) => {
-        // Handle edit action for the record
-        // Example: set initial form values and open the edit modal
         setEditModalVisible(true);
     };
 
     const handleAddTask = (record) => {
-        // Handle add task action for the record
-        // Example: set initial form values and open the add task modal
         setAddTaskModalVisible(true);
     };
 
@@ -71,15 +67,11 @@ function Dashboard() {
     };
 
     const handleEditModalSubmit = (values) => {
-        // Handle form submission for edit action
-        // Example: update the record with new values and close the modal
         console.log('Edit Form Values:', values);
         setEditModalVisible(false);
     };
 
     const handleAddTaskModalSubmit = (values) => {
-        // Handle form submission for add task action
-        // Example: create a new task with the provided values and close the modal
         console.log('Add Task Form Values:', values);
         setAddTaskModalVisible(false);
     };
