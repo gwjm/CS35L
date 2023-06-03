@@ -3,10 +3,11 @@ let User = require('../models/user.model');
 const Project = require("../models/project.model");
 const mongoose = require('mongoose')
 
-router.route('/').get((req, res) => {
-  User.find()
-    .then(users => res.json(users))
-    .catch(err => res.status(400).json('Error: ' + err));
+router.get('/', async (req, res) => {
+  const users = await User.find({}).sort({createdAt: -1})
+    .populate({path: 'friends', model: 'User'})
+    .exec()
+  res.status(200).json(users)
 });
 
 router.get('/find/:id', async (req, res) => {
@@ -37,9 +38,26 @@ router.get('/findusername/:username', async (req, res) => {
   res.status(200).json(user)
 })
 
-router.route('/addFriend/:id').post((req, res) => {
-  console.log(req)
-  User.findByIdAndUpdate(req.params.id)
+router.patch('/:id', async (req, res) => {
+  const {id} = req.params
+  if( !mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'User not found'})
+  }
+
+  const user = await User.findOneAndUpdate({_id: id}, {
+    ...req.body
+  })
+
+  if (!user) {
+    return res.status(404).json({error: 'User not found'})
+  }
+  
+  res.status(200).json(user)
+});
+
+router.route('/addFriend/:id').patch((req, res) => {
+
+  User.findOneAndUpdate(req.params.id)
     .then( user => {
       user.username = req.body.username;
       user.email = req.body.email;
@@ -51,6 +69,9 @@ router.route('/addFriend/:id').post((req, res) => {
       user.joinedprojects = req.body.joinedprojects;
 
       console.log(user)
+      user.friends = req.body.friends;
+
+  
 
       user.save()
         .then(() => res.json('Friend added!'))

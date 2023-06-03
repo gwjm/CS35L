@@ -23,15 +23,15 @@ const userSchema = new Schema({
     trim: true
   },
   ownedprojects: {
-    type: [mongoose.SchemaType.ObjectId],
+    type: [mongoose.Schema.Types.ObjectId],
     ref: 'Project'
   },
   joinedprojects: {
-    type: [mongoose.SchemaType.ObjectId],
+    type: [mongoose.Schema.Types.ObjectId],
     ref: 'Project'
   },
   friends: {
-    type: [mongoose.SchemaType.ObjectID],
+    type: [mongoose.Schema.Types.ObjectID],
     ref: 'User'
   }
 }, 
@@ -39,6 +39,23 @@ const userSchema = new Schema({
  timestamps: true,
 }
 );
+
+userSchema.virtual('friendList', {
+  ref: 'User',
+  localField: 'friends',
+  foreignField: '_id',
+  justOne: false
+});
+
+function populateVirtuals(next) {
+  this.populate({path: 'friends', model: 'User'})
+  next();
+}
+
+userSchema.pre('findOne', populateVirtuals);
+userSchema.pre('find', populateVirtuals);
+userSchema.pre('findOneAndUpdate', populateVirtuals);
+userSchema.pre('update', populateVirtuals);
 
 const User = mongoose.model('User', userSchema);
 
