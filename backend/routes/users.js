@@ -36,27 +36,20 @@ router.get('/findusername/:username', async (req, res) => {
 
   res.status(200).json(user)
 })
-  //I DONT KNOW HOW TO MAKE IT WORK. SEE 1:44 AT https://www.youtube.com/watch?v=7CqJlxBYj
-  //AND THE UPDATE FUNCTION IN https://github.com/beaucarnes/mern-exercise-tracker-mongodb/blob/master/backend/routes/exercises.js
-  //POSSIBLE SOLUTION IS USING built in User.findByIdAndUpdate instead of User.findById, BUT I COULDNT FIGURE THAT OUT EITHER
+
 router.route('/addFriend/:id').post((req, res) => {
-  console.log(req)
-  //FOR SOME REASON VALUES ARE SET TO NULL???? ALSO THE CONSOLE LOG ABOVE THIS LINE NEVER GOES THRU???
+  const newFriend = {
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    ownedprojects: req.body.ownedprojects,
+    joinedprojects: req.body.joinedprojects,
+    // Add any other properties for the new friend here
+  };
+
   User.findByIdAndUpdate(req.params.id)
-    .then( user => {
-      user.username = req.body.username;
-      user.email = req.body.email;
-      user.password = req.body.password;
-      user.ownedprojects = req.body.ownedprojects;
-      user.joinedprojects = req.body.joinedprojects;
-      user.friends = req.body.friends;
-      user.ownedprojects = req.body.ownedprojects;
-      user.joinedprojects = req.body.joinedprojects;
-      user.friends = req.body.friends;
-
-      //user.friends.push(new_friend)
-
-      console.log(user)
+    .then(user => {
+      user.friends.push(newFriend); // Add the new friend to the friends array
 
       user.save()
         .then(() => res.json('Friend added!'))
@@ -64,6 +57,7 @@ router.route('/addFriend/:id').post((req, res) => {
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
 
 router.route('/createUser').post((req, res) => {
   const username = req.body.username;

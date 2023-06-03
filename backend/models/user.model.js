@@ -8,7 +8,6 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
-    //minlength: 3
   },
   email: {    
     type: String,
@@ -41,9 +40,11 @@ const userSchema = new Schema({
 // Add a virtual property to get the array of friends
 userSchema.virtual('friendList', {
   ref: 'User',
-  localField: 'friend',
+  localField: 'friends',
   foreignField: '_id',
-  justOne: false
+  justOne: false,
+  options: { unique: true } // Add this line
+
 });
 
 // Apply population to the owner field when querying
@@ -53,8 +54,7 @@ userSchema.pre('findOneAndUpdate', populateVirtuals);
 userSchema.pre('update', populateVirtuals);
 
 function populateVirtuals(next) {
-  this.populate('friendList')
-  .populate({path: 'friend', model: 'User'})
+  this.populate('friendList');
   next();
 }
 
