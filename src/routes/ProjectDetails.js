@@ -59,7 +59,6 @@ function ProjectDetails() {
                 <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
                 <Descriptions.Item label="Description">{project.description}</Descriptions.Item>
                 <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
-                <Descriptions.Item label="Start Date">{project.startDate}</Descriptions.Item>
                 <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
             </Descriptions>
 
@@ -92,9 +91,6 @@ function ProjectDetails() {
                 >
                     Are you sure you want to delete the project?
                 </Modal>
-            </div>
-            <div className="todo-list">
-                {Todo()}
             </div>
         </Card>
     );

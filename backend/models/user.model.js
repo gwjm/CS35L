@@ -31,14 +31,32 @@ const userSchema = new Schema({
     ref: 'Project'
   },
   friends: {
-    type: [mongoose.SchemaType.ObjectID],
+    type: [mongoose.Schema.Types.ObjectId],
     ref: 'User'
   }
-}, 
-{
+}, {
  timestamps: true,
+});
+
+// Add a virtual property to get the array of friends
+userSchema.virtual('friendList', {
+  ref: 'User',
+  localField: 'friend',
+  foreignField: '_id',
+  justOne: false
+});
+
+// Apply population to the owner field when querying
+userSchema.pre('findOne', populateVirtuals);
+userSchema.pre('find', populateVirtuals);
+userSchema.pre('findOneAndUpdate', populateVirtuals);
+userSchema.pre('update', populateVirtuals);
+
+function populateVirtuals(next) {
+  this.populate('friendList')
+  .populate({path: 'friend', model: 'User'})
+  next();
 }
-);
 
 const User = mongoose.model('User', userSchema);
 

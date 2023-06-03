@@ -21,15 +21,12 @@ const projectSchema = new Schema({
     immutable: true,
     default: () => Date.now()
   },
-  startDate: {
-    type: Date,
-    required: true,
-    default: () => Date.now()
+  deadline: { // TODO: Change to Date to accomdate for rangePicker
+    type: Date
   },
-  deadline: {
-    type: Date,
-    required: true,
-    default: () => Date.now()
+  tasklist: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Task'
   },
   members: {
     type: [mongoose.Schema.Types.ObjectId],
