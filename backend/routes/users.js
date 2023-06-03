@@ -50,7 +50,7 @@ router.route('/addFriend/:id').post((req, res) => {
   User.findByIdAndUpdate(req.params.id)
     .then(user => {
       user.friends.push(newFriend); // Add the new friend to the friends array
-
+      
       user.save()
         .then(() => res.json('Friend added!'))
         .catch(err => res.status(400).json('Error: ' + err));

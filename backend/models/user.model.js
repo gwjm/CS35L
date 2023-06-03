@@ -43,8 +43,7 @@ userSchema.virtual('friendList', {
   localField: 'friends',
   foreignField: '_id',
   justOne: false,
-  options: { unique: true } // Add this line
-
+  options: { unique: true }
 });
 
 // Apply population to the owner field when querying
