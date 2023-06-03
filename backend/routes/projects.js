@@ -5,11 +5,14 @@ const mongoose = require('mongoose')
 //retrieve all projects
 router.get('/', async (req, res) => {
   const projects = await Project.find({}).sort({createdAt: -1})
-
+    .populate('owner')
+    .populate({path: 'members', model: 'User'})
+    .populate({path: 'tasklist', model: 'Task'})
+    .exec()
   res.status(200).json(projects)
 });
 
-//get a single workout
+//get a single project
 router.get('/find/:id', async (req, res) => {
   const {id} = req.params
   if( !mongoose.Types.ObjectId.isValid(id)) {
@@ -17,6 +20,10 @@ router.get('/find/:id', async (req, res) => {
   }
 
   const project = await Project.findById(id)
+    .populate('owner')
+    .populate({path: 'members', model: 'User'})
+    .populate({path: 'tasklist', model: 'Task'})
+    .exec()
 
   //dont execute rest of code if not found
   if (!project) {
@@ -26,7 +33,7 @@ router.get('/find/:id', async (req, res) => {
   res.status(200).json(project)
 })
 
-//add a workout
+//add a project
 router.post('/add', async (req, res) => {
   const {title, owner, description, startDate, deadline, tasklist, members} = req.body
 
@@ -45,6 +52,10 @@ router.delete('/delete/:id', async (req, res) => {
   if( !mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'Project not found'})
   }
+  const todolist = await Project.findById(id).select('tasklist')
+  for (let i = 0; i < todolist.length; i++) {
+    await Task.findByIdAndDelete(todolist[i])
+  }
   
   const project = await Project.findOneAndDelete({_id: id})
 
@@ -55,7 +66,7 @@ router.delete('/delete/:id', async (req, res) => {
   res.status(200).json(project)
 });
 
-//update a workout
+//update a projects
 router.patch('/:id', async (req, res) => {
   const {id} = req.params
   if( !mongoose.Types.ObjectId.isValid(id)) {

@@ -9,7 +9,7 @@ import {
 // All routes
 import Home from "./routes/Home";
 import Contact from "./routes/Contact";
-import Projects from "./routes/Projects";
+import Projects from "./routes/CreateProject";
 import About from "./routes/About";
 import NavBar from "./components/Navbar";
 import ErrorPage from "./routes/ErrorPage";
@@ -17,19 +17,25 @@ import Todo from "./routes/Todo";
 import Login from "./routes/Login";
 import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
+import Profile from "./routes/Profile";
+import UserCreation from "./routes/UserCreation";
+import TaskCreation from "./routes/TaskCreation";
 
-// TODO: Replace with ant design
-
-// Contexts
+//Contexts
 import { ThemeProvider } from "./contexts/ThemeContext";
 import "./index.css";
 
+//For Login
+import { AuthProvider } from './contexts/AuthProvider';
+
 const AppLayout = () => {
   return (
-    <ThemeProvider>
-      <NavBar />
-      <Outlet />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <NavBar />
+        <Outlet />
+      </ThemeProvider>
+    </AuthProvider>
   );
 };
 
@@ -70,11 +76,22 @@ const router = createBrowserRouter([
         path: "/Projects/:id",
         element: <ProjectDetails />,
       },
+      {
+        path: "/Profile",
+        element: <Profile />,
+      },
+      {
+        path: "/UserCreation",
+        element: <UserCreation />,
+      },
+      {
+        path: '/TaskCreation/:id',
+        element: <TaskCreation />,
+      }
     ]
   }
 ]);
 
-// TODO: add global theme selector
 createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );

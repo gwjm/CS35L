@@ -1,21 +1,57 @@
 import { useParams } from "react-router-dom";
-import useFetch from '../hooks/useFetch';
-import { Todo } from './Todo.js';
+import { Card, Descriptions, List, Button, Modal } from 'antd';
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 function ProjectDetails() {
     const { id } = useParams();
-    const { data: projects, error, loading } = useFetch('http://localhost:3001/api/projects');
-    console.log(projects);
+    const [project, setProject] = useState();
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    console.log(id);
+    useEffect(() => {
+        const fetchProject = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
+                setProject(response.data);
+            } catch (error) {
+                console.log('Error fetching project:', error);
+            }
+        };
 
-    var project = projects.find(function (el) {
-        return el._id === id;
-        /*if (el._id === id) {
-            project = el;
-            return true;
-        }*/
-    });
+        console.log("Fetching project...");
+        fetchProject();
+    }, [id]);
 
-    console.log(project);
+    const handleDelete = async () => {
+        setDeleteModalVisible(true);
+    }
+
+    const confirmDelete = async (id) => {
+        // Logic to delete the project with the given id
+        setDeleteModalVisible(false);
+        try {
+            await axios.delete(`http://localhost:3001/api/projects/delete/${project._id}`);
+            setProject(null);
+            window.location.href = '/dashboard';
+        } catch (error) {
+            console.log('Error deleting project:', error);
+        }
+        setDeleteModalVisible(false);
+    };
+
+    const cancelDelete = () => {
+        setDeleteModalVisible(false);
+    };
+
+    console.log("Project:", project);
+
+    if (!project) {
+        return <div>Loading...</div>; // or display an appropriate loading state
+    }
+
+    const projectMembers = project.members;
+    const tasklist = project.tasklist;
+
     return (
         <Card title="Project Details">
             <Descriptions layout="vertical">
@@ -60,8 +96,8 @@ function ProjectDetails() {
             <div className="todo-list">
                 {Todo()}
             </div>
-        </div>
+        </Card>
     );
-}
+};
 
 export default ProjectDetails;

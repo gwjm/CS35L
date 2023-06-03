@@ -22,19 +22,23 @@ export function ThemeProvider({ children }) {
     setTheme(theme === 'light' ? 'dark' : 'light');
 
     if (theme === 'light') {
+      document.title = 'Project Hub';
       faviconLink.href = './favicon.ico';
       rootElement.className = 'dark-theme';
     } else {
+      document.title = 'Poro Hub';
       faviconLink.href = './graceIcon.png';
       rootElement.className = 'light-theme';
     }
   }
 
   return (
-    <ThemeContext.Provider value={ theme }>
-        <ThemeUpdateContext.Provider value={toggleTheme}>
-            {children}
-        </ThemeUpdateContext.Provider>
-    </ThemeContext.Provider>
+    <ConfigProvider theme={{algorithm: theme === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm}}>
+      <ThemeContext.Provider value={ theme }>
+          <ThemeUpdateContext.Provider value={toggleTheme}>
+              {children}
+          </ThemeUpdateContext.Provider>
+      </ThemeContext.Provider>
+    </ConfigProvider>
   )
 }
