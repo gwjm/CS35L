@@ -1,6 +1,4 @@
 import AuthContext from "../contexts/AuthProvider.js";
-import { showErrorDialog } from '../components/ErrorDialog';
-import useFetch from '../hooks/useFetch';
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
 // Libraries
@@ -8,8 +6,7 @@ import axios from 'axios';
 import React, { useContext, useState, useEffect } from "react";
 
 // AntD
-import { Typography, Form, Select, Button, Card, theme , ConfigProvider } from 'antd';
-import { useRouteLoaderData } from "react-router-dom";
+import { Typography, Form, Select, Button, Card, theme , ConfigProvider , message } from 'antd';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -34,17 +31,21 @@ function Profile() {
             console.log(data)
             await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
             console.log('User created successfully');
+            message.success('Friend added successfully'); // Show success message
             fetchUser();
             fetchMembers();
-            
+
         } catch (error) {
             console.error(error);
+            message.error('Failed to add friend'); // Show error message
         }
-    }
+        }
 
-    const onFinishFailed = errorInfo => {
-        showErrorDialog('Failed to add friend');
-    }
+        const onFinishFailed = errorInfo => {
+        console.error('Failed:', errorInfo);
+        message.error('Failed to add friend'); // Show error message
+        }
+
 
     const fetchMembers = async () => {
         try {
