@@ -10,6 +10,11 @@
 
 5. To start the app, run `nodemon start` while in the backend folder, and `npm start` while in the top level of the repo (parent directory of the backend folder)
 
+**Start Shortcut**
+
+run the shell script `sh startWeb.sh` in the root directory to start both front and backend
+
+
 **Start frontend**
 
 `npm install` to load all the modules
