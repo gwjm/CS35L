@@ -25,5 +25,5 @@ yarn-error.log*
 
 # since we have package-lock.json
 yarn.lock
-MyReport.ipynb
+*.ipynb
 *.py
