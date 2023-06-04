@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, DatePicker, Select, Modal } from 'antd';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ const TaskForm = () => {
   const [visible, setVisible] = useState(false);
   const { id } = useParams();
   const [form] = Form.useForm();
+  const [members, setMembers] = useState([]);
 
   const handleOpen = () => {
     setVisible(true);
@@ -18,6 +19,8 @@ const TaskForm = () => {
     setVisible(false);
     form.resetFields();
   };
+
+
 
   const onFinish = async (values) => {
     try {
@@ -34,6 +37,20 @@ const TaskForm = () => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  const fetchMembers = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/projects/${id}`);
+      setMembers(response.data.members);
+      console.log(members);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMembers(); // Call fetchMembers when the component is mounted
+  }, []);
 
   return (
     <div>
@@ -91,7 +108,11 @@ const TaskForm = () => {
             rules={[{ required: false, message: 'Please input your task assigned user(s)!' }]}
           >
             <Select mode="multiple" placeholder="Select members">
-              {/* Render the options */}
+              {members.map(member => ( 
+                <Option key={member._id} value={member._id}>
+                  {member.username}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
