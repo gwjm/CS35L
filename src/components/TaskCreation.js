@@ -40,7 +40,7 @@ const TaskForm = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/projects/${id}`);
+      const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
       setMembers(response.data.members);
       console.log(members);
     } catch (error) {
