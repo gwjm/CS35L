@@ -29,15 +29,23 @@ function Profile() {
             if (!Array.isArray(user.friends)) {
                 user.friends = []; // Initialize as an empty array
             }
-            // for (user in values.users) {
-            //     if (user.friends[user] === values.users) {
-            //         message.error('Friend already added'); // Show error message
-            //         return;
-            //     }
-            //     else{
-            //         message.success('Friend added successfully'); // Show success message
-            //     }
-            // }
+            user.friends.push(values.users);
+            const data = { ...user};
+            console.log(data)
+
+            for (let i = 0; i<data.friends.length; i++) {
+
+                if (data.friends[i] === user._id) {
+                    console.log("Can't friend youself")
+                    return
+                }
+
+                if (data.friends[i] === values.users) {
+                    console.log('Already friends')
+                    return
+                }
+
+            }
 
             message.success('Friend added successfully'); // Show success message
             fetchUser();
