@@ -18,6 +18,7 @@ function Profile() {
     const { auth } = useContext(AuthContext);
     const [members, setMembers] = useState([]);
     const [user, setUser] = useState([]);
+    const [friends, setFriends] = useState([]);
 
 
     const onFinish = async values => {
@@ -48,8 +49,6 @@ function Profile() {
             }
 
             message.success('Friend added successfully'); // Show success message
-            fetchUser();
-            fetchMembers();
 
         } catch (error) {
             console.error(error);
@@ -75,9 +74,6 @@ function Profile() {
 
     const fetchUser = async () => {
         try {
-            if (!Array.isArray(user.friends)) {
-                user.friends = []; // Initialize as an empty array
-            }
             const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
             setUser(response.data);
         } catch (error) {
@@ -85,10 +81,33 @@ function Profile() {
         }
     };
 
-    useEffect(() => {
-        fetchUser();
-        fetchMembers(); // Call fetchMembers when the component is mounted
-    }, []); // The empty dependency array [] ensures that the effect runs only once on component mount
+    const fetchFriends = async () => {
+        try {
+            if(!user.friends){
+                user.friends = []
+            }
+          let accumulatedFriends = []; // Array to accumulate friends data
+          for (let i = 0; i < user.friends.length; i++) {
+            const response = await axios.get(`http://localhost:3001/api/users/find/${user.friends[i]}`);
+            accumulatedFriends = accumulatedFriends.concat(response.data); // Accumulate friends data
+            console.log(accumulatedFriends)
+          }
+          setFriends(accumulatedFriends); // Update state with accumulated data
+          console.log(friends)
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      useEffect(() => {
+        fetchUser()
+      }, [auth]);
+      useEffect(() => {
+        fetchMembers();
+      }, [user]);
+      useEffect(() => {
+        fetchFriends();
+      }, [user]);
 
     // Friends Columns
     const columns = [
@@ -161,7 +180,7 @@ function Profile() {
                     <Card style={{ width: "100%" }}>
                         <Title level={3}>My Friends:</Title>
                         <Table
-                            dataSource={user.friends}
+                            dataSource={friends}
                             columns={columns}
                             pagination={false}
                             size="small"
