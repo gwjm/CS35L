@@ -23,32 +23,31 @@ function Profile() {
     const onFinish = async values => {
         console.log("onfinish")
         console.log('Values:', values.users);
+        let usernames = new Set(user.friends.map(friend => friend._id));
+
         try {
             if (!Array.isArray(user.friends)) {
                 user.friends = []; // Initialize as an empty array
             }
             for (user in values.users) {
-                if (user.friends[user] === values.users) {
-                    message.error('Friend already added'); // Show error message
-                    return;
+                if (usernames.has(user)) {
+                    message.error(`${user} is already in your friend list`); // Show error message
+                    user.friends.push(values.users);
+                    const data = { ...user };
+                    await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
                 }
                 else{
-                    message.success('Friend added successfully'); // Show success message
+                    message.success(`${user} added successfully`); // Show success message
                 }
             }
 
-            user.friends.push(values.users);
-            const data = { ...user };
-            console.log(data)
-            await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
-            console.log('User created successfully');
             message.success('Friend added successfully'); // Show success message
             fetchUser();
             fetchMembers();
 
         } catch (error) {
             console.error(error);
-            message.error('Failed to add friend'); // Show error message
+            message.error('Failed to add friends'); // Show error message
         }
     }
 
