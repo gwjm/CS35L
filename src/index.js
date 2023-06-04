@@ -19,7 +19,6 @@ import Dashboard from "./routes/Dashboard"
 import ProjectDetails from "./routes/ProjectDetails";
 import Profile from "./routes/Profile";
 import UserCreation from "./routes/UserCreation";
-import TaskCreation from "./routes/TaskCreation";
 
 //Contexts
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -83,10 +82,6 @@ const router = createBrowserRouter([
       {
         path: "/UserCreation",
         element: <UserCreation />,
-      },
-      {
-        path: '/TaskCreation/:id',
-        element: <TaskCreation />,
       }
     ]
   }

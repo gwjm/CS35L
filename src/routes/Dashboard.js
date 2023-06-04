@@ -6,7 +6,8 @@ import { showErrorDialog } from '../components/ErrorDialog';
 // AntD
 import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme , Card } from 'antd';
 import { Link } from 'react-router-dom';
-import TaskCreation from './TaskCreation'; // TODO: add task creation floating
+import TaskCreation from '../components/TaskCreation'; // TODO: add task creation floating
+import EditProjectDialog from '../components/EditProjectDialog';
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
 function Dashboard() {
@@ -78,9 +79,11 @@ function Dashboard() {
 
     const editMenu = (record) => (
         <Menu>
-          <Menu.Item onClick={() => handleEdit(record)}>Edit</Menu.Item>
+          <Menu.Item>
+            <EditProjectDialog />
+          </Menu.Item>
           <Menu.Item key="addTask">
-            <Link to={`/TaskCreation/${record._id}`}>Add Task</Link>
+            <TaskCreation />
           </Menu.Item>
         </Menu>
       );
@@ -187,20 +190,6 @@ function Dashboard() {
                 </Form>
             </Modal>
 
-            <Modal
-                visible={addTaskModalVisible}
-                onCancel={handleAddTaskModalCancel}
-                onOk={handleAddTaskModalSubmit}
-                title="Add Task Form"
-            >
-                <Form>
-                    {/* Add form fields for add task action */}
-                    <Form.Item label="Title" name="taskTitle">
-                        <Input />
-                    </Form.Item>
-                    {/* Add more form fields as needed */}
-                </Form>
-            </Modal>
         </Card>
         </ConfigProvider>
     );

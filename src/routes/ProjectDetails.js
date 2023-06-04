@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag } from 'antd';
+import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag , Row , Space} from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 import { getRandomColor } from "../utility/randomColors.js";
 import { showErrorDialog } from "../components/ErrorDialog";
+import EditProjectDialog from '../components/EditProjectDialog';
+import TaskForm from "../components/TaskCreation";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -49,7 +51,6 @@ function ProjectDetails() {
     const cancelDelete = () => {
         setDeleteModalVisible(false);
     };
-
 
     if (!project) {
         return <div>Loading...</div>; // or display an appropriate loading state
@@ -121,10 +122,26 @@ function ProjectDetails() {
             }
         }
     ];
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
             <ConfigProvider theme={{ algorithm: currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
-                <Card title="Project Details" style={{ flex: 1 }}>
+                <Card
+                    title={
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>Project Details</span>
+                            <div>
+                                <Row>
+                                    <Space>
+                                        <EditProjectDialog />
+                                        <TaskForm />
+                                    </Space>
+                                </Row>
+                            </div>
+                        </div>
+                    }
+                    style={{ flex: 1 }}
+                >
                     <Descriptions layout="vertical">
                         <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
                         <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
