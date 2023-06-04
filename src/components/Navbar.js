@@ -152,7 +152,7 @@ function NavBar(props) {
 
       <Menu.Item key="searchBar">
         <Input.Search
-          placeholder="input search text"
+          placeholder="Looking for a friend?"
           allowClear
           enterButton="Search"
           onSearch={(value) => console.log(value)}

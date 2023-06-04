@@ -6,7 +6,7 @@ import axios from 'axios';
 import React, { useContext, useState, useEffect } from "react";
 
 // AntD
-import { Typography, Form, Select, Button, Card, theme , ConfigProvider , message } from 'antd';
+import { Typography, Form, Select, Button, Card, theme, ConfigProvider, message, Table, Row, Col, Tag } from 'antd';
 const { Title, Text } = Typography;
 const { Option } = Select;
 
@@ -21,13 +21,24 @@ function Profile() {
 
 
     const onFinish = async values => {
+        console.log("onfinish")
         console.log('Values:', values.users);
         try {
             if (!Array.isArray(user.friends)) {
                 user.friends = []; // Initialize as an empty array
-              }
+            }
+            for (user in values.users) {
+                if (user.friends[user] === values.users) {
+                    message.error('Friend already added'); // Show error message
+                    return;
+                }
+                else{
+                    message.success('Friend added successfully'); // Show success message
+                }
+            }
+
             user.friends.push(values.users);
-            const data = { ...user};
+            const data = { ...user };
             console.log(data)
             await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
             console.log('User created successfully');
@@ -39,91 +50,121 @@ function Profile() {
             console.error(error);
             message.error('Failed to add friend'); // Show error message
         }
-        }
+    }
 
-        const onFinishFailed = errorInfo => {
+    const onFinishFailed = errorInfo => {
         console.error('Failed:', errorInfo);
         message.error('Failed to add friend'); // Show error message
-        }
+    }
 
 
     const fetchMembers = async () => {
         try {
-          const response = await axios.get(`http://localhost:3001/api/users/`);
-          const parsedMembers = response.data.filter(member => member.username !== user.username);
-          const friendsOfUser = user.friends
-          setMembers(parsedMembers);
+            const response = await axios.get(`http://localhost:3001/api/users/`);
+            const parsedMembers = response.data.filter(member => member.username !== user.username);
+            const friendsOfUser = user.friends
+            setMembers(parsedMembers);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
+    };
 
     const fetchUser = async () => {
-    try {
-        const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
-        setUser(response.data);
-    } catch (error) {
-        console.error(error);
-    }
+        try {
+            const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
+            setUser(response.data);
+        } catch (error) {
+            console.error(error);
+        }
     };
-    
+
     useEffect(() => {
         fetchUser();
         fetchMembers(); // Call fetchMembers when the component is mounted
     }, []); // The empty dependency array [] ensures that the effect runs only once on component mount
-    
 
+    // Friends Columns
+    const columns = [
+        {
+            title: "Friend Name",
+            dataIndex: "username",
+            key: "username",
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+        }
+    ]
+
+    const isFriend = (memberId) => {
+        return user.friends.some((friend) => friend._id === memberId);
+      };
     return (
-        <ConfigProvider
-            theme={{
-                algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
-            }}>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Card style={{ width: 400 }}>
-                    <Title level={1}>My Profile</Title>
-                    <div>
-                        <Text>Username: {user ? user.username : ''}</Text>
-                        <Text>Email: {user ? user.email : ''}</Text>
-                    </div>
-                    <div className="search">
-                        <Text>Add Friends (because you don't have any in real life :D)</Text>
+        <ConfigProvider theme={{algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm}}>
+            <Card style={{ backgroundColor: "grey", height: "100vh" }}>
+                <Row gutter={[12, 12]}>
+                    <Col span={12}>
+                    <Card>
+                        <Title level={1}>My Profile</Title>
                         <div>
-                            <Form
-                                name="basic"
-                                wrapperCol={{ span: 16 }}
-                                onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}
-                            >
-                                <Form.Item
-                                    name="users"
-                                    rules={[{ required: true, message: 'Please select a user to friend!' }]}
-                                >
-                                    <Select
-                                        showSearch
-                                        placeholder="Find friends"
-                                        filterOption={(input, option) =>
-                                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                                        }
-                                    >
-                                        {/* options={members} */}
-                                        {members.map(member => (
-                                            <Option key={member._id} value={member._id}>
-                                              {member.username}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                    <Button type="primary" htmlType="submit">
-                                        Submit
-                                    </Button>
-                                </Form.Item>
-                            </Form>
+                            <Text>Username: {user ? user.username : ""}</Text>
+                            <br />
+                            <Text>Email: {user ? user.email : ""}</Text>
                         </div>
-                    </div>
-                </Card>
-            </div>
+                        <div className="search">
+                            <Text>Add Friends (because you don't have any in real life :D)</Text>
+                            <div>
+                                <Form
+                                    name="basic"
+                                    wrapperCol={{ span: 16 }}
+                                    onFinish={onFinish}
+                                    onFinishFailed={onFinishFailed}
+                                >
+                                    <Form.Item
+                                        name="users"
+                                        rules={[{ required: true, message: "Please select a user to friend!" }]}
+                                    >
+                                        <Select
+                                            showSearch
+                                            mode="multiple"
+                                            placeholder="Find friends"
+                                            filterOption={(input, option) =>
+                                                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                                            }
+                                        >
+                                            {members.map((member) => (
+                                                <Option key={member._id} value={member._id} disabled={isFriend(member._id)} >
+                                                    <Tag color={isFriend(member._id) ? 'gold' : "green"}>{member.username}</Tag>
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                        <Button type="primary" htmlType="submit">
+                                            Submit
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </div>
+                        </div>
+                    </Card>
+                    </Col>
+                    <Col span={12}>
+                    <Card style={{ width: "100%" }}>
+                        <Title level={3}>My Friends:</Title>
+                        <Table
+                            dataSource={user.friends}
+                            columns={columns}
+                            pagination={false}
+                            size="small"
+                        />
+                    </Card>
+                    </Col>
+                </Row>
+            </Card>
         </ConfigProvider>
     );
 };
+
 export default Profile;

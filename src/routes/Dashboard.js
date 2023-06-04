@@ -4,7 +4,7 @@ import AuthContext from "../contexts/AuthProvider.js";
 import { showErrorDialog } from '../components/ErrorDialog';
 
 // AntD
-import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme } from 'antd';
+import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme , Card } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskCreation from './TaskCreation'; // TODO: add task creation floating
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
@@ -132,12 +132,19 @@ function Dashboard() {
     ];
 
     // Return --------------------------------------------------
+    const cardStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'top',
+        height: '100vh',
+      };
+
     return (
     <ConfigProvider
         theme={{
          algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
         }}>
-        <div>
+        <Card style={cardStyle}>
             <h1>My Dashboard</h1>
             {loading && <div>Loading...</div>}
             {error && showErrorDialog(error)}
@@ -194,7 +201,7 @@ function Dashboard() {
                     {/* Add more form fields as needed */}
                 </Form>
             </Modal>
-        </div>
+        </Card>
         </ConfigProvider>
     );
 };

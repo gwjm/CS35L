@@ -1,13 +1,16 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, List, Button, Modal } from 'antd';
+import { Card, Descriptions, List, Button, Modal, ConfigProvider, Table, theme } from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-    console.log(id);
+    const currentTheme = useTheme();
+    const toggleTheme = useThemeUpdate();
+
     useEffect(() => {
         const fetchProject = async () => {
             try {
@@ -52,47 +55,60 @@ function ProjectDetails() {
     const projectMembers = project.members;
     const tasklist = project.tasklist;
 
+    const columns = [
+        {
+            title: 'Members',
+            dataIndex: 'username',
+            key: 'username',
+        }
+    ];
+
     return (
-        <Card title="Project Details">
-            <Descriptions layout="vertical">
-                <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
-                <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
-                <Descriptions.Item label="Description">{project.description}</Descriptions.Item>
-                <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
-                <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
-            </Descriptions>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+            <ConfigProvider theme={{ algorithm: currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
+                <Card title="Project Details" style={{ flex: 1 }}>
+                    <Descriptions layout="vertical">
+                        <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
+                        <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
+                        <Descriptions.Item label="Description">{project.description}</Descriptions.Item>
+                        <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
+                        <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
+                    </Descriptions>
 
-            <List
-                header={<header><h3>Members</h3></header>}
-                dataSource={projectMembers}
-                renderItem={(item) => <List.Item>{item.username}</List.Item>}
-            />
+                    <h3>Members</h3>
+                    <Table dataSource={projectMembers} columns={columns} pagination={false} style={{ marginBottom: 16 }} />
 
-            <List
-                header={<header><h3>Task List</h3></header>}
-                dataSource={tasklist}
-                renderItem={(item) => <List.Item>{item.title}</List.Item>}
-            />
+                    <h3>Task List</h3>
+                    <List
+                        dataSource={tasklist}
+                        renderItem={item => (
+                            <List.Item>{item.title}</List.Item>
+                        )}
+                    />
 
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
-                <Button
-                    danger type="text"
-                    onClick={() => handleDelete()}
-                >
-                    Delete
-                </Button>
-                <Modal
-                    open={deleteModalVisible}
-                    title="Confirm Delete"
-                    okText="Delete"
-                    cancelText="Cancel"
-                    onOk={confirmDelete}
-                    onCancel={cancelDelete}
-                >
-                    Are you sure you want to delete the project?
-                </Modal>
-            </div>
-        </Card>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
+                        <Button
+                            danger
+                            type="primary"
+                            onClick={() => handleDelete()}
+                            style={{ backgroundColor: 'red', borderColor: 'red' }}
+                        >
+                            Delete
+                        </Button>
+                        <Modal
+                            visible={deleteModalVisible}
+                            title="Confirm Delete"
+                            okText="Delete"
+                            cancelText="Cancel"
+                            onOk={confirmDelete}
+                            onCancel={cancelDelete}
+                        >
+                            Are you sure you want to delete the project?
+                        </Modal>
+                    </div>
+                </Card>
+            </ConfigProvider>
+        </div>
     );
 };
 
