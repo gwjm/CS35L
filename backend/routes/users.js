@@ -5,8 +5,8 @@ const mongoose = require('mongoose')
 
 router.get('/', async (req, res) => {
   const users = await User.find({}).sort({createdAt: -1})
-    .populate({path: 'friends', model: 'User'})
-    .exec()
+    // .populate({path: 'friends', model: 'User'})
+    // .exec()
   res.status(200).json(users)
 });
 

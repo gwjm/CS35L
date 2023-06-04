@@ -2,6 +2,7 @@ import useFetch from '../hooks/useFetch';
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
 import { showErrorDialog } from '../components/ErrorDialog';
+import axios from 'axios';
 
 // AntD
 import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme , Card } from 'antd';
@@ -15,7 +16,8 @@ function Dashboard() {
     const currentTheme = useTheme();
 
     const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
-    let data2 = []
+    const[projects, setProjects] = useState([]);
+    const[user, setUser] = useState([]);
 
     const { auth } = useContext(AuthContext);
 
@@ -25,29 +27,36 @@ function Dashboard() {
             //console.log(auth);
             localStorage.setItem("token", JSON.stringify(auth));
         }
+        fetchUser();
     }, [auth]);
-
-    //console.log(Object.keys(auth).length === 0);
-    let j = 0;
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].owner.username === auth.user1) {
-            data2[j] = data[i];
-            j++;
+    
+    useEffect(() => {
+        if (user._id) {
+            fetchProjects();
         }
-    }
-    /* axios.get('http://localhost:3001/api/projects/')
-         .then(function (response) {
-             console.log(response);
-         })
-         .catch(function (error) {
-             console.log(error);
-         })
-         .finally(function () {
- 
-         });*/
+    }, [user]);
 
-    //console.log(data);
-    //console.log(data.id);
+    const fetchUser = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
+            setUser(response.data);
+            console.log(response.data)
+            fetchProjects();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchProjects = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
+            setProjects(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
 
@@ -87,6 +96,7 @@ function Dashboard() {
           </Menu.Item>
         </Menu>
       );
+
 
     const columns = [
         {
@@ -164,7 +174,7 @@ function Dashboard() {
                 }}
             >
                 <Table
-                    dataSource={data2}
+                    dataSource={projects}
                     columns={columns}
                     pagination={false}
                     scroll={{ y: 300 }}

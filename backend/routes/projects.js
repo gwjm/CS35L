@@ -33,6 +33,21 @@ router.get('/find/:id', async (req, res) => {
   res.status(200).json(project)
 })
 
+//get projects by ownerid
+router.get('/findbyowner/:id', async (req, res) => {
+  const {id} = req.params
+  if( !mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'Project not found'})
+  }
+  const projects = await Project.find({owner: id})
+    .populate('owner')
+
+  if(!projects) {
+    return res.status(404).json({error: 'No projects found'})
+  }
+  res.status(200).json(projects)
+})
+
 //add a project
 router.post('/add', async (req, res) => {
   const {title, owner, description, deadline, tasklist, members} = req.body

@@ -29,17 +29,15 @@ function Profile() {
             if (!Array.isArray(user.friends)) {
                 user.friends = []; // Initialize as an empty array
             }
-            for (user in values.users) {
-                if (usernames.has(user)) {
-                    message.error(`${user} is already in your friend list`); // Show error message
-                    user.friends.push(values.users);
-                    const data = { ...user };
-                    await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
-                }
-                else{
-                    message.success(`${user} added successfully`); // Show success message
-                }
-            }
+            // for (user in values.users) {
+            //     if (user.friends[user] === values.users) {
+            //         message.error('Friend already added'); // Show error message
+            //         return;
+            //     }
+            //     else{
+            //         message.success('Friend added successfully'); // Show success message
+            //     }
+            // }
 
             message.success('Friend added successfully'); // Show success message
             fetchUser();
@@ -69,6 +67,9 @@ function Profile() {
 
     const fetchUser = async () => {
         try {
+            if (!Array.isArray(user.friends)) {
+                user.friends = []; // Initialize as an empty array
+            }
             const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
             setUser(response.data);
         } catch (error) {
