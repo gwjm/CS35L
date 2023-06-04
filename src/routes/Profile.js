@@ -57,7 +57,6 @@ function Profile() {
         message.error('Failed to add friend'); // Show error message
     }
 
-
     const fetchMembers = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/users/`);

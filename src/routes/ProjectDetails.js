@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, List, Button, Modal, ConfigProvider, Table, theme } from 'antd';
+import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag } from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
+import { getRandomColor } from "../utility/randomColors.js";
+import { showErrorDialog } from "../components/ErrorDialog";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -18,6 +20,7 @@ function ProjectDetails() {
                 setProject(response.data);
             } catch (error) {
                 console.log('Error fetching project:', error);
+                showErrorDialog('Error fetching project');
             }
         };
 
@@ -38,6 +41,7 @@ function ProjectDetails() {
             window.location.href = '/dashboard';
         } catch (error) {
             console.log('Error deleting project:', error);
+            showErrorDialog('Error deleting project');
         }
         setDeleteModalVisible(false);
     };
@@ -46,7 +50,6 @@ function ProjectDetails() {
         setDeleteModalVisible(false);
     };
 
-    console.log("Project:", project);
 
     if (!project) {
         return <div>Loading...</div>; // or display an appropriate loading state
@@ -54,15 +57,70 @@ function ProjectDetails() {
 
     const projectMembers = project.members;
     const tasklist = project.tasklist;
+    // Generate random color for each user name
+    const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
+    function getColor(username) {
+        const colorEntry = randomColorArray.find(([name]) => name === username);
+        return colorEntry ? colorEntry[1] : getRandomColor();
+    }
 
     const columns = [
         {
             title: 'Members',
             dataIndex: 'username',
             key: 'username',
-        }
+            render: (username) => {
+                const color = getColor(username);
+                return <Tag color={color}>{username}</Tag>;
+            },
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+        },
     ];
 
+    // Task columns
+    const taskColumns = [
+        {
+            title: 'Task',
+            dataIndex: 'title',
+            key: 'title',
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description',
+        },
+        {
+            title: 'Deadline',
+            dataIndex: 'dueDate',
+            key: 'dueDate',
+        },
+        {
+            title: 'Assigned To',
+            dataIndex: 'assignedUsers',
+            key: 'assignedUsers',
+            render: (assignedUsers) => (
+                <span>
+                    {assignedUsers.map((user) => (
+                        <React.Fragment key={user}>
+                            <Tag color={getColor(user)}>{user}</Tag>
+                        </React.Fragment>
+                    ))}
+                </span>
+            ),
+        },
+        {
+            title: 'Status',
+            dataIndex: 'completed',
+            key: 'completed',
+            render: (status) => {
+                return <Tag color={status === 'false' ? 'lime' : 'red'}>{status ? 'Completed' : 'In Progress'}</Tag>
+            }
+        }
+    ];
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
             <ConfigProvider theme={{ algorithm: currentTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
@@ -76,15 +134,11 @@ function ProjectDetails() {
                     </Descriptions>
 
                     <h3>Members</h3>
-                    <Table dataSource={projectMembers} columns={columns} pagination={false} style={{ marginBottom: 16 }} />
+                    <Table dataSource={projectMembers} columns={columns} pagination={true} style={{ marginBottom: 16 }} />
 
                     <h3>Task List</h3>
-                    <List
-                        dataSource={tasklist}
-                        renderItem={item => (
-                            <List.Item>{item.title}</List.Item>
-                        )}
-                    />
+
+                    <Table dataSource={tasklist} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
 
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
                         <Button
