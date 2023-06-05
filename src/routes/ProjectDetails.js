@@ -85,6 +85,7 @@ function ProjectDetails() {
     }
 
     const projectMembers = project.members;
+    console.log("projectMembers: ", projectMembers)
     const tasklist = project.tasklist;
     // Generate random color for each user name
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
