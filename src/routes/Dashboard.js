@@ -137,7 +137,7 @@ function Dashboard() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => (
-              <Dropdown overlay={editMenu(record)}>
+              <Dropdown menu={editMenu(record)}>
                 <Button>Actions</Button>
               </Dropdown>
             ),

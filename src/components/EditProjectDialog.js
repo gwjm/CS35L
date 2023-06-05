@@ -30,7 +30,7 @@ const EditProjectDialog = () => {
       </Button>
 
       <Modal
-        visible={visible}
+        open={visible}
         title="Edit Project"
         okText="Save"
         cancelText="Cancel"

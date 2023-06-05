@@ -34,7 +34,7 @@ function NavBar(props) {
       key: '2',
       label: 'Preference',
       disabled: !loggedIn,
-      children: [
+      items: [
         {
           key: '2-1',
           label: 'Settings',
@@ -49,7 +49,7 @@ function NavBar(props) {
       key: '1',
       type: 'group',
       label: 'Settings',
-      children: [
+      items: [
         {
           key: 'profileItem',
           label: !loggedIn ? 'Login/Register' : "Profile",
