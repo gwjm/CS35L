@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -90,7 +90,7 @@ const TaskForm = () => {
             name="dueDate"
             rules={[{ required: true, message: 'Please input your task due date!' }]}
           >
-            <DatePicker />
+            <DatePicker disabledDate={(current) => current.isBefore(moment()-1)} />
           </Form.Item>
           <Form.Item
           label="Task Status"
