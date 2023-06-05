@@ -36,6 +36,7 @@ function Dashboard() {
         }
     }, [user]);
 
+    //get currently logged in user
     const fetchUser = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`)
@@ -47,6 +48,7 @@ function Dashboard() {
         }
     };
 
+    //get projects owned by logged in user
     const fetchProjects = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
@@ -137,7 +139,7 @@ function Dashboard() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => (
-              <Dropdown menu={editMenu(record)}>
+              <Dropdown overlay={editMenu(record)}>
                 <Button>Actions</Button>
               </Dropdown>
             ),
