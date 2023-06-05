@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Modal } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Modal, message } from 'antd';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+
 
 const { Option } = Select;
 
@@ -20,8 +21,6 @@ const TaskForm = () => {
     form.resetFields();
   };
 
-
-
   const onFinish = async (values) => {
     try {
       const data = { ...values };
@@ -29,6 +28,7 @@ const TaskForm = () => {
       console.log('Task created successfully');
       setVisible(false);
       form.resetFields();
+      window.location.reload();
     } catch (error) {
       console.error('Failed to create task', error);
     }
@@ -42,7 +42,7 @@ const TaskForm = () => {
     try {
       const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
       setMembers(response.data.members);
-      console.log(members);
+      console.log(response.data.members);
     } catch (error) {
       console.error(error);
     }
@@ -105,7 +105,7 @@ const TaskForm = () => {
           <Form.Item
             label="Assigned User(s)"
             name="assignedUsers"
-            rules={[{ required: false, message: 'Please input your task assigned user(s)!' }]}
+            rules={[{ required: true, message: 'Please input your task assigned user(s)!' }]}
           >
             <Select mode="multiple" placeholder="Select members">
               {members.map(member => ( 

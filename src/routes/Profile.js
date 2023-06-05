@@ -20,41 +20,37 @@ function Profile() {
     const [user, setUser] = useState([]);
     const [friends, setFriends] = useState([]);
 
-
     const onFinish = async values => {
-        console.log("onfinish")
-        console.log('Values:', values.users);
-        let usernames = new Set(user.friends.map(friend => friend._id));
+        console.log("onfinish");
+        let usernames = new Set([...user.friends]);
+        let newFriends = new Set([...values.users]);
 
+        // Add all friends
         try {
-            if (!Array.isArray(user.friends)) {
-                user.friends = []; // Initialize as an empty array
+          if (!Array.isArray(user.friends)) {
+            user.friends = []; // Initialize as an empty array
+          }
+      
+          for (const friend of members) {
+            if (usernames.has(friend._id) && newFriends.has(friend._id)) {
+              message.error(`${friend.username} is already in your friend list`); // Show error message
+            } else if (friend._id === user._id) {
+              message.error(`Can't add yourself as a friend`); // Show error message
+            } else if (newFriends.has(friend._id)) {
+              message.success(`${friend.username} added successfully`); // Show success message
+              user.friends.push(friend._id);
+              let data = { ...user };
+              await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
             }
-            user.friends.push(values.users);
-            const data = { ...user};
-            console.log(data)
-
-            for (let i = 0; i<data.friends.length; i++) {
-
-                if (data.friends[i] === user._id) {
-                    console.log("Can't friend youself")
-                    return
-                }
-
-                if (data.friends[i] === values.users) {
-                    console.log('Already friends')
-                    return
-                }
-
-            }
-
-            message.success('Friend added successfully'); // Show success message
-
+          }
+      
+          fetchUser();
+          fetchMembers();
         } catch (error) {
-            console.error(error);
-            message.error('Failed to add friends'); // Show error message
+          console.error(error);
+          message.error('Failed to add friends'); // Show error message
         }
-    }
+      };
 
     const onFinishFailed = errorInfo => {
         console.error('Failed:', errorInfo);
@@ -65,7 +61,7 @@ function Profile() {
         try {
             const response = await axios.get(`http://localhost:3001/api/users/`);
             const parsedMembers = response.data.filter(member => member.username !== user.username);
-            const friendsOfUser = user.friends
+            const friendsOfUser = user.friends;
             setMembers(parsedMembers);
         } catch (error) {
             console.error(error);
@@ -83,31 +79,30 @@ function Profile() {
 
     const fetchFriends = async () => {
         try {
-            if(!user.friends){
+            if (!user.friends) {
                 user.friends = []
             }
-          let accumulatedFriends = []; // Array to accumulate friends data
-          for (let i = 0; i < user.friends.length; i++) {
-            const response = await axios.get(`http://localhost:3001/api/users/find/${user.friends[i]}`);
-            accumulatedFriends = accumulatedFriends.concat(response.data); // Accumulate friends data
-            console.log(accumulatedFriends)
-          }
-          setFriends(accumulatedFriends); // Update state with accumulated data
-          console.log(friends)
+            let accumulatedFriends = []; // Array to accumulate friends data
+            for (let i = 0; i < user.friends.length; i++) {
+                const response = await axios.get(`http://localhost:3001/api/users/find/${user.friends[i]}`);
+                accumulatedFriends = accumulatedFriends.concat(response.data); // Accumulate friends data
+                console.log(accumulatedFriends)
+            }
+            setFriends(accumulatedFriends); // Update state with accumulated data
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
+    };
 
-      useEffect(() => {
+    useEffect(() => {
         fetchUser()
-      }, [auth]);
-      useEffect(() => {
+    }, [auth]);
+    useEffect(() => {
         fetchMembers();
-      }, [user]);
-      useEffect(() => {
+    }, [user]);
+    useEffect(() => {
         fetchFriends();
-      }, [user]);
+    }, [user]);
 
     // Friends Columns
     const columns = [
@@ -124,68 +119,70 @@ function Profile() {
     ]
 
     const isFriend = (memberId) => {
-        return user.friends.some((friend) => friend._id === memberId);
-      };
+        let usernames = new Set([...user.friends]);
+        return usernames.has(memberId);
+    };
+
     return (
-        <ConfigProvider theme={{algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm}}>
+        <ConfigProvider theme={{ algorithm: currentTheme === "dark" ? darkAlgorithm : defaultAlgorithm }}>
             <Card style={{ backgroundColor: "grey", height: "100vh" }}>
                 <Row gutter={[12, 12]}>
                     <Col span={12}>
-                    <Card>
-                        <Title level={1}>My Profile</Title>
-                        <div>
-                            <Text>Username: {user ? user.username : ""}</Text>
-                            <br />
-                            <Text>Email: {user ? user.email : ""}</Text>
-                        </div>
-                        <div className="search">
-                            <Text>Add Friends (because you don't have any in real life :D)</Text>
+                        <Card>
+                            <Title level={1}>My Profile</Title>
                             <div>
-                                <Form
-                                    name="basic"
-                                    wrapperCol={{ span: 16 }}
-                                    onFinish={onFinish}
-                                    onFinishFailed={onFinishFailed}
-                                >
-                                    <Form.Item
-                                        name="users"
-                                        rules={[{ required: true, message: "Please select a user to friend!" }]}
-                                    >
-                                        <Select
-                                            showSearch
-                                            mode="multiple"
-                                            placeholder="Find friends"
-                                            filterOption={(input, option) =>
-                                                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                                            }
-                                        >
-                                            {members.map((member) => (
-                                                <Option key={member._id} value={member._id} disabled={isFriend(member._id)} >
-                                                    <Tag color={isFriend(member._id) ? 'gold' : "green"}>{member.username}</Tag>
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                        <Button type="primary" htmlType="submit">
-                                            Submit
-                                        </Button>
-                                    </Form.Item>
-                                </Form>
+                                <Text>Username: {user ? user.username : ""}</Text>
+                                <br />
+                                <Text>Email: {user ? user.email : ""}</Text>
                             </div>
-                        </div>
-                    </Card>
+                            <div className="search">
+                                <Text>Add Friends (because you don't have any in real life :D)</Text>
+                                <div>
+                                    <Form
+                                        name="basic"
+                                        wrapperCol={{ span: 16 }}
+                                        onFinish={onFinish}
+                                        onFinishFailed={onFinishFailed}
+                                    >
+                                        <Form.Item
+                                            name="users"
+                                            rules={[{ required: true, message: "Please select a user to friend!" }]}
+                                        >
+                                            <Select
+                                                showSearch
+                                                mode="multiple"
+                                                placeholder="Find friends"
+                                                filterOption={(input, option) =>
+                                                    (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                                                }
+                                            >
+                                                {members.map((member) => (
+                                                    <Option key={member._id} value={member._id} disabled={isFriend(member._id)} >
+                                                        <Tag color={isFriend(member._id) ? 'gold' : "green"}>{member.username}</Tag>
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                                            <Button type="primary" htmlType="submit">
+                                                Submit
+                                            </Button>
+                                        </Form.Item>
+                                    </Form>
+                                </div>
+                            </div>
+                        </Card>
                     </Col>
                     <Col span={12}>
-                    <Card style={{ width: "100%" }}>
-                        <Title level={3}>My Friends:</Title>
-                        <Table
-                            dataSource={friends}
-                            columns={columns}
-                            pagination={false}
-                            size="small"
-                        />
-                    </Card>
+                        <Card style={{ width: "100%" }}>
+                            <Title level={3}>My Friends:</Title>
+                            <Table
+                                dataSource={friends}
+                                columns={columns}
+                                pagination={false}
+                                size="small"
+                            />
+                        </Card>
                     </Col>
                 </Row>
             </Card>

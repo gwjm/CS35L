@@ -118,7 +118,7 @@ function ProjectDetails() {
             dataIndex: 'completed',
             key: 'completed',
             render: (status) => {
-                return <Tag color={status === 'false' ? 'lime' : 'red'}>{status ? 'Completed' : 'In Progress'}</Tag>
+                return <Tag color={status ? 'lime' : 'red'}>{status ? 'Completed' : 'In Progress'}</Tag>
             }
         }
     ];
