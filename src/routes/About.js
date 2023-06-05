@@ -15,7 +15,7 @@ function About() {
         >
             <Card style={{ backgroundColor: "grey", height: "100vh" }}>
                 <Row justify="center" align="middle" style={{ height: '100vh' }} gutter={[12, 12]}>
-                    <Col span={12}>
+                    <Col>
                         <Card style={{ maxWidth: 600 }}>
                             <h2 style={{ textAlign: 'center' }}>Our Philosophy: Embracing Chaos</h2>
                             <p>
@@ -23,7 +23,7 @@ function About() {
                             </p>
                         </Card>
                     </Col>
-                    <Col span={12}>
+                    <Col>
                         <Card style={{ maxWidth: 600 }}>
                             <h2 style={{ textAlign: 'center' }}>Customer Service: An Imaginary Concept</h2>
                             <p>
