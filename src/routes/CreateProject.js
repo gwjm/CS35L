@@ -4,16 +4,15 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { AlignCenterOutlined } from '@ant-design/icons';
 import AuthContext from "../contexts/AuthProvider.js";
+import moment from 'moment';
 
 const { Option } = Select;
-
 
 const ProjectForm = () => {
   const { auth } = useContext(AuthContext);
   const [members, setMembers] = useState([]);
   const [tasks, addTask] = useState([]);
   const navigate = useNavigate();
-
 
   const onFinish = async values => {
     console.log('Success:', values);
@@ -54,6 +53,7 @@ const ProjectForm = () => {
   useEffect(() => {
     fetchMembers(); // Call fetchMembers when the component is mounted
   }, []); // The empty dependency array [] ensures that the effect runs only once on component mount
+
 
 
   return (
@@ -102,7 +102,7 @@ const ProjectForm = () => {
         name="deadline"
         rules={[{ required: true, message: 'Please select a deadline!' }]}
       >
-        <DatePicker />
+        <DatePicker disabledDate={(current) => current.isBefore(moment()-1)} />
       </Form.Item>
       <Form.Item
         name={['task']}
