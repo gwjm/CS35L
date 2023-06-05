@@ -5,7 +5,7 @@ import { showErrorDialog } from '../components/ErrorDialog';
 import axios from 'axios';
 
 // AntD
-import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card } from 'antd';
+import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskCreation from '../components/TaskCreation'; // TODO: add task creation floating
 import EditProjectDialog from '../components/EditProjectDialog';
@@ -163,9 +163,14 @@ function Dashboard() {
                 <h1>My Dashboard</h1>
                 {loading && <div>Loading...</div>}
                 {error && showErrorDialog(error)}
-                <Link to="/Projects">
-                    <Button type="primary">Add Project</Button>
-                </Link>
+                <Row>
+                    <Col span={8} offset={21}>
+                        <Link to="/Projects">
+                            <Button type="primary" size="large">Add Project</Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <div><br /></div>
                 <div
                     id="scrollableDiv"
                     style={{
@@ -203,7 +208,7 @@ function Dashboard() {
                 </Modal>
 
             </Card>
-        </ConfigProvider>
+        </ConfigProvider >
     );
 };
 
