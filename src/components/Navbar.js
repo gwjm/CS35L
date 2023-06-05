@@ -26,6 +26,7 @@ function NavBar(props) {
     window.localStorage.setItem("isLoggedIn", false);
   };
 
+
   // Avatar menu items
   const navigate = useNavigate();
   const items = [
@@ -175,7 +176,7 @@ function NavBar(props) {
           <a onClick={(e) => e.preventDefault()}>
             <Space>
             <Avatar size={{ xs: 24, sm: 32, md: 40}} icon={<UserOutlined />}/>
-            User
+            {auth.user1}
             </Space>
           </a>
         </Dropdown>
