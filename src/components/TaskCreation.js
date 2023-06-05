@@ -93,15 +93,26 @@ const TaskForm = () => {
             <DatePicker />
           </Form.Item>
           <Form.Item
-            label="Task Status"
-            name="status"
-            rules={[{ required: true, message: 'Please input your task status!' }]}
-          >
-            <Select>
-              <Option value={false}>Not Started</Option>
-              <Option value={true}>Completed</Option>
-            </Select>
-          </Form.Item>
+          label="Task Status"
+          name="status"
+          rules={[{ required: true, message: 'Please input your task status!' }]}
+        >
+
+          <Select
+            showSearch
+            placeholder="Select a status"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onChange={(value) => {
+              form.setFieldsValue({status: Number(value)});}}
+            >
+              <Option value={0}>Not Started</Option>
+              <Option value={1}>In Progress</Option>
+              <Option value={2}>Completed</Option>
+          </Select>
+        </Form.Item>
           <Form.Item
             label="Assigned User(s)"
             name="assignedUsers"
