@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Form, Input, Button, DatePicker, Select } from 'antd';
+import { Form, Input, Button, DatePicker, Select, Card } from 'antd';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { AlignCenterOutlined } from '@ant-design/icons';
@@ -13,7 +13,7 @@ const ProjectForm = () => {
   const [members, setMembers] = useState([]);
   const [tasks, addTask] = useState([]);
   const navigate = useNavigate();
-  
+
   const onFinish = async values => {
     console.log('Success:', values);
     try {
@@ -57,64 +57,66 @@ const ProjectForm = () => {
 
 
   return (
-    <Form
-      name="basic"
-      labelCol={AlignCenterOutlined}
-      wrapperCol={{ span: 16 }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-    >
-      <Form.Item
-        label="Project Name"
-        name="title"
-        rules={[{ required: true, message: 'Please input your project name!' }]}
+    <Card title="Create a Project">
+      <Form
+        name="basic"
+        labelCol={AlignCenterOutlined}
+        wrapperCol={{ span: 16 }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        label="Description"
-        name="description"
-        rules={[{ required: true, message: 'Please input your project description!' }]}
-      >
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item
-        label="Members"
-        name="members"
-        rules={[{ required: true, message: 'Please select project members!' }]}
-      >
-        <Select
-          mode="multiple"
-          showSearch
-          // onSearch={fetchMembers}
-          filterOption={false}
-          placeholder="Select members"
+        <Form.Item
+          label="Project Name"
+          name="title"
+          rules={[{ required: true, message: 'Please input your project name!' }]}
         >
-          {members.map(member => (
-            <Option key={member._id} value={member._id}>
-              {member.username}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        label="Deadline"
-        name="deadline"
-        rules={[{ required: true, message: 'Please select a deadline!' }]}
-      >
-        <DatePicker disabledDate={(current) => current.isBefore(moment()-1)} />
-      </Form.Item>
-      <Form.Item
-        name={['task']}
-      >
-        {/* <TaskForm tasks={tasks} addTask={addTask} /> */}
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: 'Please input your project description!' }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item
+          label="Members"
+          name="members"
+          rules={[{ required: true, message: 'Please select project members!' }]}
+        >
+          <Select
+            mode="multiple"
+            showSearch
+            // onSearch={fetchMembers}
+            filterOption={false}
+            placeholder="Select members"
+          >
+            {members.map(member => (
+              <Option key={member._id} value={member._id}>
+                {member.username}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="Deadline"
+          name="deadline"
+          rules={[{ required: true, message: 'Please select a deadline!' }]}
+        >
+          <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
+        </Form.Item>
+        <Form.Item
+          name={['task']}
+        >
+          {/* <TaskForm tasks={tasks} addTask={addTask} /> */}
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 };
 
