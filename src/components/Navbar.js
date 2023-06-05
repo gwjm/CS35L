@@ -167,7 +167,7 @@ function NavBar(props) {
             checked={currentTheme === 'dark'}
             onChange={toggleTheme}
           />
-          <text> {currentTheme === 'dark' ? 'Light' : 'Dark'} </text>
+          {currentTheme === 'dark' ? 'Light' : 'Dark'}
         </Space>
       </Menu.Item>
 
