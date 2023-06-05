@@ -4,23 +4,31 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { AlignCenterOutlined } from '@ant-design/icons';
 import AuthContext from "../contexts/AuthProvider.js";
+import moment from 'moment';
 
 const { Option } = Select;
-
 
 const ProjectForm = () => {
   const { auth } = useContext(AuthContext);
   const [members, setMembers] = useState([]);
   const [tasks, addTask] = useState([]);
   const navigate = useNavigate();
-
-
+  
   const onFinish = async values => {
     console.log('Success:', values);
     try {
       const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
       const data = { ...values, owner: userlogged.data._id }; // Add the owner field with the logged-in user's _id
       console.log(data)
+
+      //Check for valid deadline
+      const curr_date = new Date();
+      if (data.deadline < curr_date) {
+        //TODO: add a popup here
+        console.log('Invalid deadline');
+        return;
+      }
+
       await axios.post('http://localhost:3001/api/projects/add', data);
       console.log('Project created successfully');
       navigate("/dashboard");
@@ -45,6 +53,7 @@ const ProjectForm = () => {
   useEffect(() => {
     fetchMembers(); // Call fetchMembers when the component is mounted
   }, []); // The empty dependency array [] ensures that the effect runs only once on component mount
+
 
 
   return (
@@ -93,7 +102,7 @@ const ProjectForm = () => {
         name="deadline"
         rules={[{ required: true, message: 'Please select a deadline!' }]}
       >
-        <DatePicker />
+        <DatePicker disabledDate={(current) => current.isBefore(moment()-1)} />
       </Form.Item>
       <Form.Item
         name={['task']}
