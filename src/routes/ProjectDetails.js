@@ -33,25 +33,27 @@ function ProjectDetails() {
 
     useEffect(() => {
         const setTaskMembers = async () => {
-            if(!project.tasklist) return;
-            try {
-                const tasksLoaded = [];
-                project.tasklist.map( async (task) => {
-                    const response = await axios.get(`http://localhost:3001/api/tasks/get/${task._id}`);
-                    if (response.data) {
-                        tasksLoaded.push(response.data);
-                        } else {
-                        console.log(`Empty data received for task with ID: ${task._id}`);
-                        }
-                    
-                })
-                console.log("tasksLoaded: ", tasksLoaded);
-                console.log("project.tasklist: ", project.tasklist)
-                setTasks(tasksLoaded); 
-            } catch (error) {
-                console.log('Error fetching project members:', error);
-                showErrorDialog('Error fetching project members');
-            }
+          if (!project.tasklist) return;
+          try {
+            const tasksLoaded = await Promise.all(
+              project.tasklist.map(async (task) => {
+                const response = await axios.get(
+                  `http://localhost:3001/api/tasks/get/${task._id}`
+                );
+                if (response.data) {
+                  return response.data;
+                } else {
+                  console.log(`Empty data received for task with ID: ${task._id}`);
+                  return null;
+                }
+              })
+            );
+            console.log("tasksLoaded: ", tasksLoaded);
+            setTasks(tasksLoaded.filter((task) => task !== null));
+          } catch (error) {
+            console.log("Error fetching project members:", error);
+            showErrorDialog("Error fetching project members");
+          }
         };
         setTaskMembers();
     }, [project]);
