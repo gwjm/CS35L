@@ -19,6 +19,7 @@ function Profile() {
     const [members, setMembers] = useState([]);
     const [user, setUser] = useState([]);
     const [friends, setFriends] = useState([]);
+    const [ form ] = Form.useForm();
 
     const onFinish = async values => {
         console.log("onfinish");
@@ -43,7 +44,7 @@ function Profile() {
               await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
             }
           }
-      
+          form.resetFields();
           fetchUser();
           fetchMembers();
         } catch (error) {
@@ -139,6 +140,7 @@ function Profile() {
                                 <Text>Add Friends (because you don't have any in real life :D)</Text>
                                 <div>
                                     <Form
+                                        form={form}
                                         name="basic"
                                         wrapperCol={{ span: 16 }}
                                         onFinish={onFinish}

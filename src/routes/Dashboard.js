@@ -186,7 +186,7 @@ function Dashboard() {
             </div>
 
             <Modal
-                visible={editModalVisible}
+                open={editModalVisible}
                 onCancel={handleEditModalCancel}
                 onOk={handleEditModalSubmit}
                 title="Edit Form"
