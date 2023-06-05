@@ -5,7 +5,7 @@ import { showErrorDialog } from '../components/ErrorDialog';
 import axios from 'axios';
 
 // AntD
-import { Table, Button, Menu, Dropdown, Modal, Form, Input , ConfigProvider , theme , Card } from 'antd';
+import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskCreation from '../components/TaskCreation'; // TODO: add task creation floating
 import EditProjectDialog from '../components/EditProjectDialog';
@@ -16,8 +16,8 @@ function Dashboard() {
     const currentTheme = useTheme();
 
     const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
-    const[projects, setProjects] = useState([]);
-    const[user, setUser] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [user, setUser] = useState([]);
 
     const { auth } = useContext(AuthContext);
 
@@ -29,7 +29,7 @@ function Dashboard() {
         }
         fetchUser();
     }, [auth]);
-    
+
     useEffect(() => {
         if (user._id) {
             fetchProjects();
@@ -90,14 +90,14 @@ function Dashboard() {
 
     const editMenu = (record) => (
         <Menu>
-          <Menu.Item>
-            <EditProjectDialog />
-          </Menu.Item>
-          <Menu.Item key="addTask">
-            <TaskCreation />
-          </Menu.Item>
+            <Menu.Item>
+                <EditProjectDialog />
+            </Menu.Item>
+            <Menu.Item key="addTask">
+                <TaskCreation />
+            </Menu.Item>
         </Menu>
-      );
+    );
 
 
     const columns = [
@@ -139,9 +139,9 @@ function Dashboard() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => (
-              <Dropdown overlay={editMenu(record)}>
-                <Button>Actions</Button>
-              </Dropdown>
+                <Dropdown overlay={editMenu(record)}>
+                    <Button>Actions</Button>
+                </Dropdown>
             ),
         },
     ];
@@ -149,60 +149,60 @@ function Dashboard() {
     // Return --------------------------------------------------
     const cardStyle = {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'top',
         justifyContent: 'top',
         height: '100vh',
-      };
+    };
 
     return (
-    <ConfigProvider
-        theme={{
-         algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
-        }}>
-        <Card style={cardStyle}>
-            <h1>My Dashboard</h1>
-            {loading && <div>Loading...</div>}
-            {error && showErrorDialog(error)}
-            <Link to="/Projects">
-                <Button type="primary">Add Project</Button>
-            </Link>
-            <div
-                id="scrollableDiv"
-                style={{
-                    height: 400,
-                    overflow: 'auto',
-                    padding: '0 16px',
-                    border: '1px solid rgba(140, 140, 140, 0.35)',
-                }}
-            >
-                <Table
-                    dataSource={projects}
-                    columns={columns}
-                    pagination={false}
-                    scroll={{ y: 300 }}
-                    loading={loading}
-                    locale={{
-                        emptyText: 'No data available',
+        <ConfigProvider
+            theme={{
+                algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
+            }}>
+            <Card style={cardStyle}>
+                <h1>My Dashboard</h1>
+                {loading && <div>Loading...</div>}
+                {error && showErrorDialog(error)}
+                <Link to="/Projects">
+                    <Button type="primary">Add Project</Button>
+                </Link>
+                <div
+                    id="scrollableDiv"
+                    style={{
+                        height: 400,
+                        overflow: 'auto',
+                        padding: '0 16px',
+                        border: '1px solid rgba(140, 140, 140, 0.35)',
                     }}
-                />
-            </div>
+                >
+                    <Table
+                        dataSource={projects}
+                        columns={columns}
+                        pagination={false}
+                        scroll={{ y: 300 }}
+                        loading={loading}
+                        locale={{
+                            emptyText: 'No data available',
+                        }}
+                    />
+                </div>
 
-            <Modal
-                open={editModalVisible}
-                onCancel={handleEditModalCancel}
-                onOk={handleEditModalSubmit}
-                title="Edit Form"
-            >
-                <Form>
-                    {/* Add form fields for edit action */}
-                    <Form.Item label="Title" name="editTitle">
-                        <Input />
-                    </Form.Item>
-                    {/* Add more form fields as needed */}
-                </Form>
-            </Modal>
+                <Modal
+                    open={editModalVisible}
+                    onCancel={handleEditModalCancel}
+                    onOk={handleEditModalSubmit}
+                    title="Edit Form"
+                >
+                    <Form>
+                        {/* Add form fields for edit action */}
+                        <Form.Item label="Title" name="editTitle">
+                            <Input />
+                        </Form.Item>
+                        {/* Add more form fields as needed */}
+                    </Form>
+                </Modal>
 
-        </Card>
+            </Card>
         </ConfigProvider>
     );
 };
