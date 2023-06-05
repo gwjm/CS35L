@@ -4,8 +4,8 @@ import "./Navbar.css"
 import AuthContext from "../contexts/AuthProvider.js";
 
 // ant designs
-import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, UserOutlined , CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
-import { Menu, Switch, Input, Button, Space , Avatar , Dropdown } from 'antd'; // TODO: implement drop down avatar in navbar
+import Icon, { ContactsOutlined, HomeOutlined, MenuOutlined, BranchesOutlined, UserOutlined, CoffeeOutlined, OrderedListOutlined, KeyOutlined, DashboardOutlined } from '@ant-design/icons';
+import { Menu, Switch, Input, Button, Space, Avatar, Dropdown } from 'antd'; // TODO: implement drop down avatar in navbar
 import { useNavigate } from "react-router-dom";
 
 // Contexts
@@ -17,6 +17,7 @@ function NavBar(props) {
   const currentTheme = useTheme();
   const toggleTheme = useThemeUpdate();
   const [current, setCurrent] = useState('1');
+  const [items, setDropdownItems] = useState();
 
   const { auth } = useContext(AuthContext);
   const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
@@ -29,39 +30,23 @@ function NavBar(props) {
 
   // Avatar menu items
   const navigate = useNavigate();
-  const items = [
-    {
-      key: '2',
-      label: 'Preference',
-      disabled: !loggedIn,
-      items: [
-        {
-          key: '2-1',
-          label: 'Settings',
-        },
-        {
-          key: '2-2',
-          label: 'History ',
-        },
-      ],
-    },
+  const loggedOutItems = [
     {
       key: '1',
-      type: 'group',
-      label: 'Settings',
-      items: [
-        {
-          key: 'profileItem',
-          label: !loggedIn ? 'Login/Register' : "Profile",
-          onClick: () => !loggedIn ? navigate('/login') : navigate('/profile'),
-        },
-        {
-          key: '1-2',
-          disabled: !loggedIn,
-          label: 'Logout',
-          onClick: () => {logout(); navigate('/');},
-        },
-      ],
+      label: 'Login/Register',
+      onClick: () => navigate('/login'),
+    },
+  ];
+  const loggedInItems = [
+    {
+      key: '1',
+      label: 'Profile',
+      onClick: () => navigate('/profile'),
+    },
+    {
+      key: '2',
+      label: 'Logout',
+      onClick: () => { logout(); navigate('/'); },
     },
   ];
 
@@ -97,6 +82,17 @@ function NavBar(props) {
   const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
   const { setAuth } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (loggedIn) {
+      setDropdownItems(loggedInItems);
+    }
+    else {
+      setDropdownItems(loggedOutItems);
+    }
+  }, [loggedIn]);
+
+
   /*(() => {
     if (Object.keys(window.localStorage.getItem("loggedInUser")).length !== 0)
       
@@ -138,7 +134,7 @@ function NavBar(props) {
       {!loggedIn && <Menu.Item key="about" icon={<CoffeeOutlined />}>
         <Link to="/about">About</Link>
       </Menu.Item>}
-      {!loggedIn &&
+      {/*{!loggedIn &&
         <Menu.Item key="login" icon={<KeyOutlined />}>
           <Link to="/login">Login</Link>
         </Menu.Item>}
@@ -149,9 +145,9 @@ function NavBar(props) {
       {loggedIn &&
         <Menu.Item key="logout" icon={<KeyOutlined />}>
           <Link onClick={logout}>Logout</Link>
-        </Menu.Item>}
+      </Menu.Item>}*/}
 
-      <Menu.Item key="searchBar">
+      {/*<Menu.Item key="searchBar">
         <Input.Search
           placeholder="Looking for a friend?"
           allowClear
@@ -159,7 +155,7 @@ function NavBar(props) {
           onSearch={(value) => console.log(value)}
           style={{ width: 300, marginTop: 8 }}
         />
-      </Menu.Item>
+      </Menu.Item>*/}
 
       <Menu.Item key="6" style={{ float: 'right' }}>
         <Space>
@@ -172,11 +168,11 @@ function NavBar(props) {
       </Menu.Item>
 
       <Menu.Item>
-        <Dropdown menu={{ items }}>
+        <Dropdown menu={{ items, onClick, }}>
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-            <Avatar size={{ xs: 24, sm: 32, md: 40}} icon={<UserOutlined />}/>
-            {auth.user1}
+              <Avatar size={{ xs: 24, sm: 32, md: 40 }} icon={<UserOutlined />} />
+              {loggedIn ? auth.user1 : "Log In"}
             </Space>
           </a>
         </Dropdown>
