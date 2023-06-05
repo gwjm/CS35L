@@ -21,6 +21,15 @@ const ProjectForm = () => {
       const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
       const data = { ...values, owner: userlogged.data._id }; // Add the owner field with the logged-in user's _id
       console.log(data)
+
+      //Check for valid deadline
+      const curr_date = new Date();
+      if (data.deadline < curr_date) {
+        //TODO: add a popup here
+        console.log('Invalid deadline');
+        return;
+      }
+
       await axios.post('http://localhost:3001/api/projects/add', data);
       console.log('Project created successfully');
       navigate("/dashboard");
