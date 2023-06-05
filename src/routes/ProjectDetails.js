@@ -85,6 +85,7 @@ function ProjectDetails() {
     }
 
     const projectMembers = project.members;
+    console.log("projectMembers: ", projectMembers)
     const tasklist = project.tasklist;
     // Generate random color for each user name
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
@@ -135,7 +136,7 @@ function ProjectDetails() {
                 <span>
                     {assignedUsers.map((user) => (
                         <React.Fragment key={user._id}>
-                            <Tag color={getColor(user._id)}>{user.username}</Tag>
+                            <Tag color={getColor(user.username)}>{user.username}</Tag>
                         </React.Fragment>
                     ))}
                 </span>
