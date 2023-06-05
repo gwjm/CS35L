@@ -12,9 +12,11 @@
 
 .light-theme .home h1,
 .light-theme .home p {
-  color: #ff9090;
   font-size: 30px;
   text-align: center;
+  background-image: linear-gradient(90deg, #FBF4EC, #ECD7C8, #EEA4BC, #BE88C4, #9186E7, #92C9F9, #C7F8FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .light-theme .button {
@@ -31,20 +33,25 @@
 }
 
 .light-theme .home h1 {
+  color: #ff9090;
   font-size: 60px;
 }
 
 .light-theme .home span {
-  background-color: #000000;
-  color: rgb(255, 110, 110);
   padding: 6px;
   border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.6);
+  background-image: linear-gradient(135deg, #FBF4EC, #ECD7C8, #EEA4BC, #BE88C4, #9186E7, #92C9F9, #C7F8FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  box-shadow: 0 0 10px rgb(255, 255, 255);
 }
 
 .light-theme .home p {
   letter-spacing: 12px;
 }
-/* TODO: Use theme files for separate pages and add base css file */
+
 .light-theme .home div {
   height: 100vh;
   display: flex;
@@ -108,4 +115,3 @@
 .dark-theme .home p {
   letter-spacing: 12px;
 }
-
