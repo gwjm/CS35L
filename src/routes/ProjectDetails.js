@@ -143,10 +143,28 @@ function ProjectDetails() {
         },
         {
             title: 'Status',
-            dataIndex: 'completed',
-            key: 'completed',
-            render: (status) => {
-                return <Tag color={status ? 'lime' : 'red'}>{status ? 'Completed' : 'In Progress'}</Tag>
+            dataIndex: 'status',
+            key: 'status',
+            render: (completed) => {
+              let color, statusText;
+              switch (completed) {
+                case 0:
+                  color = 'red';
+                  statusText = 'Not Started';
+                  break;
+                case 1:
+                  color = 'yellow';
+                  statusText = 'In Progress';
+                  break;
+                case 2:
+                  color = 'lime';
+                  statusText = 'Completed';
+                  break;
+                default:
+                  color = 'gray';
+                  statusText = 'Unknown';
+              }
+              return <Tag color={color}>{statusText}</Tag>;
             }
         }
     ];
