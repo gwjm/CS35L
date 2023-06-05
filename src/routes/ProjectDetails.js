@@ -7,10 +7,12 @@ import { getRandomColor } from "../utility/randomColors.js";
 import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialog from '../components/EditProjectDialog';
 import TaskForm from "../components/TaskCreation";
+// import { set } from "mongoose";
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
+    const [ tasks, setTasks ] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const currentTheme = useTheme();
     const toggleTheme = useThemeUpdate();
@@ -20,15 +22,39 @@ function ProjectDetails() {
             try {
                 const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
                 setProject(response.data);
+                console.log("Fetching project...", project);
             } catch (error) {
                 console.log('Error fetching project:', error);
                 showErrorDialog('Error fetching project');
             }
         };
-
-        console.log("Fetching project...");
         fetchProject();
     }, [id]);
+
+    useEffect(() => {
+        const setTaskMembers = async () => {
+            if(!project.tasklist) return;
+            try {
+                const tasksLoaded = [];
+                project.tasklist.map( async (task) => {
+                    const response = await axios.get(`http://localhost:3001/api/tasks/get/${task._id}`);
+                    if (response.data) {
+                        tasksLoaded.push(response.data);
+                        } else {
+                        console.log(`Empty data received for task with ID: ${task._id}`);
+                        }
+                    
+                })
+                console.log("tasksLoaded: ", tasksLoaded);
+                console.log("project.tasklist: ", project.tasklist)
+                setTasks(tasksLoaded); 
+            } catch (error) {
+                console.log('Error fetching project members:', error);
+                showErrorDialog('Error fetching project members');
+            }
+        };
+        setTaskMembers();
+    }, [project]);
 
     const handleDelete = async () => {
         setDeleteModalVisible(true);
@@ -106,8 +132,8 @@ function ProjectDetails() {
             render: (assignedUsers) => (
                 <span>
                     {assignedUsers.map((user) => (
-                        <React.Fragment key={user}>
-                            <Tag color={getColor(user)}>{user}</Tag>
+                        <React.Fragment key={user._id}>
+                            <Tag color={getColor(user._id)}>{user.username}</Tag>
                         </React.Fragment>
                     ))}
                 </span>
@@ -155,7 +181,7 @@ function ProjectDetails() {
 
                     <h3>Task List</h3>
 
-                    <Table dataSource={tasklist} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
+                    <Table dataSource={tasks} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
 
                     <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
                         <Button
