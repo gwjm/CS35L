@@ -4,10 +4,12 @@ import axios from "axios";
 import { showErrorDialog } from "./ErrorDialog";
 import { useParams } from "react-router-dom";
 import moment from 'moment';
+import dayjs from 'dayjs';
+
 const EditProjectDialogFromDashboard = (project_details) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
-  console.log(project_details)
+  console.log(project_details.project)
   //const { id } = project_details.project._id
   const [id, setID] = useState()
   //console.log(project_details.project._id)
@@ -27,13 +29,14 @@ const EditProjectDialogFromDashboard = (project_details) => {
         }
       }
     };
-    setID(project_details.project._id)
+    setID(project_details.project)
+    console.log(id)
     fetchProject();
   }, [id]);
 
 
   const handleOpen = () => {
-    form.setFieldsValue({ title: project.title, description: project.description })
+    form.setFieldsValue({ title: project.title, description: project.description, deadline: dayjs(project.deadline, 'YYYY-MM-DD') })
     setVisible(true);
   };
 
@@ -48,11 +51,13 @@ const EditProjectDialogFromDashboard = (project_details) => {
       console.log(values);
       project.title = values.title
       project.description = values.description
+      project.deadline = values.deadline
       setVisible(false);
       form.resetFields();
       try {
         axios.patch(`http://localhost:3001/api/projects/${id}`, project);
         console.log("Project updated successfully");
+        window.location.reload(false);
       }
       catch (error) {
         console.log("Error updating project:", error);
@@ -92,12 +97,12 @@ const EditProjectDialogFromDashboard = (project_details) => {
             <Input.TextArea placeholder="Enter project description" />
           </Form.Item>
           <Form.Item
-          label="Deadline"
-          name="deadline"
-          rules={[{ required: true, message: 'Please select a deadline!' }]}
-        >
-          <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
-        </Form.Item>
+            label="Deadline"
+            name="deadline"
+            rules={[{ required: true, message: 'Please select a deadline!' }]}
+          >
+            <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
+          </Form.Item>
           {/* Add more form fields for other project details */}
         </Form>
       </Modal>
