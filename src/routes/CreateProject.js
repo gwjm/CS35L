@@ -16,6 +16,19 @@ const ProjectForm = () => {
 
   const onFinish = async values => {
     console.log('Success:', values);
+
+    const userIDs = []
+    //find the IDs associated with passed usernames
+    for (const username of values.members) {
+      try{
+        const user_id = await axios.get(`http://localhost:3001/api/users/findusername/${username}`);
+        userIDs.push(user_id.data._id);
+      } catch (error) {
+        console.log("Issue with finding user_id (CreateProject.js)")
+      }
+    }
+    values.members = userIDs;
+
     try {
       const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
       values.members.push(userlogged.data._id);
@@ -89,11 +102,11 @@ const ProjectForm = () => {
             mode="multiple"
             showSearch
             // onSearch={fetchMembers}
-            filterOption={false}
+            filterOption={true}
             placeholder="Select members"
           >
             {members.map(member => (
-              <Option key={member._id} value={member._id}>
+              <Option key={member._id} value={member.username}>
                 {member.username}
               </Option>
             ))}
