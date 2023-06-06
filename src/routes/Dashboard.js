@@ -76,13 +76,9 @@ function Dashboard() {
     //get projects owned or a member of by logged in user
     const fetchProjects = async () => {
         try {
-            //owned by
-            const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
-            //a member of these projects
+            //owners are members as well
             const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
-            //concatenate
-            const concatenatedResponse = [...response_owner.data, ...response_member.data];
-            setProjects(concatenatedResponse);
+            setProjects([...response_member.data]);
         } catch (error) {
             console.error(error);
         }
