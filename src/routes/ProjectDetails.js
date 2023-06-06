@@ -9,6 +9,7 @@ import EditProjectDialogFromProjectDetails from '../components/EditProjectDialog
 import TaskForm from "../components/TaskCreation";
 import moment from 'moment';
 import EditTaskDialog from "../components/EditTaskDialog";
+import EditTaskStatus from "../components/EditTaskStatus";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -154,7 +155,7 @@ function ProjectDetails() {
                 <EditTaskDialog task={task_details}/>
             </Menu.Item>
             <Menu.Item> 
-                
+                <EditTaskStatus task={task_details}/>
             </Menu.Item>
             <Menu.Item> 
                 <Button 
