@@ -18,6 +18,7 @@ const ProjectForm = () => {
     console.log('Success:', values);
     try {
       const userlogged = await axios.get(`http://localhost:3001/api/users/findusername/${auth.user1}`);
+      values.members.push(userlogged.data._id);
       const data = { ...values, owner: userlogged.data._id }; // Add the owner field with the logged-in user's _id
       console.log(data)
 
