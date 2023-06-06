@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, Row, Space } from 'antd';
+import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, Row, Space, Menu, Dropdown} from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
@@ -8,15 +8,17 @@ import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
 import moment from 'moment';
-import editTaskDialog from "../components/EditTaskDialog";
+import EditTaskDialog from "../components/EditTaskDialog";
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
     const [tasks, setTasks] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [taskDeleteModalVisible, setTaskDeleteModalVisible] = useState(false);
     const currentTheme = useTheme();
     const toggleTheme = useThemeUpdate();
+    const [deleteTaskId, setDeleteTaskId] = useState(null);
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -120,10 +122,39 @@ function ProjectDetails() {
         },
     ];
 
+    const handleTaskDelete = async (id) => {
+        setTaskDeleteModalVisible(true);
+        setDeleteTaskId(id);
+    }
+
+    const confirmTaskDelete = async () => {
+        setTaskDeleteModalVisible(false);
+        if (!id) {
+            console.log('Error deleting task: no id provided');
+            showErrorDialog('Error deleting task');
+            return;
+        }
+        try{
+            await axios.delete(`http://localhost:3001/api/tasks/delete/${id}`);
+            window.location.href = `/projects/${project._id}`;
+        } catch (error) {
+            console.log('Error deleting task:', error);
+            showErrorDialog('Error deleting task');
+        }
+        setDeleteTaskId(null);
+    }
+
+    const cancelTaskDelete = () => {
+        setTaskDeleteModalVisible(false);
+    }
+
     const editMenu = (task_details, record) => (
         <Menu> 
             <Menu.Item>
-                <editTaskDialog task={task_details}/>
+                <EditTaskDialog task={task_details}/>
+            </Menu.Item>
+            <Menu.Item> 
+                <Button type="link" onClick={() => handleTaskDelete(record._id)}>Delete</Button>
             </Menu.Item>
         </Menu>
     );
@@ -186,20 +217,20 @@ function ProjectDetails() {
                 return <Tag color={color}>{statusText}</Tag>;
             }
         },
-        // {
-        //     title: 'Actions',
-        //     key: 'actions',
-        //     dataIndex: '_id',
-        //     render: (text, record) => (
-        //         <div>
+        {
+            title: 'Actions',
+            key: 'actions',
+            dataIndex: '_id',
+            render: (text, record) => (
+                <div>
 
-        //             <div>{/*console.log(text)*/}
-        //                 <Dropdown overlay={editMenu(text, record)}>
-        //                     <Button>Actions</Button>
-        //                 </Dropdown></div>
-        //         </div>
-        //     ),
-        // }, 
+                    <div>{/*console.log(text)*/}
+                        <Dropdown overlay={editMenu(text, record)}>
+                            <Button>Actions</Button>
+                        </Dropdown></div>
+                </div>
+            ),
+        }, 
     ];
 
     return (
@@ -262,6 +293,17 @@ function ProjectDetails() {
                             onCancel={cancelDelete}
                         >
                             Are you sure you want to delete the project?
+                        </Modal>
+
+                        <Modal
+                            visible={taskDeleteModalVisible}
+                            title="Confirm Delete"
+                            okText="Delete"
+                            cancelText="Cancel"
+                            onOk={confirmTaskDelete}
+                            onCancel={cancelTaskDelete}
+                        >
+                            Are you sure you want to delete this task?
                         </Modal>
                     </div>
                 </Card>

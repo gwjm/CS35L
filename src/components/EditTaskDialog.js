@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import moment from 'moment';
 import dayjs from 'dayjs';
 
-const editTaskDialog = (task_details) => {
+const EditTaskDialog = (task_details) => {
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
     const [id, setId] = useState();
@@ -19,14 +19,14 @@ const editTaskDialog = (task_details) => {
               console.log(id)
               const response = await axios.get(`http://localhost:3001/api/tasks/get/${id}`);
               setTask(response.data);
-              console.log("Fetching project...", project);
+              console.log("Fetching project...", task);
             } catch (error) {
               console.log('Error fetching project:', error);
               showErrorDialog('Error fetching project');
             }
           }
         };
-        setID(task_details.task)
+        setId(task_details.task)
         console.log(id)
         fetchTask();
       }, [id]);
@@ -51,7 +51,7 @@ const editTaskDialog = (task_details) => {
             setVisible(false);
             form.resetFields();
             try {
-              axios.patch(`http://localhost:3001/api/projects/${id}`, project);
+              axios.patch(`http://localhost:3001/api/tasks/update/${id}`, task);
               console.log("Project updated successfully");
               window.location.reload(false);
             }
@@ -106,4 +106,4 @@ const editTaskDialog = (task_details) => {
           );
 }
 
-export default editTaskDialog;
+export default EditTaskDialog;
