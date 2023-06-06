@@ -187,7 +187,6 @@ function ProjectDetails() {
                                 <Row>
                                     <Space>
                                         <EditProjectDialogFromProjectDetails />
-                                        <TaskForm />
                                     </Space>
                                 </Row>
                             </div>
@@ -205,8 +204,17 @@ function ProjectDetails() {
 
                     <h3>Members</h3>
                     <Table dataSource={projectMembers} columns={columns} pagination={true} style={{ marginBottom: 16 }} />
-
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h3>Task List</h3>
+                    <div>
+                            <Row>
+                                <Space>
+                                    <TaskForm />
+                                </Space>
+                            </Row>
+                    </div>
+                    </div>
 
                     <Table dataSource={tasks} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
 
