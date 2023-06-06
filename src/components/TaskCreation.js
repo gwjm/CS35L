@@ -130,10 +130,10 @@ const TaskForm = () => {
               showSearch
               mode="multiple" 
               placeholder="Select members"
-              onSearch={(value_search) => setFilterValue(value_search)}
+              onSearch={(value_key) => setFilterValue(value_key)}
             >
               {members.map(member => ( 
-                <Option key={member._id} value={member.username}>
+                <Option key={member.username} value={member._id}>
                   {member.username}
                 </Option>
               ))}
