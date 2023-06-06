@@ -20,6 +20,13 @@ function Profile() {
     const [user, setUser] = useState([]);
     const [friends, setFriends] = useState([]);
     const [form] = Form.useForm();
+    const [filterValue, setFilterValue] = useState('');
+
+    //used to search for friends in the text box
+    const filteredMembers = members.filter(
+        (member) =>
+          member.username.toLowerCase().includes(filterValue.toLowerCase())
+      );
 
     function removeAllOccurrences(set, element) {
         for (let item of set) {
@@ -31,9 +38,26 @@ function Profile() {
 
     const onFinish = async values => {
         console.log("onfinish");
-        let usernames = new Set([...user.friends]);
-        let newFriends = new Set([...values.users]);
+        console.log("values",values)
 
+        //find the IDs associated with passed usernames
+        const userIDs = []
+        for (const username of values.users) {
+           const user_id = await axios.get(`http://localhost:3001/api/users/findusername/${username}`);
+           if (!user_id) {
+            console.log("Error adding friend")
+            message.error("Error adding friend")
+            return
+           }
+           else {
+            userIDs.push(user_id.data._id);
+           }
+        }
+       
+        let newFriends = new Set([...userIDs])
+        let usernames = new Set([...user.friends]);
+        //console.log('new',newFriends)
+        
         // Add all friends
         try {
             if (!Array.isArray(user.friends)) {
@@ -41,14 +65,19 @@ function Profile() {
             }
 
             for (const friend of members) {
+                //Remove a friend
                 if (usernames.has(friend._id) && newFriends.has(friend._id)) {
                     message.error(`${friend.username} was removed from your friend list!`); // Show error message
                     user.friends = user.friends.filter(f => f !== friend._id);
                     let data = { ...user };
                     await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
-                } else if (friend._id === user._id) {
+                } 
+                //Cant add yourself as friend
+                else if (friend._id === user._id) {
                     message.error(`Can't add yourself as a friend`); // Show error message
-                } else if (newFriends.has(friend._id)) {
+                }
+                //Add a friend
+                else if (newFriends.has(friend._id)) {
                     message.success(`${friend.username} added successfully`); // Show success message
                     user.friends.push(friend._id);
                     let data = { ...user };
@@ -147,7 +176,7 @@ function Profile() {
                                 <Text>Email: {user ? user.email : ""}</Text>
                             </div>
                             <div className="search">
-                                <Text>Add Friends (because you don't have any in real life :D)</Text>
+                                <Text>Add Friends</Text>
                                 <div>
                                     <Form
                                         form={form}
@@ -164,12 +193,11 @@ function Profile() {
                                                 showSearch
                                                 mode="multiple"
                                                 placeholder="Find friends"
-                                                filterOption={(input, option) =>
-                                                    (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                                                }
+                                                //filterOption={false}
+                                                onSearch={(value_search) => setFilterValue(value_search)}
                                             >
                                                 {members.map((member) => (
-                                                    <Option key={member._id} value={member._id}>
+                                                    <Option key={member._id} value={member.username}>
                                                         <Tag color={isFriend(member._id) ? 'red' : "green"}>{member.username}</Tag>
                                                     </Option>
                                                 ))}
