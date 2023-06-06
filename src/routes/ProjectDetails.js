@@ -8,6 +8,7 @@ import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
 import moment from 'moment';
+import editTaskDialog from "../components/EditTaskDialog";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -90,6 +91,8 @@ function ProjectDetails() {
     // Generate random color for each user name
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
 
+    
+
     function getColor(username) {
         for (const user of randomColorArray) {
             console.log(user);
@@ -116,6 +119,14 @@ function ProjectDetails() {
             key: 'email',
         },
     ];
+
+    const editMenu = (task_details, record) => (
+        <Menu> 
+            <Menu.Item>
+                <editTaskDialog task={task_details}/>
+            </Menu.Item>
+        </Menu>
+    );
 
     // Task columns
     const taskColumns = [
@@ -174,7 +185,21 @@ function ProjectDetails() {
                 }
                 return <Tag color={color}>{statusText}</Tag>;
             }
-        }
+        },
+        // {
+        //     title: 'Actions',
+        //     key: 'actions',
+        //     dataIndex: '_id',
+        //     render: (text, record) => (
+        //         <div>
+
+        //             <div>{/*console.log(text)*/}
+        //                 <Dropdown overlay={editMenu(text, record)}>
+        //                     <Button>Actions</Button>
+        //                 </Dropdown></div>
+        //         </div>
+        //     ),
+        // }, 
     ];
 
     return (
