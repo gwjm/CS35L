@@ -4,16 +4,13 @@
 
 2. Run `npm install`
 
-3. Do `cd backend` to enter backend folder. Then, run `npm install express cors mongoose dotenv`
+3. Do `cd backend` to enter backend folder. Then, run `npm install`
 
-4. Run `npm install nodemon -g`
-
-5. To start the app, run `nodemon start` while in the backend folder, and `npm start` while in the top level of the repo (parent directory of the backend folder)
+4. To start the app, run `nodemon start` while in the backend folder, and `npm start` in root directory
 
 **Start Shortcut**
 
 run the shell script `sh startWeb.sh` in the root directory to start both front and backend
-
 
 **Start frontend**
 
