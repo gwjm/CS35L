@@ -1,11 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
+import axios from "axios";
+import { showErrorDialog } from "./ErrorDialog";
+import { useParams } from "react-router-dom";
 
-const EditProjectDialog = () => {
+const EditProjectDialogFromProjectDetails = () => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
+  const { id } = useParams();
+  const [project, setProject] = useState();
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      if (id != null) {
+        try {
+          console.log(id)
+          const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
+          setProject(response.data);
+          console.log("Fetching project...", project);
+        } catch (error) {
+          console.log('Error fetching project:', error);
+          showErrorDialog('Error fetching project');
+        }
+      }
+    };
+    //setID(project_details.project._id)
+    fetchProject();
+  }, [id]);
 
   const handleOpen = () => {
+    form.setFieldsValue({ title: project.title, description: project.description })
     setVisible(true);
   };
 
@@ -39,7 +63,7 @@ const EditProjectDialog = () => {
       >
         <Form form={form} layout="vertical">
           <Form.Item
-            name="projectTitle"
+            name="title"
             label="Project Title"
             rules={[{ required: true, message: 'Please enter a project title' }]}
           >
@@ -61,4 +85,4 @@ const EditProjectDialog = () => {
   );
 };
 
-export default EditProjectDialog;
+export default EditProjectDialogFromProjectDetails;

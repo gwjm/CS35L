@@ -1,18 +1,18 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag , Row , Space} from 'antd';
+import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, Row, Space } from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 import { getRandomColor } from "../utility/randomColors.js";
 import { showErrorDialog } from "../components/ErrorDialog";
-import EditProjectDialog from '../components/EditProjectDialog';
+import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
 // import { set } from "mongoose";
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
-    const [ tasks, setTasks ] = useState([]);
+    const [tasks, setTasks] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const currentTheme = useTheme();
     const toggleTheme = useThemeUpdate();
@@ -33,27 +33,27 @@ function ProjectDetails() {
 
     useEffect(() => {
         const setTaskMembers = async () => {
-          if (!project.tasklist) return;
-          try {
-            const tasksLoaded = await Promise.all(
-              project.tasklist.map(async (task) => {
-                const response = await axios.get(
-                  `http://localhost:3001/api/tasks/get/${task._id}`
+            if (!project.tasklist) return;
+            try {
+                const tasksLoaded = await Promise.all(
+                    project.tasklist.map(async (task) => {
+                        const response = await axios.get(
+                            `http://localhost:3001/api/tasks/get/${task._id}`
+                        );
+                        if (response.data) {
+                            return response.data;
+                        } else {
+                            console.log(`Empty data received for task with ID: ${task._id}`);
+                            return null;
+                        }
+                    })
                 );
-                if (response.data) {
-                  return response.data;
-                } else {
-                  console.log(`Empty data received for task with ID: ${task._id}`);
-                  return null;
-                }
-              })
-            );
-            console.log("tasksLoaded: ", tasksLoaded);
-            setTasks(tasksLoaded.filter((task) => task !== null));
-          } catch (error) {
-            console.log("Error fetching project members:", error);
-            showErrorDialog("Error fetching project members");
-          }
+                console.log("tasksLoaded: ", tasksLoaded);
+                setTasks(tasksLoaded.filter((task) => task !== null));
+            } catch (error) {
+                console.log("Error fetching project members:", error);
+                showErrorDialog("Error fetching project members");
+            }
         };
         setTaskMembers();
     }, [project]);
@@ -91,13 +91,13 @@ function ProjectDetails() {
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
 
     function getColor(username) {
-      for (const user of randomColorArray) {
-        console.log(user);
-        if (user[0] === username) {
-          return user[1];
+        for (const user of randomColorArray) {
+            console.log(user);
+            if (user[0] === username) {
+                return user[1];
+            }
         }
-      }
-      return getRandomColor();
+        return getRandomColor();
     }
 
     const columns = [
@@ -153,25 +153,25 @@ function ProjectDetails() {
             dataIndex: 'status',
             key: 'status',
             render: (completed) => {
-              let color, statusText;
-              switch (completed) {
-                case 0:
-                  color = 'red';
-                  statusText = 'Not Started';
-                  break;
-                case 1:
-                  color = 'yellow';
-                  statusText = 'In Progress';
-                  break;
-                case 2:
-                  color = 'lime';
-                  statusText = 'Completed';
-                  break;
-                default:
-                  color = 'gray';
-                  statusText = 'Unknown';
-              }
-              return <Tag color={color}>{statusText}</Tag>;
+                let color, statusText;
+                switch (completed) {
+                    case 0:
+                        color = 'red';
+                        statusText = 'Not Started';
+                        break;
+                    case 1:
+                        color = 'yellow';
+                        statusText = 'In Progress';
+                        break;
+                    case 2:
+                        color = 'lime';
+                        statusText = 'Completed';
+                        break;
+                    default:
+                        color = 'gray';
+                        statusText = 'Unknown';
+                }
+                return <Tag color={color}>{statusText}</Tag>;
             }
         }
     ];
@@ -186,7 +186,7 @@ function ProjectDetails() {
                             <div>
                                 <Row>
                                     <Space>
-                                        <EditProjectDialog />
+                                        {<EditProjectDialogFromProjectDetails />}
                                         <TaskForm />
                                     </Space>
                                 </Row>

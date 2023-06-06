@@ -8,7 +8,7 @@ import axios from 'axios';
 import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
 import TaskCreation from '../components/TaskCreation'; // TODO: add task creation floating
-import EditProjectDialog from '../components/EditProjectDialog';
+import EditProjectDialogFromDashboard from '../components/EditProjectDialogFromDashboard';
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
 function Dashboard() {
@@ -88,10 +88,11 @@ function Dashboard() {
         setAddTaskModalVisible(false);
     };
 
-    const editMenu = (record) => (
+    const editMenu = (project_details) => (
         <Menu>
+            {/*console.log("record" + record._id)*/}
             <Menu.Item>
-                <EditProjectDialog />
+                <EditProjectDialogFromDashboard project={project_details} />
             </Menu.Item>
             <Menu.Item key="addTask">
                 <TaskCreation />
@@ -139,9 +140,10 @@ function Dashboard() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => (
-                <Dropdown overlay={editMenu(record)}>
-                    <Button>Actions</Button>
-                </Dropdown>
+                <div>{/*console.log(text)*/}
+                    <Dropdown overlay={editMenu(text)}>
+                        <Button>Actions</Button>
+                    </Dropdown></div>
             ),
         },
     ];
