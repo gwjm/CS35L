@@ -77,7 +77,11 @@ function Dashboard() {
     const fetchProjects = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
-            setProjects(response.data);
+            const response2 = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
+            console.log('1',response);
+            console.log('2',response2)
+            const concatenatedResponse = [...response.data, ...response2.data];
+            setProjects(concatenatedResponse);
         } catch (error) {
             console.error(error);
         }
