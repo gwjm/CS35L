@@ -30,7 +30,7 @@ const EditProjectDialogFromProjectDetails = () => {
   }, [id]);
 
   const handleOpen = () => {
-    form.setFieldsValue({ title: project.title, description: project.description })
+    form.setFieldsValue({ title: project.title, description: project.description , deadline: moment(project.deadline)})
     setVisible(true);
   };
 
@@ -42,7 +42,6 @@ const EditProjectDialogFromProjectDetails = () => {
   const handleSave = () => {
     form.validateFields().then(async (values) => {
       // Process the submitted form values
-      console.log(values);
       project.title = values.title
       project.description = values.description
       project.deadline = values.deadline

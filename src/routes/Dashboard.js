@@ -222,7 +222,7 @@ function Dashboard() {
                     <Table
                         dataSource={projects}
                         columns={columns}
-                        pagination={{ pageSize: 10, position: ['bottomCenter'] }}
+                        pagination={{ pageSize: 8, position: ['bottomCenter'] }}
                         scroll={{ y: '100%' }}
                         loading={loading}
                         locale={{
