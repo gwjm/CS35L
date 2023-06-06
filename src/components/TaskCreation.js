@@ -28,7 +28,8 @@ const TaskForm = () => {
       console.log('Task created successfully');
       setVisible(false);
       form.resetFields();
-      window.location.reload();
+      message.success('Task created successfully');
+      window.location.reload(); // TODO: Refetch data instead of reload page
     } catch (error) {
       console.error('Failed to create task', error);
     }

@@ -186,7 +186,7 @@ function ProjectDetails() {
                             <div>
                                 <Row>
                                     <Space>
-                                        {<EditProjectDialogFromProjectDetails />}
+                                        <EditProjectDialogFromProjectDetails />
                                         <TaskForm />
                                     </Space>
                                 </Row>
