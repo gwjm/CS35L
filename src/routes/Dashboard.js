@@ -77,6 +77,7 @@ function Dashboard() {
     const fetchProjects = async () => {
         try {
             //owners are members as well
+            if(user._id !== undefined){
             const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
             const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
             const concatenatedResponse = ([...response_member.data, ...response_owner.data])
@@ -90,6 +91,7 @@ function Dashboard() {
             // console.log("unique",uniqueResponse)
             // console.log("concentated",concatenatedResponse)
             setProjects([...uniqueResponse]);
+            }
         } catch (error) {
             console.error(error);
         }
