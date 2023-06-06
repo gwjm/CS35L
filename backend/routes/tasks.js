@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 let Task = require('../models/task.model');
 let Project = require('../models/project.model');
 
@@ -48,7 +49,7 @@ router.post('/add/:id', async (req, res) => {
 });
 
 // Update a task
-router.patch('update/:id', async (req, res) => {
+router.patch('/update/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
@@ -68,14 +69,14 @@ router.patch('update/:id', async (req, res) => {
 });
 
 // Delete a task
-router.delete('delete/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
+    const {id} = req.params
+    if( !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({error: 'task not found'})
     }
 
-    await task.remove();
+    await Task.findOneAndDelete({_id:id});
     res.json({ message: 'Task deleted' });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -14,10 +14,9 @@ const EditTaskStatus = (task_id) => {
         const fetchTask = async () => {
             if (id != null) {
                 try {
-                    console.log(id)
                     const response = await axios.get(`http://localhost:3001/api/tasks/get/${id}`);
                     setTask(response.data);
-                    console.log("Fetching task...", task);
+
                 } catch (error) {
                     console.log('Error fetching task:', error);
                     showErrorDialog('Error fetching task');
@@ -25,7 +24,7 @@ const EditTaskStatus = (task_id) => {
             }
         };
         setId(task_id.task)
-        console.log(id)
+        console.log(id);
         fetchTask();
     }, [id]);
 
@@ -39,14 +38,15 @@ const EditTaskStatus = (task_id) => {
     };
 
     const handleSave = () => {
-        form.validateFields().then((values) => {
+        console.log(task)
+        form.validateFields().then(async (values) => {
             // Process the submitted form values
             console.log(values);
             task.status = values.status
             setVisible(false);
             form.resetFields();
             try {
-                axios.patch(`http://localhost:3001/api/tasks/update/${id}`, task);
+                await axios.patch(`http://localhost:3001/api/tasks/update/${id}`, task);
                 console.log("Task updated successfully");
                 window.location.reload(false);
             }
@@ -63,7 +63,7 @@ const EditTaskStatus = (task_id) => {
           </Button>
           <Modal
                 open={visible}
-                title="Edit Task"
+                title="Edit Task Status"
                 okText="Save"
                 cancelText="Cancel"
                 onCancel={handleClose}

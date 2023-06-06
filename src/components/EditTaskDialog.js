@@ -19,10 +19,10 @@ const EditTaskDialog = (task_details) => {
               console.log(id)
               const response = await axios.get(`http://localhost:3001/api/tasks/get/${id}`);
               setTask(response.data);
-              console.log("Fetching project...", task);
+              console.log("Fetching Task...", task);
             } catch (error) {
-              console.log('Error fetching project:', error);
-              showErrorDialog('Error fetching project');
+              console.log('Error fetching Task:', error);
+              showErrorDialog('Error fetching Task');
             }
           }
         };

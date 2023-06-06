@@ -130,13 +130,13 @@ function ProjectDetails() {
 
     const confirmTaskDelete = async () => {
         setTaskDeleteModalVisible(false);
-        if (!id) {
+        if (!deleteTaskId) {
             console.log('Error deleting task: no id provided');
             showErrorDialog('Error deleting task');
             return;
         }
         try{
-            await axios.delete(`http://localhost:3001/api/tasks/delete/${id}`);
+            await axios.delete(`http://localhost:3001/api/tasks/delete/${deleteTaskId}`);
             window.location.href = `/projects/${project._id}`;
         } catch (error) {
             console.log('Error deleting task:', error);
