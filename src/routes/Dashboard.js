@@ -78,7 +78,18 @@ function Dashboard() {
         try {
             //owners are members as well
             const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
-            setProjects([...response_member.data]);
+            const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
+            const concatenatedResponse = ([...response_member.data, ...response_owner.data])
+            const uniqueResponse = Array.from(
+                new Set(
+                  concatenatedResponse.map(item => item._id)
+                )
+            ).map(id => concatenatedResponse.find(item => item._id === id));
+            // console.log("owner",response_owner.data)
+            // console.log("member",response_member.data)
+            // console.log("unique",uniqueResponse)
+            // console.log("concentated",concatenatedResponse)
+            setProjects([...uniqueResponse]);
         } catch (error) {
             console.error(error);
         }
