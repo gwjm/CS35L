@@ -39,12 +39,19 @@ const EditProjectDialogFromProjectDetails = () => {
   };
 
   const handleSave = () => {
-    form.validateFields().then((values) => {
+    form.validateFields().then( async (values) => {
       // Process the submitted form values
       console.log(values);
+      project.title = values.title
+      project.description = values.description
       setVisible(false);
       form.resetFields();
-    });
+      try {
+        await axios.patch(`http://localhost:3001/api/projects/${id}`, project);
+        console.log("Project updated successfully");
+      } catch (error) {
+        console.log("Error updating project:", error);
+    }});
   };
 
   return (
