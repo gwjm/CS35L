@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../contexts/AuthProvider.js";
 import { showErrorDialog } from '../components/ErrorDialog';
 import axios from 'axios';
+import moment from 'moment';
 
 // AntD
 import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card, Row, Col } from 'antd';
@@ -17,7 +18,7 @@ function Dashboard() {
 
     const { data, loading, error } = useFetch('http://localhost:3001/api/projects');
     const [projects, setProjects] = useState([]);
-    const [deleteProject, setDeleteProject] = useState({}); 
+    const [deleteProject, setDeleteProject] = useState({});
     const [user, setUser] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -77,20 +78,16 @@ function Dashboard() {
     const fetchProjects = async () => {
         try {
             //owners are members as well
-            if(user._id !== undefined){
-            const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
-            const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
-            const concatenatedResponse = ([...response_member.data, ...response_owner.data])
-            const uniqueResponse = Array.from(
-                new Set(
-                  concatenatedResponse.map(item => item._id)
-                )
-            ).map(id => concatenatedResponse.find(item => item._id === id));
-            // console.log("owner",response_owner.data)
-            // console.log("member",response_member.data)
-            // console.log("unique",uniqueResponse)
-            // console.log("concentated",concatenatedResponse)
-            setProjects([...uniqueResponse]);
+            if (user._id !== undefined) {
+                const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`)
+                const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
+                const concatenatedResponse = ([...response_member.data, ...response_owner.data])
+                const uniqueResponse = Array.from(
+                    new Set(
+                        concatenatedResponse.map(item => item._id)
+                    )
+                ).map(id => concatenatedResponse.find(item => item._id === id));
+                setProjects([...uniqueResponse]);
             }
         } catch (error) {
             console.error(error);
@@ -168,12 +165,14 @@ function Dashboard() {
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+            render: (createdAt) => <div>{moment(createdAt).format('MM/DD/YYYY')}</div>,
         },
         {
             title: 'Deadline',
             dataIndex: 'deadline',
             key: 'deadline',
             sorter: (a, b) => new Date(a.deadline) - new Date(b.deadline),
+            render: (deadline) => <div>{moment(deadline).format('MM/DD/YYYY')}</div>,
         },
         {
             title: 'Actions',
@@ -181,14 +180,14 @@ function Dashboard() {
             dataIndex: '_id',
             render: (text, record) => (
                 <div>
-                <Button
-                    danger
-                    type="primary"
-                    onClick={() => handleDelete(record._id)}
-                    style={{ backgroundColor: 'red', borderColor: 'red' }}
-                >
-                    Delete
-                </Button>
+                    <Button
+                        danger
+                        type="primary"
+                        onClick={() => handleDelete(record._id)}
+                        style={{ backgroundColor: 'red', borderColor: 'red' }}
+                    >
+                        Delete
+                    </Button>
                 </div>
             ),
         },
@@ -219,26 +218,18 @@ function Dashboard() {
                     </Col>
                 </Row>
                 <div><br /></div>
-                <div
-                    id="scrollableDiv"
-                    style={{
-                        height: 400,
-                        overflow: 'auto',
-                        padding: '0 16px',
-                        border: '1px solid rgba(140, 140, 140, 0.35)',
-                    }}
-                >
+                <Card>
                     <Table
                         dataSource={projects}
                         columns={columns}
-                        pagination={false}
-                        scroll={{ y: 300 }}
+                        pagination={{ pageSize: 10, position: ['bottomCenter'] }}
+                        scroll={{ y: '100%' }}
                         loading={loading}
                         locale={{
                             emptyText: 'No data available',
                         }}
                     />
-                </div>
+                </Card>
                 <Modal
                     visible={deleteModalVisible}
                     title="Confirm Delete"

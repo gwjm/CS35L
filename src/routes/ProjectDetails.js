@@ -7,7 +7,7 @@ import { getRandomColor } from "../utility/randomColors.js";
 import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
-// import { set } from "mongoose";
+import moment from 'moment';
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -133,6 +133,7 @@ function ProjectDetails() {
             title: 'Deadline',
             dataIndex: 'dueDate',
             key: 'dueDate',
+            render: (dueDate) => <div>{moment(dueDate).format('MM/DD/YYYY')}</div>,
         },
         {
             title: 'Assigned To',
