@@ -19,7 +19,15 @@ function Profile() {
     const [members, setMembers] = useState([]);
     const [user, setUser] = useState([]);
     const [friends, setFriends] = useState([]);
-    const [ form ] = Form.useForm();
+    const [form] = Form.useForm();
+
+    function removeAllOccurrences(set, element) {
+        for (let item of set) {
+          if (item === element) {
+            set.delete(item);
+          }
+        }
+      }
 
     const onFinish = async values => {
         console.log("onfinish");
@@ -28,30 +36,33 @@ function Profile() {
 
         // Add all friends
         try {
-          if (!Array.isArray(user.friends)) {
-            user.friends = []; // Initialize as an empty array
-          }
-      
-          for (const friend of members) {
-            if (usernames.has(friend._id) && newFriends.has(friend._id)) {
-              message.error(`${friend.username} is already in your friend list`); // Show error message
-            } else if (friend._id === user._id) {
-              message.error(`Can't add yourself as a friend`); // Show error message
-            } else if (newFriends.has(friend._id)) {
-              message.success(`${friend.username} added successfully`); // Show success message
-              user.friends.push(friend._id);
-              let data = { ...user };
-              await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
+            if (!Array.isArray(user.friends)) {
+                user.friends = []; // Initialize as an empty array
             }
-          }
-          form.resetFields();
-          fetchUser();
-          fetchMembers();
+
+            for (const friend of members) {
+                if (usernames.has(friend._id) && newFriends.has(friend._id)) {
+                    message.error(`${friend.username} was removed from your friend list!`); // Show error message
+                    user.friends = user.friends.filter(f => f !== friend._id);
+                    let data = { ...user };
+                    await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
+                } else if (friend._id === user._id) {
+                    message.error(`Can't add yourself as a friend`); // Show error message
+                } else if (newFriends.has(friend._id)) {
+                    message.success(`${friend.username} added successfully`); // Show success message
+                    user.friends.push(friend._id);
+                    let data = { ...user };
+                    await axios.patch(`http://localhost:3001/api/users/${user._id}`, data);
+                }
+            }
+            form.resetFields();
+            fetchUser();
+            fetchMembers();
         } catch (error) {
-          console.error(error);
-          message.error('Failed to add friends'); // Show error message
+            console.error(error);
+            message.error('Failed to add friends'); // Show error message
         }
-      };
+    };
 
     const onFinishFailed = errorInfo => {
         console.error('Failed:', errorInfo);
@@ -87,7 +98,6 @@ function Profile() {
             for (let i = 0; i < user.friends.length; i++) {
                 const response = await axios.get(`http://localhost:3001/api/users/find/${user.friends[i]}`);
                 accumulatedFriends = accumulatedFriends.concat(response.data); // Accumulate friends data
-                console.log(accumulatedFriends)
             }
             setFriends(accumulatedFriends); // Update state with accumulated data
         } catch (error) {
@@ -159,8 +169,8 @@ function Profile() {
                                                 }
                                             >
                                                 {members.map((member) => (
-                                                    <Option key={member._id} value={member._id} disabled={isFriend(member._id)} >
-                                                        <Tag color={isFriend(member._id) ? 'gold' : "green"}>{member.username}</Tag>
+                                                    <Option key={member._id} value={member._id}>
+                                                        <Tag color={isFriend(member._id) ? 'red' : "green"}>{member.username}</Tag>
                                                     </Option>
                                                 ))}
                                             </Select>
