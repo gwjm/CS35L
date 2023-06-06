@@ -4,6 +4,7 @@ import axios from "axios";
 import { showErrorDialog } from "./ErrorDialog";
 import { useParams } from "react-router-dom";
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 const EditProjectDialogFromProjectDetails = () => {
   const [visible, setVisible] = useState(false);
@@ -30,7 +31,7 @@ const EditProjectDialogFromProjectDetails = () => {
   }, [id]);
 
   const handleOpen = () => {
-    form.setFieldsValue({ title: project.title, description: project.description , deadline: moment(project.deadline)})
+    form.setFieldsValue({ title: project.title, description: project.description, deadline: dayjs(project.deadline, 'YYYY-MM-DD') })
     setVisible(true);
   };
 
@@ -92,7 +93,7 @@ const EditProjectDialogFromProjectDetails = () => {
             name="deadline"
             rules={[{ required: true, message: 'Please select a deadline!' }]}
           >
-            <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
+            <DatePicker disabledDate={(current) => current.isBefore(moment() - 1) } />
           </Form.Item>
           {/* Add more form fields for other project details */}
         </Form>
