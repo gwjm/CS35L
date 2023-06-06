@@ -56,7 +56,7 @@ function Dashboard() {
             //a member of these projects
             const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
             //concatenate
-            const concatenatedResponse = [...response.data, ...response2.data];
+            const concatenatedResponse = [...response_owner.data, ...response_member.data];
             setProjects(concatenatedResponse);
         } catch (error) {
             console.error(error);
