@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import axios from "axios";
 import { showErrorDialog } from "./ErrorDialog";
@@ -39,7 +39,7 @@ const EditProjectDialogFromProjectDetails = () => {
   };
 
   const handleSave = () => {
-    form.validateFields().then( async (values) => {
+    form.validateFields().then(async (values) => {
       // Process the submitted form values
       console.log(values);
       project.title = values.title
@@ -49,9 +49,11 @@ const EditProjectDialogFromProjectDetails = () => {
       try {
         await axios.patch(`http://localhost:3001/api/projects/${id}`, project);
         console.log("Project updated successfully");
+        window.location.reload(false);
       } catch (error) {
         console.log("Error updating project:", error);
-    }});
+      }
+    });
   };
 
   return (
