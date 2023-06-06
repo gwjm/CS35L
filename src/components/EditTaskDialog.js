@@ -1,16 +1,21 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input, DatePicker } from 'antd';
+import { Button, Modal, Form, Input, DatePicker, Select,  } from 'antd';
 import axios from "axios";
 import { showErrorDialog } from "./ErrorDialog";
 import { useParams } from "react-router-dom";
 import moment from 'moment';
 import dayjs from 'dayjs';
 
-const EditTaskDialog = (task_details) => {
+const { Option } = Select;
+
+const EditTaskDialog = (task_details, projectdetail) => {
+    console.log(task_details)
     const [visible, setVisible] = useState(false);
     const [form] = Form.useForm();
     const [id, setId] = useState();
     const [task, setTask] = useState();
+    const [filterValue, setFilterValue] = useState('');
+    const [members, setMembers] = useState([]);
 
     useEffect(() => {
         const fetchTask = async () => {
@@ -26,13 +31,23 @@ const EditTaskDialog = (task_details) => {
             }
           }
         };
+        const fetchMembers = async () => {
+          try {
+            const response = await axios.get(`http://localhost:3001/api/projects/find/${projectdetail._id}`);
+            setMembers(response.data.members);
+            console.log(response.data.members);
+          } catch (error) {
+            console.error(error);
+          }
+        };
         setId(task_details.task)
         console.log(id)
         fetchTask();
+        fetchMembers();
       }, [id]);
 
     const handleOpen = () => {
-        form.setFieldsValue({ title: task.title, description: task.description, dueDate: dayjs(task.dueDate, 'YYYY-MM-DD') })
+        form.setFieldsValue({ title: task.title, description: task.description, dueDate: dayjs(task.dueDate, 'YYYY-MM-DD'), assignedUsers: task.assignedUsers })
         setVisible(true);
     };
 
@@ -48,6 +63,7 @@ const EditTaskDialog = (task_details) => {
             task.title = values.title
             task.description = values.description
             task.dueDate = values.dueDate
+            task.assignedUsers = values.assignedUsers
             setVisible(false);
             form.resetFields();
             try {
@@ -61,6 +77,7 @@ const EditTaskDialog = (task_details) => {
       
           });
         }
+
 
         return (
             <div>
@@ -80,7 +97,7 @@ const EditTaskDialog = (task_details) => {
                   <Form.Item
                     name="title"
                     label="Task Title"
-                    rules={[{ required: true, message: 'Please enter a project title' }]}
+                    rules={[{ required: true, message: 'Please enter a title' }]}
                   >
                     <Input placeholder="Enter task title" />
                   </Form.Item>
@@ -98,6 +115,24 @@ const EditTaskDialog = (task_details) => {
                     rules={[{ required: true, message: 'Please select a task due date!' }]}
                   >
                     <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
+                  </Form.Item>
+                  <Form.Item
+                    label="Assigned User(s)"
+                    name="assignedUsers"
+                    rules={[{ required: true, message: 'Please input your task assigned user(s)!' }]}
+                  >
+                    <Select 
+                      showSearch
+                      mode="multiple" 
+                      placeholder="Select members"
+                      onSearch={(value_key) => setFilterValue(value_key)}
+                    >
+                      {members.map(member => ( 
+                        <Option key={member.username} value={member._id}>
+                          {member.username}
+                        </Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                   {/* Add more form fields for other project details */}
                 </Form>

@@ -152,7 +152,7 @@ function ProjectDetails() {
     const editMenu = (task_details, record) => (
         <Menu> 
             <Menu.Item>
-                <EditTaskDialog task={task_details}/>
+                <EditTaskDialog task={task_details} project={project}/>
             </Menu.Item>
             <Menu.Item> 
                 <EditTaskStatus task={task_details}/>
