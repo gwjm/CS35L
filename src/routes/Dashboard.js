@@ -48,13 +48,14 @@ function Dashboard() {
         }
     };
 
-    //get projects owned by logged in user
+    //get projects owned or a member of by logged in user
     const fetchProjects = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
-            const response2 = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
-            console.log('1',response);
-            console.log('2',response2)
+            //owned by
+            const response_owner = await axios.get(`http://localhost:3001/api/projects/findbyowner/${user._id}`)
+            //a member of these projects
+            const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`) 
+            //concatenate
             const concatenatedResponse = [...response.data, ...response2.data];
             setProjects(concatenatedResponse);
         } catch (error) {
