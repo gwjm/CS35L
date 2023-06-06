@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Button, Modal, Form, Input } from 'antd';
+import { Button, Modal, Form, Input, DatePicker } from 'antd';
 import axios from "axios";
 import { showErrorDialog } from "./ErrorDialog";
 import { useParams } from "react-router-dom";
-
+import moment from 'moment';
 const EditProjectDialogFromDashboard = (project_details) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -91,7 +91,13 @@ const EditProjectDialogFromDashboard = (project_details) => {
           >
             <Input.TextArea placeholder="Enter project description" />
           </Form.Item>
-
+          <Form.Item
+          label="Deadline"
+          name="deadline"
+          rules={[{ required: true, message: 'Please select a deadline!' }]}
+        >
+          <DatePicker disabledDate={(current) => current.isBefore(moment() - 1)} />
+        </Form.Item>
           {/* Add more form fields for other project details */}
         </Form>
       </Modal>
