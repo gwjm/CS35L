@@ -11,6 +11,7 @@ const TaskForm = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
   const [members, setMembers] = useState([]);
+  const [filterValue, setFilterValue] = useState('');
 
   const handleOpen = () => {
     setVisible(true);
@@ -20,6 +21,12 @@ const TaskForm = () => {
     setVisible(false);
     form.resetFields();
   };
+
+    //used to search for friends in the text box
+  const filteredMembers = members.filter(
+      (member) =>
+        member.username.toLowerCase().includes(filterValue.toLowerCase())
+  );
 
   const onFinish = async (values) => {
     try {
@@ -119,9 +126,14 @@ const TaskForm = () => {
             name="assignedUsers"
             rules={[{ required: true, message: 'Please input your task assigned user(s)!' }]}
           >
-            <Select mode="multiple" placeholder="Select members">
+            <Select 
+              showSearch
+              mode="multiple" 
+              placeholder="Select members"
+              onSearch={(value_search) => setFilterValue(value_search)}
+            >
               {members.map(member => ( 
-                <Option key={member._id} value={member._id}>
+                <Option key={member._id} value={member.username}>
                   {member.username}
                 </Option>
               ))}
