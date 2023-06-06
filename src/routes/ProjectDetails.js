@@ -154,7 +154,13 @@ function ProjectDetails() {
                 <EditTaskDialog task={task_details}/>
             </Menu.Item>
             <Menu.Item> 
-                <Button type="link" onClick={() => handleTaskDelete(record._id)}>Delete</Button>
+                <Button 
+                danger 
+
+                type="primary" onClick={() => handleTaskDelete(record._id)}
+                style={{ backgroundColor: 'red', borderColor: 'red' }}
+                >
+                Delete</Button>
             </Menu.Item>
         </Menu>
     );
