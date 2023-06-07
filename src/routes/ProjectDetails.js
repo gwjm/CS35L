@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, Row, Space } from 'antd';
+import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, Row, Space, Menu, Dropdown} from 'antd';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
@@ -8,23 +8,28 @@ import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
 import moment from 'moment';
+import EditTaskDialog from "../components/EditTaskDialog";
+import EditTaskStatus from "../components/EditTaskStatus";
+import AddRemoveMembers from "../components/AddRemoveMembers";
 
 function ProjectDetails() {
     const { id } = useParams();
     const [project, setProject] = useState();
     const [tasks, setTasks] = useState([]);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+    const [taskDeleteModalVisible, setTaskDeleteModalVisible] = useState(false);
     const currentTheme = useTheme();
     const toggleTheme = useThemeUpdate();
+    const [deleteTaskId, setDeleteTaskId] = useState(null);
 
     useEffect(() => {
         const fetchProject = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
                 setProject(response.data);
-                console.log("Fetching project...", project);
+                // console.log("Fetching project...", project);
             } catch (error) {
-                console.log('Error fetching project:', error);
+                // console.log('Error fetching project:', error);
                 showErrorDialog('Error fetching project');
             }
         };
@@ -48,10 +53,10 @@ function ProjectDetails() {
                         }
                     })
                 );
-                console.log("tasksLoaded: ", tasksLoaded);
+                // console.log("tasksLoaded: ", tasksLoaded);
                 setTasks(tasksLoaded.filter((task) => task !== null));
             } catch (error) {
-                console.log("Error fetching project members:", error);
+                // console.log("Error fetching project members:", error);
                 showErrorDialog("Error fetching project members");
             }
         };
@@ -70,7 +75,7 @@ function ProjectDetails() {
             setProject(null);
             window.location.href = '/dashboard';
         } catch (error) {
-            console.log('Error deleting project:', error);
+            // console.log('Error deleting project:', error);
             showErrorDialog('Error deleting project');
         }
         setDeleteModalVisible(false);
@@ -85,14 +90,16 @@ function ProjectDetails() {
     }
 
     const projectMembers = project.members;
-    console.log("projectMembers: ", projectMembers)
+    // console.log("projectMembers: ", projectMembers)
     const tasklist = project.tasklist;
     // Generate random color for each user name
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
 
+    
+
     function getColor(username) {
         for (const user of randomColorArray) {
-            console.log(user);
+            // console.log(user);
             if (user[0] === username) {
                 return user[1];
             }
@@ -116,6 +123,53 @@ function ProjectDetails() {
             key: 'email',
         },
     ];
+
+    const handleTaskDelete = async (id) => {
+        setTaskDeleteModalVisible(true);
+        setDeleteTaskId(id);
+    }
+
+    const confirmTaskDelete = async () => {
+        setTaskDeleteModalVisible(false);
+        if (!deleteTaskId) {
+            console.log('Error deleting task: no id provided');
+            showErrorDialog('Error deleting task');
+            return;
+        }
+        try{
+            await axios.delete(`http://localhost:3001/api/tasks/delete/${deleteTaskId}`);
+            window.location.href = `/projects/${project._id}`;
+        } catch (error) {
+            console.log('Error deleting task:', error);
+            showErrorDialog('Error deleting task');
+        }
+        setDeleteTaskId(null);
+    }
+
+    const cancelTaskDelete = () => {
+        setTaskDeleteModalVisible(false);
+    }
+
+    const editMenu = (task_details, record) => (
+        <Menu> 
+            <Menu.Item>
+                <EditTaskDialog task={task_details}/>
+            </Menu.Item>
+            <Menu.Item> 
+                <EditTaskStatus task={task_details}/>
+            </Menu.Item>
+            <Menu.Item> 
+                <Button 
+                danger 
+                type="primary" 
+                onClick={() => handleTaskDelete(record._id)}
+                style={{ backgroundColor: 'red', borderColor: 'red' }}
+                >
+                Delete
+                </Button>
+            </Menu.Item>
+        </Menu>
+    );
 
     // Task columns
     const taskColumns = [
@@ -174,7 +228,21 @@ function ProjectDetails() {
                 }
                 return <Tag color={color}>{statusText}</Tag>;
             }
-        }
+        },
+        {
+            title: 'Actions',
+            key: 'actions',
+            dataIndex: '_id',
+            render: (text, record) => (
+                <div>
+
+                    <div>{/*console.log(text)*/}
+                        <Dropdown overlay={editMenu(text, record)}>
+                            <Button>Actions</Button>
+                        </Dropdown></div>
+                </div>
+            ),
+        }, 
     ];
 
     return (
@@ -187,7 +255,7 @@ function ProjectDetails() {
                             <div>
                                 <Row>
                                     <Space>
-                                        <EditProjectDialogFromProjectDetails />
+                                        <EditProjectDialogFromProjectDetails project={project} />
                                     </Space>
                                 </Row>
                             </div>
@@ -202,19 +270,28 @@ function ProjectDetails() {
                         <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
                         <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
                     </Descriptions>
-
-                    <h3>Members</h3>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3>Members</h3>
+                        <div>
+                                <Row>
+                                    <Space>
+                                        <AddRemoveMembers />
+                                    </Space>
+                                </Row>
+                        </div>
+                    </div>
                     <Table dataSource={projectMembers} columns={columns} pagination={true} style={{ marginBottom: 16 }} />
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3>Task List</h3>
-                    <div>
-                            <Row>
-                                <Space>
-                                    <TaskForm />
-                                </Space>
-                            </Row>
-                    </div>
+                        <h3>Task List</h3>
+                        <div>
+                                <Row>
+                                    <Space>
+                                        <TaskForm />
+                                    </Space>
+                                </Row>
+                        </div>
                     </div>
 
                     <Table dataSource={tasks} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
@@ -237,6 +314,17 @@ function ProjectDetails() {
                             onCancel={cancelDelete}
                         >
                             Are you sure you want to delete the project?
+                        </Modal>
+
+                        <Modal
+                            visible={taskDeleteModalVisible}
+                            title="Confirm Delete"
+                            okText="Delete"
+                            cancelText="Cancel"
+                            onOk={confirmTaskDelete}
+                            onCancel={cancelTaskDelete}
+                        >
+                            Are you sure you want to delete this task?
                         </Modal>
                     </div>
                 </Card>

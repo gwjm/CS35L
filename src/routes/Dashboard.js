@@ -124,14 +124,21 @@ function Dashboard() {
         setAddTaskModalVisible(false);
     };
 
-    const editMenu = (project_details) => (
+    const editMenu = (project_details, record) => (
         <Menu>
             {/*console.log("record" + record._id)*/}
             <Menu.Item>
                 <EditProjectDialogFromDashboard project={project_details} />
             </Menu.Item>
             <Menu.Item key="addTask">
-                <TaskCreation />
+                <Button
+                    danger
+                    type="primary"
+                    onClick={() => handleDelete(record._id)}
+                    style={{ backgroundColor: 'red', borderColor: 'red' }}
+                >
+                    Delete
+                </Button>
             </Menu.Item>
         </Menu>
     );
@@ -180,14 +187,11 @@ function Dashboard() {
             dataIndex: '_id',
             render: (text, record) => (
                 <div>
-                    <Button
-                        danger
-                        type="primary"
-                        onClick={() => handleDelete(record._id)}
-                        style={{ backgroundColor: 'red', borderColor: 'red' }}
-                    >
-                        Delete
-                    </Button>
+
+                    <div>{/*console.log(text)*/}
+                        <Dropdown overlay={editMenu(text, record)}>
+                            <Button>Actions</Button>
+                        </Dropdown></div>
                 </div>
             ),
         },
