@@ -4,11 +4,11 @@ import AuthContext from "../contexts/AuthProvider.js";
 import { showErrorDialog } from '../components/ErrorDialog';
 import axios from 'axios';
 import moment from 'moment';
+import ProjectForm from '../components/ProjectCreation';
 
 // AntD
 import { Table, Button, Menu, Dropdown, Modal, Form, Input, ConfigProvider, theme, Card, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
-import TaskCreation from '../components/TaskCreation'; // TODO: add task creation floating
 import EditProjectDialogFromDashboard from '../components/EditProjectDialogFromDashboard';
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 
@@ -77,6 +77,7 @@ function Dashboard() {
     //get projects owned or a member of by logged in user
     const fetchProjects = async () => {
         try {
+            await new Promise((resolve) => setTimeout(resolve, 0));
             //owners are members as well
             if (user._id !== undefined) {
                 const response_member = await axios.get(`http://localhost:3001/api/projects/findbymember/${user._id}`)
@@ -93,7 +94,9 @@ function Dashboard() {
             console.error(error);
         }
     };
-
+    useEffect(() => {
+        fetchProjects();
+    }, []);
 
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [addTaskModalVisible, setAddTaskModalVisible] = useState(false);
@@ -126,7 +129,6 @@ function Dashboard() {
 
     const editMenu = (project_details, record) => (
         <Menu>
-            {/*console.log("record" + record._id)*/}
             <Menu.Item>
                 <EditProjectDialogFromDashboard project={project_details} />
             </Menu.Item>
@@ -187,16 +189,85 @@ function Dashboard() {
             dataIndex: '_id',
             render: (text, record) => (
                 <div>
-
-                    <div>{/*console.log(text)*/}
+                    <div>
                         <Dropdown overlay={editMenu(text, record)}>
                             <Button>Actions</Button>
-                        </Dropdown></div>
+                        </Dropdown>
+                    </div>
                 </div>
             ),
         },
     ];
 
+    function CreateProjectModal({ onSubmit, onClose }) {
+        const [modalVisible, setModalVisible] = useState(false);
+      
+        const showModal = () => {
+          setModalVisible(true);
+        };
+      
+        const handleModalOk = async () => {
+          await onSubmit();
+          setModalVisible(false);
+        };
+      
+        const handleModalCancel = () => {
+          setModalVisible(false);
+          onClose();
+        };
+      
+        return (
+          <>
+            <Button type="primary" onClick={showModal}>
+              Create Project
+            </Button>
+      
+            <Modal
+              title="Create Project"
+              visible={modalVisible}
+              onOk={handleModalOk}
+              onCancel={handleModalCancel}
+              footer={null}
+            >
+              <ProjectForm />
+            </Modal>
+          </>
+        );
+      }
+      
+      function CreateProject() {
+        const [isCreateProjectModalOpen, setIsCreateProjectModalOpen] = useState(false);
+        const [form] = Form.useForm(); // Add this line to use Ant Design's Form component
+      
+        const handleProjectSubmit = async () => {
+          await fetchProjects();
+          setIsCreateProjectModalOpen(false); // Close the form after submitting
+          form.resetFields(); // Reset form fields
+        };
+      
+        const openCreateProjectModal = () => {
+          setIsCreateProjectModalOpen(true);
+        };
+      
+        useEffect(() => {
+          if (isCreateProjectModalOpen) {
+            fetchProjects(); // Call fetchProjects when the modal is open
+          }
+        }, [isCreateProjectModalOpen]);
+      
+        return (
+          <>
+            <CreateProjectModal
+              onSubmit={handleProjectSubmit}
+              onClose={() => {
+                setIsCreateProjectModalOpen(false);
+                form.resetFields(); // Reset form fields when closing the modal
+              }}
+            />
+          </>
+        );
+      }
+      
     // Return --------------------------------------------------
     const cardStyle = {
         display: 'flex',
@@ -211,14 +282,14 @@ function Dashboard() {
                 algorithm: currentTheme === 'dark' ? darkAlgorithm : defaultAlgorithm,
             }}>
             <Card style={cardStyle}>
-                <h1>My Dashboard</h1>
-                {loading && <div>Loading...</div>}
-                {error && showErrorDialog(error)}
-                <Row>
-                    <Col span={8} offset={21}>
-                        <Link to="/Projects">
-                            <Button type="primary" size="large">Add Project</Button>
-                        </Link>
+                <Row gutter={16}>
+                    <Col span={12} style={{ textAlign: 'left' }}>
+                        <h1>My Dashboard</h1>
+                        {loading && <div>Loading...</div>}
+                        {error && showErrorDialog(error)}
+                    </Col>
+                    <Col span={12} style={{ textAlign: 'right' }}>
+                        <CreateProject />
                     </Col>
                 </Row>
                 <div><br /></div>
@@ -251,11 +322,9 @@ function Dashboard() {
                     title="Edit Form"
                 >
                     <Form>
-                        {/* Add form fields for edit action */}
                         <Form.Item label="Title" name="editTitle">
                             <Input />
                         </Form.Item>
-                        {/* Add more form fields as needed */}
                     </Form>
                 </Modal>
 

@@ -235,8 +235,7 @@ function ProjectDetails() {
             dataIndex: '_id',
             render: (text, record) => (
                 <div>
-
-                    <div>{/*console.log(text)*/}
+                    <div>
                         <Dropdown overlay={editMenu(text, record)}>
                             <Button>Actions</Button>
                         </Dropdown></div>
