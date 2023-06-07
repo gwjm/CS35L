@@ -5,6 +5,7 @@ npm install
 npm start &
 
 # Start the backend
+# shellcheck disable=SC2164
 cd ./backend/
 npm install
 nodemon start
