@@ -10,6 +10,7 @@ import TaskForm from "../components/TaskCreation";
 import moment from 'moment';
 import EditTaskDialog from "../components/EditTaskDialog";
 import EditTaskStatus from "../components/EditTaskStatus";
+import AddRemoveMembers from "../components/AddRemoveMembers";
 
 function ProjectDetails() {
     const { id } = useParams();
@@ -26,9 +27,9 @@ function ProjectDetails() {
             try {
                 const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
                 setProject(response.data);
-                console.log("Fetching project...", project);
+                // console.log("Fetching project...", project);
             } catch (error) {
-                console.log('Error fetching project:', error);
+                // console.log('Error fetching project:', error);
                 showErrorDialog('Error fetching project');
             }
         };
@@ -52,10 +53,10 @@ function ProjectDetails() {
                         }
                     })
                 );
-                console.log("tasksLoaded: ", tasksLoaded);
+                // console.log("tasksLoaded: ", tasksLoaded);
                 setTasks(tasksLoaded.filter((task) => task !== null));
             } catch (error) {
-                console.log("Error fetching project members:", error);
+                // console.log("Error fetching project members:", error);
                 showErrorDialog("Error fetching project members");
             }
         };
@@ -74,7 +75,7 @@ function ProjectDetails() {
             setProject(null);
             window.location.href = '/dashboard';
         } catch (error) {
-            console.log('Error deleting project:', error);
+            // console.log('Error deleting project:', error);
             showErrorDialog('Error deleting project');
         }
         setDeleteModalVisible(false);
@@ -89,7 +90,7 @@ function ProjectDetails() {
     }
 
     const projectMembers = project.members;
-    console.log("projectMembers: ", projectMembers)
+    // console.log("projectMembers: ", projectMembers)
     const tasklist = project.tasklist;
     // Generate random color for each user name
     const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
@@ -98,7 +99,7 @@ function ProjectDetails() {
 
     function getColor(username) {
         for (const user of randomColorArray) {
-            console.log(user);
+            // console.log(user);
             if (user[0] === username) {
                 return user[1];
             }
@@ -254,7 +255,7 @@ function ProjectDetails() {
                             <div>
                                 <Row>
                                     <Space>
-                                        <EditProjectDialogFromProjectDetails />
+                                        <EditProjectDialogFromProjectDetails project={project} />
                                     </Space>
                                 </Row>
                             </div>
@@ -269,19 +270,28 @@ function ProjectDetails() {
                         <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
                         <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
                     </Descriptions>
-
-                    <h3>Members</h3>
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h3>Members</h3>
+                        <div>
+                                <Row>
+                                    <Space>
+                                        <AddRemoveMembers />
+                                    </Space>
+                                </Row>
+                        </div>
+                    </div>
                     <Table dataSource={projectMembers} columns={columns} pagination={true} style={{ marginBottom: 16 }} />
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <h3>Task List</h3>
-                    <div>
-                            <Row>
-                                <Space>
-                                    <TaskForm />
-                                </Space>
-                            </Row>
-                    </div>
+                        <h3>Task List</h3>
+                        <div>
+                                <Row>
+                                    <Space>
+                                        <TaskForm />
+                                    </Space>
+                                </Row>
+                        </div>
                     </div>
 
                     <Table dataSource={tasks} columns={taskColumns} pagination={true} style={{ marginBottom: 16 }} />
