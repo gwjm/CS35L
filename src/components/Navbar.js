@@ -16,7 +16,7 @@ import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
 function NavBar(props) {
   const currentTheme = useTheme();
   const toggleTheme = useThemeUpdate();
-  const [current, setCurrent] = useState('1');
+  const [, setCurrent] = useState('1');
 
   const { auth } = useContext(AuthContext);
   const loggedIn = (window.localStorage.getItem("isLoggedIn") === "true");
