@@ -1,6 +1,6 @@
 ![Logo](./public/graceIcon.png)
 
-# ![Logo](./public/favicon.ico) Quick Start
+# Quick Start
 
 
 To quickly set up and run the application, follow these steps:
