@@ -25,25 +25,29 @@ function AddRemoveMembers() {
         form.resetFields();
     };
 
+
+
     const handleSave = () => {
         // console.log(newMembers);
         // console.log(members)
-        // let arr = members
+        let arr = members
         for(const person of newMembers)
         {
             if(isMember(person) )
             {
-                setMembers(members.filter(member => member._id !== person._id))
+                arr = arr.filter(member => member._id !== person._id)
                 message.error(`Removed ${person.username} from project`);
             }
             else
             {
-                members.push(person)
+                arr.push(person)
                 message.success(`Added ${person.username} to project`);
             }
         }
+        console.log(arr)
         setVisible(false);
         form.resetFields();
+        project.members = arr
         try {
             axios.patch(`http://localhost:3001/api/projects/${id}`, project);
             console.log("Project updated successfully");
