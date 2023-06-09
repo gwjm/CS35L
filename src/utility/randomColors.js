@@ -1,17 +1,17 @@
 // Ant design colors for user tags
 const antDesignColors = [
   'pink',
-  'red',
+  'geekblue',
   'yellow',
   'orange',
   'cyan',
   'green',
   'blue',
   'purple',
+  'volcano',
   'lime',
   'gold',
-  'volcano',
-  'geekblue',
+  'red',
   'magenta',
 ];
 

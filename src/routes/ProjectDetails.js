@@ -91,7 +91,7 @@ function ProjectDetails() {
 
     const projectMembers = project.members;
 
-    function getColor(username) {
+    function getTagColor(username) {
         const index = projectMembers.findIndex((member) => member.username === username);
         if (index !== -1) {
           return getColor(index);
@@ -105,7 +105,7 @@ function ProjectDetails() {
             dataIndex: 'username',
             key: 'username',
             render: (username) => {
-                const color = getColor(username);
+                const color = getTagColor(username);
                 return <Tag color={color}>{username}</Tag>;
             },
         },
@@ -189,7 +189,7 @@ function ProjectDetails() {
                 <span>
                     {assignedUsers.map((user) => (
                         <React.Fragment key={user._id}>
-                            <Tag color={getColor(user.username)}>{user.username}</Tag>
+                            <Tag color={getTagColor(user.username)}>{user.username}</Tag>
                         </React.Fragment>
                     ))}
                 </span>
