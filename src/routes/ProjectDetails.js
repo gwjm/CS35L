@@ -266,8 +266,8 @@ function ProjectDetails() {
                         <Descriptions.Item label="Project Title">{project.title}</Descriptions.Item>
                         <Descriptions.Item label="Owner">{project.owner.username}</Descriptions.Item>
                         <Descriptions.Item label="Description">{project.description}</Descriptions.Item>
-                        <Descriptions.Item label="Created At">{project.createdAt}</Descriptions.Item>
-                        <Descriptions.Item label="Deadline">{project.deadline}</Descriptions.Item>
+                        <Descriptions.Item label="Created At">{moment(project.createdAt).format('MM/DD/YYYY')}</Descriptions.Item>
+                        <Descriptions.Item label="Deadline">{moment(project.deadline).format('MM/DD/YYYY')}</Descriptions.Item>
                     </Descriptions>
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
