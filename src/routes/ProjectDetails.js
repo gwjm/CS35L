@@ -3,7 +3,7 @@ import { Card, Descriptions, Button, Modal, ConfigProvider, Table, theme, Tag, R
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useTheme, useThemeUpdate } from "../contexts/ThemeContext";
-import { getRandomColor } from "../utility/randomColors.js";
+import { getColor , getRandomColor } from "../utility/randomColors.js";
 import { showErrorDialog } from "../components/ErrorDialog";
 import EditProjectDialogFromProjectDetails from '../components/EditProjectDialogFromProjectDetails';
 import TaskForm from "../components/TaskCreation";
@@ -90,22 +90,14 @@ function ProjectDetails() {
     }
 
     const projectMembers = project.members;
-    // console.log("projectMembers: ", projectMembers)
-    const tasklist = project.tasklist;
-    // Generate random color for each user name
-    const randomColorArray = projectMembers.map((str) => [str.username, getRandomColor()]);
-
-    
 
     function getColor(username) {
-        for (const user of randomColorArray) {
-            // console.log(user);
-            if (user[0] === username) {
-                return user[1];
-            }
+        const index = projectMembers.findIndex((member) => member.username === username);
+        if (index !== -1) {
+          return getColor(index);
         }
         return getRandomColor();
-    }
+      }
 
     const columns = [
         {
