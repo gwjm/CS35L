@@ -2,8 +2,11 @@ import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Form, Select, Tag, Button, Typography, message, Modal } from "antd";
+import AuthContext from "../contexts/AuthProvider.js";
+
 const {Text} = Typography;
 const { Option } = Select;
+
 
 
 function AddRemoveMembers() {
@@ -15,6 +18,7 @@ function AddRemoveMembers() {
     const [newMembers, setNewMembers] = useState([]);
     const [users, setUsers] = useState([]);
     const [filterValue, setFilterValue] = useState('');
+    const { auth } = useContext(AuthContext);
 
     const handleOpen = () => {
         setVisible(true);
@@ -25,11 +29,7 @@ function AddRemoveMembers() {
         form.resetFields();
     };
 
-
-
     const handleSave = () => {
-        // console.log(newMembers);
-        // console.log(members)
         let arr = members
         for(const person of newMembers)
         {
@@ -129,8 +129,9 @@ function AddRemoveMembers() {
                                 onChange={(value) => handleNewMemberArray(value)}
                             >
                                 {users.map((user) => (
-                                    <Option key={user._id} value={user.username}>
-                                        <Tag color={isMember(user) ? 'red' : 'green'}>{user.username}</Tag>
+                                    console.log(auth.user1),
+                                    <Option key={user._id} value={user.username} disabled={user.username === auth.user1}>
+                                        <Tag color={isMember(user) ? (user.username === auth.user1 ? 'gold' : 'red') : 'green'}>{user.username}</Tag>
                                     </Option>
                                 ))}
                             </Select>
