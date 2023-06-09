@@ -117,7 +117,7 @@ const ProjectForm = () => {
             placeholder="Select members"
           >
             {members.map((member) => (
-              <Option key={member._id} value={member.username}>
+              <Option key={member._id} value={member.username} disabled={member.username === auth.user1}>
                 {member.username}
               </Option>
             ))}
