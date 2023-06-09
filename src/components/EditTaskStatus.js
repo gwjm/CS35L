@@ -24,7 +24,7 @@ const EditTaskStatus = (task_id) => {
             }
         };
         setId(task_id.task)
-        console.log(id);
+        // console.log(id);
         fetchTask();
     }, [id]);
 
@@ -38,7 +38,7 @@ const EditTaskStatus = (task_id) => {
     };
 
     const handleSave = () => {
-        console.log(task)
+        // console.log(task)
         form.validateFields().then(async (values) => {
             // Process the submitted form values
             console.log(values);

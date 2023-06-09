@@ -50,7 +50,7 @@ const TaskForm = () => {
     try {
       const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
       setMembers(response.data.members);
-      console.log(response.data.members);
+      // console.log(response.data.members);
     } catch (error) {
       console.error(error);
     }

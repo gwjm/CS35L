@@ -16,7 +16,7 @@ const EditTaskDialog = (task_details) => {
         const fetchTask = async () => {
           if (id != null) {
             try {
-              console.log(id)
+              // console.log(id)
               const response = await axios.get(`http://localhost:3001/api/tasks/get/${id}`);
               setTask(response.data);
               console.log("Fetching Task...", task);
@@ -27,7 +27,7 @@ const EditTaskDialog = (task_details) => {
           }
         };
         setId(task_details.task)
-        console.log(id)
+        // console.log(id)
         fetchTask();
       }, [id]);
 
@@ -44,7 +44,7 @@ const EditTaskDialog = (task_details) => {
     const handleSave = () => {
         form.validateFields().then((values) => {
             // Process the submitted form values
-            console.log(values);
+            // console.log(values);
             task.title = values.title
             task.description = values.description
             task.dueDate = values.dueDate

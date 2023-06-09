@@ -38,7 +38,7 @@ function Profile() {
 
     const onFinish = async values => {
         console.log("onfinish");
-        console.log("values",values)
+        // console.log("values",values)
 
         //find the IDs associated with passed usernames
         const userIDs = []

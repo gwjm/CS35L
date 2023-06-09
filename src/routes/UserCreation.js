@@ -16,20 +16,20 @@ const UserCreation = () => {
 
   useEffect(() => {
     if (auth) {
-      console.log(auth);
+      // console.log(auth);
       localStorage.setItem("token", JSON.stringify(auth));
     }
   }, [auth]);
 
   const onFinishCreate = (values) => {
-    console.log('Create User:', values);
+    // console.log('Create User:', values);
     const user = {
       username: values['username'],
       email: values['email'],
       password: values['password']
     }
 
-    console.log(user)
+    // console.log(user)
 
     axios.post('http://localhost:3001/api/users/createUser', user).then(console.log('Added User'));
     const user1 = values.username;
@@ -49,9 +49,9 @@ const UserCreation = () => {
   };
   const emailNotTaken = (value) => {
     for (var i = 0; i < data.length; i++) {
-      console.log(data[i].email)
+      // console.log(data[i].email)
       if (data[i].email === value) {
-        console.log(data[i].email)
+        // console.log(data[i].email)
         return false;
       }
     }

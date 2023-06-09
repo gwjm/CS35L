@@ -68,7 +68,7 @@ router.route('/addFriend/:id').patch((req, res) => {
       user.ownedprojects = req.body.ownedprojects;
       user.joinedprojects = req.body.joinedprojects;
 
-      console.log(user)
+      // console.log(user)
       user.friends = req.body.friends;
 
   

@@ -44,7 +44,7 @@ function AddRemoveMembers() {
                 message.success(`Added ${person.username} to project`);
             }
         }
-        console.log(arr)
+        // console.log(arr)
         setVisible(false);
         form.resetFields();
         project.members = arr
@@ -129,7 +129,7 @@ function AddRemoveMembers() {
                                 onChange={(value) => handleNewMemberArray(value)}
                             >
                                 {users.map((user) => (
-                                    console.log(auth.user1),
+                                    // console.log(auth.user1),
                                     <Option key={user._id} value={user.username} disabled={user.username === auth.user1}>
                                         <Tag color={isMember(user) ? (user.username === auth.user1 ? 'gold' : 'red') : 'green'}>{user.username}</Tag>
                                     </Option>

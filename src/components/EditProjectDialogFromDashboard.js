@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 const EditProjectDialogFromDashboard = (project_details) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
-  console.log(project_details.project)
+  // console.log(project_details.project)
   //const { id } = project_details.project._id
   const [id, setID] = useState()
   //console.log(project_details.project._id)
@@ -18,7 +18,7 @@ const EditProjectDialogFromDashboard = (project_details) => {
     const fetchProject = async () => {
       if (id != null) {
         try {
-          console.log(id)
+          // console.log(id)
           const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
           setProject(response.data);
           console.log("Fetching project...", project);
@@ -29,7 +29,7 @@ const EditProjectDialogFromDashboard = (project_details) => {
       }
     };
     setID(project_details.project)
-    console.log(id)
+    // console.log(id)
     fetchProject();
   }, [id]);
 
@@ -47,7 +47,7 @@ const EditProjectDialogFromDashboard = (project_details) => {
   const handleSave = () => {
     form.validateFields().then((values) => {
       // Process the submitted form values
-      console.log(values);
+      // console.log(values);
       project.title = values.title
       project.description = values.description
       project.deadline = values.deadline

@@ -52,7 +52,7 @@ function NavBar(props) {
 
 
   const onClick = (e) => {
-    console.log('click ', e);
+    // console.log('click ', e);
     setCurrent(e.key);
   };
 

@@ -16,7 +16,7 @@ const EditProjectDialogFromProjectDetails = () => {
     const fetchProject = async () => {
       if (id != null) {
         try {
-          console.log(id)
+          // console.log(id)
           const response = await axios.get(`http://localhost:3001/api/projects/find/${id}`);
           setProject(response.data);
           console.log("Fetching project...", project);
